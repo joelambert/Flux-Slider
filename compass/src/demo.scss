@@ -1,0 +1,108 @@
+ /* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "compass/css3";
+
+*
+{
+	@include box-sizing('border-box');
+}
+
+html
+{
+	background: #2F2F2F;
+}
+
+body
+{
+	//@include linear-gradient(color-stops(#333, #000));
+	background: #2F2F2F;
+	min-height: 100%;
+	font-family: helvetica, arial, sans-serif;
+	
+ 	section.container
+	{
+		width: 790px;
+		margin: 40px auto;
+		
+		h1
+		{
+			color: #DDD;
+			font-size: 3em;
+			font-weight: bold;
+			text-align: center;
+			text-shadow: 0 1px 0px #000;
+			text-transform: lowercase;
+			margin-bottom: 0.2em;
+		}
+		
+		h2
+		{
+			font-size: 0.8em;
+			color: #666;
+			text-align: center;
+			margin-bottom: 4em;
+			text-shadow: 0 1px 0px rgba(#000, 0.5);
+		}
+		
+		div#slider
+		{
+			@include border-radius(3px);
+			@include box-sizing('content-box');
+			padding: 20px;
+			background: rgba(#000, 0.3);
+
+			-webkit-box-shadow: 0 1px 0 rgba(#FFF, 0.1), 0 0 8px rgba(#000, 0.9) inset;
+			
+			div.fluxslider
+			{
+				div.images
+				{
+					width: 100%;
+					border: 1px solid rgba(#FFF, 0.1);
+					@include box-sizing('content-box');
+				}
+				
+				ul.pagination
+				{
+					@include box-sizing('content-box');
+					padding: 10px 0 !important;
+					overflow: hidden;
+					
+					li
+					{
+						text-indent: 10000px;
+						height: 8px;
+						width: 8px;
+						@include border-radius(10px);
+						background: rgba(#000, 0.6);
+						-webkit-box-shadow: 0 1px 0 rgba(#FFF, 0.1);
+						
+						&.current
+						{
+							background: rgba(#FFF, 0.2);
+						}
+					}
+				}
+			}
+		}
+		
+		footer
+		{
+			width: 100%;
+			text-align: center;
+			font-size: 0.7em;
+			//text-shadow: 0 1px 0px rgba(#000, 0.5);
+			margin-top: 4em;
+			color: #666;
+			
+			p
+			{
+				margin-bottom: 2em;
+			}
+		}
+	}
+}

@@ -1,0 +1,8 @@
+1.1
+-----------------
+Added support for Zepto.js as a drop in replacement for jQuery
+Added detection of 3d CSS effects to ensure hardware acceleration is used where possible
+
+1.0
+-----------------
+Initial release

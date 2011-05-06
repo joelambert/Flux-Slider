@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8 />
+		<title>Flux Slider Demo &#0187; Hardware accelerated image transitions using CSS3</title>
+		<!--[if lte IE 8]>
+ 			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" href="css/demo.css" type="text/css" media="screen" title="no title" charset="utf-8">
+		<script src="js/zepto/zepto.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/flux.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			$(function(){
+				window.f = new flux.slider('#slider', {
+					pagination: true
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<section class="container">
+			<h1><span class="flux">Flux</span> <span class="slider">Slider</span></h1>
+			<h2>Hardware accelerated image transitions using CSS3.</h2>
+			<div id="slider">
+				<img src="img/avatar.jpg" alt="" />
+				<img src="img/ironman.jpg" alt="" />
+				<img src="img/tron.jpg" alt="" />
+				<img src="img/greenhornet.jpg" alt="" />
+			</div>
+			<footer>
+				<p>Flux Slider &copy; Copyright 2011 Joe Lambert. All Rights Reserved.</p>
+				<img src="img/html5.png" alt="HTML5" width="35px" />
+			</footer>
+		</section>
+	</body>
+</html>
