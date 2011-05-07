@@ -48,6 +48,17 @@ flux.transition = function(fluxslider, opts) {
 	}, opts);
 	
 	this.slider = fluxslider;
+	
+	// We need to ensure transitions degrade gracefully if they require 3d but the browser doesn't support it
+	if(this.options.requires3d && !flux.browser.supports3d)
+	{
+		var _this = this;
+		this.options.setup = undefined;
+		this.options.after = undefined;
+		this.options.execute = function() {
+			_this.finished();
+		};
+	}
 };
 
 flux.transition.prototype = {
