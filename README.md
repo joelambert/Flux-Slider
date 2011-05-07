@@ -8,13 +8,15 @@ The aim is to use hardware acceleration where possible to improve performace on 
 ## Tested Under
 - Safari
 - Chrome
+- Firefox 4 *(since v1.2)*
 - iOS
 
 ## May/should also work for
-- Android
+- Android (Known to be jerky due to lack of hardware acceleration)
+- Opera
 
 # Requirements
-Flux requires a Webkit browser and has been built to use either jQuery or [Zepto.js](http://zepto.js) as they share the same API. For mobile deployment Zepto is recommended due to its <5k deployment footprint.
+Flux requires a browser which supports CSS3 transformations and has been built to use either jQuery or [Zepto.js](http://zepto.js) as they share the same API. For mobile deployment Zepto is recommended due to its <5k deployment footprint.
 
 # Usage
 Create HTML markup with the images you wish to use. For example:
