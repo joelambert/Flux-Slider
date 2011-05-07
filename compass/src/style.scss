@@ -1,1 +1,32 @@
 @import 'demo';
+@import 'compass';
+
+section#details
+{
+	text-align: center;
+	padding-top: 4em;
+	
+	a
+	{
+		margin-left: 1em;
+		padding: 1em;
+		background: rgba(#FFF, 0.1);
+		@include border-radius(3px);
+		color: #000;
+		text-shadow: 0 1px 0 rgba(#FFF, 0.2);
+		text-decoration: none;
+		border: 1px solid rgba(#FFF, 0.3);
+		font-weight: bold;
+		font-size: 0.8em;
+		
+		&:first-child
+		{
+			margin-left: 0;
+		}
+		
+		&:hover
+		{
+			background: rgba(#FFF, 0.3);
+		}
+	}
+}
