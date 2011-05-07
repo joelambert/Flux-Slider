@@ -8,7 +8,9 @@
  */
 
 // Flux namespace
-var flux = {};
+var flux = {
+	version: '@VERSION'
+};
 
 flux.slider = function(elem, opts) {
 	if(!flux.browser.supportsTransitions)

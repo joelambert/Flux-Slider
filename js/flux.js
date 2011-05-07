@@ -8,7 +8,9 @@
  */
 
 // Flux namespace
-var flux = {};
+var flux = {
+	version: '1.2'
+};
 
 flux.slider = function(elem, opts) {
 	if(!flux.browser.supportsTransitions)
