@@ -8,6 +8,7 @@
 		<file>src/flux.browser.js</file>
 		<file>src/flux.transitions.js</file>
 		<file>src/flux.transitions.bars.js</file>
+		<file>src/flux.transitions.bars3d.js</file>
 		<file>src/flux.transitions.blinds.js</file>
 		<file>src/flux.transitions.zip.js</file>
 		<file>src/flux.transitions.blocks.js</file>
