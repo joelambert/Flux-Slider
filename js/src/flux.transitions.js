@@ -42,6 +42,7 @@
 
 flux.transition = function(fluxslider, opts) {
 	this.options = $.extend({
+		requires3d: false,
 		after: function() {
 			// Default callback for after the transition has completed
 		}
