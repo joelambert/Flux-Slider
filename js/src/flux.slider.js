@@ -123,7 +123,9 @@ flux.slider.prototype = {
 		this.stop();
 		this.setupImages();
 		this.transition();
-		this.start();
+		
+		if(this.options.autoplay)
+			this.start();
 	},  
 	finishedLoading: function() {
 		var _this = this;
