@@ -9,14 +9,14 @@ flux.transitions.blinds = function(fluxslider, opts) {
 			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			bars.css({
-				'-webkit-transform': 'scalex(0.0001)',
 				'opacity': '0.5'
+			}).css3({
+				'transform': 'scalex(0.0001)'
 			});
 		}
 	});

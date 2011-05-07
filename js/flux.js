@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.1
+ * @preserve Flux Slider v1.2
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert. All rights reserved
@@ -11,11 +11,11 @@
 var flux = {};
 
 flux.slider = function(elem, opts) {
-	if(!flux.browser.webkit)
+	if(!flux.browser.supportsTransitions)
 	{
 		if(window.console && window.console.error)
-			console.error("Flux Slider requires a Webkit browser");
-
+			console.error("Flux Slider requires a browser that supports CSS3 transitions");
+	
 		return;
 	}
 	
@@ -44,7 +44,7 @@ flux.slider = function(elem, opts) {
 	this.playing = false;
 	
 	this.element.find('img').each(function(index, found_img){
-		_this.images.push(found_img.cloneNode());
+		_this.images.push(found_img.cloneNode(false));
 
 		var image = new Image();
 		image.onload = function() {
@@ -275,44 +275,80 @@ flux.browser = {
 		if(flux.browser.supports3d)
 			return 'rotate3d('+(axis == 'x' ? '1' : '0')+', '+(axis == 'y' ? '1' : '0')+', '+(axis == 'z' ? '1' : '0')+', '+deg+'deg)';
 		else
-			return 'rotate'+axis.toUpperCase()+'('+deg+'deg)';
+		{
+			if(axis == 'z')
+				return 'rotate('+deg+'deg)';
+			else
+				return '';
+		}
 	}
 };
 
 (function() {
-	// Work out which prefix this browser supports
-	// var browserPrefixes = {
-	// 	'webkit': 'Webkit',
-	// 	'moz': 'Moz',
-	// 	'ms': 'ms',
-	// 	'o': 'O'
-	// };
-	// 
-	// var dom = document.createElement('div');
-	// 
-	// for(var pre in browserPrefixes)
-	// {
-	// 	dom.style = '-'+pre+'-transform: translate(0,0)';
-	// 	if(dom.style[browserPrefixes[pre]+'Transform']!=undefined)
-	// 	{
-	// 		flux.browser.prefixCSS = pre;
-	// 		flux.browser.prefixDOM = browserPrefixes[pre];
-	// 	}
-	// }
+	var div = document.createElement('div');
 	
-	flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
+	flux.browser.supportsTransitions = false;
+	var prefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+	for(var i=0; i<prefixes.length; i++)
+	{
+		if(prefixes[i]+'Transition' in div.style)
+			flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
+	}
+	
+	//flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
 	flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
 })();;
 
+(function(){
+	/**
+	 * Helper function for cross-browser CSS3 support, prepends all possible prefixes to all properties passed in
+	 * @param {Object} props Ker/value pairs of CSS3 properties
+	 */
+	$.fn.css3 = function(props) {
+		var css = {};
+		var prefixes = ['webkit', 'moz', 'ms', 'o'];
+		
+		for(var prop in props)
+			for(var i=0; i<prefixes.length; i++)
+				css['-'+prefixes[i]+'-'+prop] = props[prop];
+			
+		this.css(css);
+		return this;
+	};
+	
+	/**
+	 * Helper function to bind to the correct transition end event
+	 * @param {function} callback The function to call when the event fires
+	 */
+	$.fn.transitionEnd = function(callback) {
+		var _this = this;
+		
+		var events = ['webkitTransitionEnd', 'transitionend', 'oTransitionEnd'];
+		
+		for(var i=0; i < events.length; i++)
+		{
+			this.bind(events[i], function(event){
+				// Automatically stop listening for the event
+				for(var j=0; j<events.length;j++)
+					$(this).unbind(events[j]);
+
+				// Perform the callback function
+				if(callback)
+					callback.call(this);
+			});
+		}
+	};
+})();
+
+
 flux.transition = function(fluxslider, opts) {
 	this.options = $.extend({
-		// Default callback for once the transition has completed
 		after: function() {
-			fluxslider.setupImages();
+			// Default callback for after the transition has completed
 		}
 	}, opts);
 	
-	this.image = fluxslider.image1;
+	this.slider = fluxslider;
 };
 
 flux.transition.prototype = {
@@ -323,7 +359,7 @@ flux.transition.prototype = {
 			this.options.setup.call(this);
 		
 		// Remove the background image from the top image
-		this.image.css({
+		this.slider.image1.css({
 			'background-image': 'none'
 		});
 		
@@ -333,6 +369,8 @@ flux.transition.prototype = {
 	finished: function() {
 		if(this.options.after)
 			this.options.after.call(this);
+			
+		this.slider.setupImages();
 	}
 };
 
@@ -342,7 +380,7 @@ flux.transitions.bars = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
 		barWidth: 60,
 		setup: function() {
-			var barCount = Math.floor(this.image.width() / this.options.barWidth) + 1
+			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
 			
 			var delayBetweenBars = 40;
 			
@@ -354,33 +392,33 @@ flux.transitions.bars = function(fluxslider, opts) {
 					top: '0',
 					left: (i*this.options.barWidth)+'px',
 					
-					'background-image': this.image.css('background-image'),
-					'background-position': '-'+(i*this.options.barWidth)+'px 0px',
-					
-					'-webkit-transition-duration': '400ms',
-					'-webkit-transition-timing-function': 'ease-in',
-					'-webkit-transition-property': 'opacity, -webkit-transform',
-					'-webkit-transition-delay': (i*delayBetweenBars)+'ms'
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+(i*this.options.barWidth)+'px 0px'
+				}).css3({
+					'transition-duration': '400ms',
+					'transition-timing-function': 'ease-in',
+					'transition-property': 'all',
+					'transition-delay': (i*delayBetweenBars)+'ms'
 				});
-				this.image.append(bar);
+				this.slider.image1.append(bar);
 			}
 		},
 		execute: function() {
 			var _this = this;
 			
-			var height = this.image.height();
+			var height = this.slider.image1.height();
 
-			var bars = this.image.find('div.bar');
+			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			bars.css({
-				'-webkit-transform': flux.browser.translate(0, height),
 				'opacity': '0.5'
+			}).css3({
+				'transform': flux.browser.translate(0, height)
 			});
 		}
 	}, opts));	
@@ -392,19 +430,19 @@ flux.transitions.blinds = function(fluxslider, opts) {
 		execute: function() {
 			var _this = this;
 			
-			var height = this.image.height();
+			var height = this.slider.image1.height();
 
-			var bars = this.image.find('div.bar');
+			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			bars.css({
-				'-webkit-transform': 'scalex(0.0001)',
 				'opacity': '0.5'
+			}).css3({
+				'transform': 'scalex(0.0001)'
 			});
 		}
 	});
@@ -415,21 +453,21 @@ flux.transitions.zip = function(fluxslider, opts) {
 		execute: function() {
 			var _this = this;
 			
-			var height = this.image.height();
+			var height = this.slider.image1.height();
 
-			var bars = this.image.find('div.bar');
+			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			bars.each(function(index, bar){	
 				setTimeout(function(){
 					$(bar).css({
-						'-webkit-transform': flux.browser.translate(0, (index%2 ? '-'+(2*height) : height)),
 						'opacity': '0.3'
+					}).css3({
+						'transform': flux.browser.translate(0, (index%2 ? '-'+(2*height) : height))
 					});
 				}, 5);		
 			})
@@ -443,8 +481,8 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		blockDelays: {},
 		maxDelay: 0,
 		setup: function() {
-			var xCount = Math.floor(this.image.width() / this.options.blockSize)+1;
-			var yCount = Math.floor(this.image.height() / this.options.blockSize)+1;
+			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1;
+			var yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1;
 			
 			var delayBetweenBars = 100;
 			
@@ -461,15 +499,15 @@ flux.transitions.blocks = function(fluxslider, opts) {
 						top: (j*this.options.blockSize)+'px',
 						left: (i*this.options.blockSize)+'px',
 						
-						'background-image': this.image.css('background-image'),
-						'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px',
-						
-						'-webkit-transition-duration': '350ms',
-						'-webkit-transition-timing-function': 'ease-in',
-						'-webkit-transition-property': 'opacity, -webkit-transform',
-						'-webkit-transition-delay': delay+'ms'
+						'background-image': this.slider.image1.css('background-image'),
+						'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px'
+					}).css3({
+						'transition-duration': '350ms',
+						'transition-timing-function': 'ease-in',
+						'transition-property': 'all',
+						'transition-delay': delay+'ms'
 					});
-					this.image.append(block);
+					this.slider.image1.append(block);
 					
 					if(delay > this.options.maxDelay)
 					{
@@ -482,19 +520,19 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		execute: function() {
 			var _this = this;
 
-			var blocks = this.image.find('div.block');
+			var blocks = this.slider.image1.find('div.block');
 			
 			// Get notified when the last transition has completed
-			this.options.maxDelayBlock.bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			this.options.maxDelayBlock.transitionEnd(function(){
 				_this.finished();
 			});
 			
 			blocks.each(function(index, block){				
 				setTimeout(function(){
 					$(block).css({
-						'-webkit-transform': 'scale(0.8)',
 						'opacity': '0'
+					}).css3({
+						'transform': 'scale(0.8)'
 					});
 				}, 5);
 			})
@@ -508,7 +546,7 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var largestLength = this.image.width() > this.image.height() ? this.image.width() : this.image.height();
+			var largestLength = this.slider.image1.width() > this.slider.image1.height() ? this.slider.image1.width() : this.slider.image1.height();
 			
 			// How many blocks do we need?
 			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 2; // 2 extra to account for the round border
@@ -521,40 +559,39 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					width: thisBlockSize+'px',
 					height: thisBlockSize+'px',
 					position: 'absolute',
-					top: ((this.image.height()-thisBlockSize)/2)+'px',
-					left: ((this.image.width()-thisBlockSize)/2)+'px',
+					top: ((this.slider.image1.height()-thisBlockSize)/2)+'px',
+					left: ((this.slider.image1.width()-thisBlockSize)/2)+'px',
 					
 					'z-index': 100+(blockCount-i),
 					
-					'background-image': this.image.css('background-image'),
-					'background-position': 'center center',
-					
-					'-webkit-border-radius': '100000px',
-					
-					'-webkit-transition-duration': '800ms',
-					'-webkit-transition-timing-function': 'linear',
-					'-webkit-transition-property': 'opacity, -webkit-transform',
-					'-webkit-transition-delay': ((blockCount-i)*this.options.delay)+'ms'
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': 'center center'
+				}).css3({
+					'border-radius': '1000px',
+					'transition-duration': '800ms',
+					'transition-timing-function': 'linear',
+					'transition-property': 'all',
+					'transition-delay': ((blockCount-i)*this.options.delay)+'ms'
 				});
-				this.image.append(block);
+				this.slider.image1.append(block);
 			}
 		},
 		execute: function() {
 			var _this = this;
 
-			var blocks = this.image.find('div.block');
+			var blocks = this.slider.image1.find('div.block');
 			
 			// Get notified when the last transition has completed
-			$(blocks[0]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(blocks[0]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			blocks.each(function(index, block){
 				setTimeout(function(){
 					$(block).css({
-						'-webkit-transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90'),
 						'opacity': '0'
+					}).css3({
+						'transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90')
 					});
 				}, 5);
 			})

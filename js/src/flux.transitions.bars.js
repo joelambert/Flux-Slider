@@ -15,12 +15,12 @@ flux.transitions.bars = function(fluxslider, opts) {
 					left: (i*this.options.barWidth)+'px',
 					
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(i*this.options.barWidth)+'px 0px',
-					
-					'-webkit-transition-duration': '400ms',
-					'-webkit-transition-timing-function': 'ease-in',
-					'-webkit-transition-property': 'opacity, -webkit-transform',
-					'-webkit-transition-delay': (i*delayBetweenBars)+'ms'
+					'background-position': '-'+(i*this.options.barWidth)+'px 0px'
+				}).css3({
+					'transition-duration': '400ms',
+					'transition-timing-function': 'ease-in',
+					'transition-property': 'all',
+					'transition-delay': (i*delayBetweenBars)+'ms'
 				});
 				this.slider.image1.append(bar);
 			}
@@ -33,14 +33,14 @@ flux.transitions.bars = function(fluxslider, opts) {
 			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.finished();
 			});
 			
 			bars.css({
-				'-webkit-transform': flux.browser.translate(0, height),
 				'opacity': '0.5'
+			}).css3({
+				'transform': flux.browser.translate(0, height)
 			});
 		}
 	}, opts));	

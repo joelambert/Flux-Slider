@@ -11,6 +11,9 @@
 		<script src="js/flux.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(function(){
+				if(!flux.browser.supportsTransitions)
+					alert("Flux Slider requires a browser that supports CSS3 transitions");
+					
 				window.f = new flux.slider('#slider', {
 					pagination: true
 				});
