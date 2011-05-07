@@ -211,7 +211,7 @@ flux.slider.prototype = {
 		var index = Math.floor(Math.random()*(this.options.transitions.length));
 		
 		var tran = new flux.transitions[this.options.transitions[index]](this);
-		//var tran = new flux.transitions.concentric(this);
+
 		tran.run();
 		
 		this.currentImageIndex = this.nextImageIndex;
