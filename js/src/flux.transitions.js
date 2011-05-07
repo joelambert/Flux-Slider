@@ -1,12 +1,11 @@
 flux.transition = function(fluxslider, opts) {
 	this.options = $.extend({
-		// Default callback for once the transition has completed
 		after: function() {
-			fluxslider.setupImages();
+			// Default callback for after the transition has completed
 		}
 	}, opts);
 	
-	this.image = fluxslider.image1;
+	this.slider = fluxslider;
 };
 
 flux.transition.prototype = {
@@ -17,7 +16,7 @@ flux.transition.prototype = {
 			this.options.setup.call(this);
 		
 		// Remove the background image from the top image
-		this.image.css({
+		this.slider.image1.css({
 			'background-image': 'none'
 		});
 		
@@ -27,6 +26,8 @@ flux.transition.prototype = {
 	finished: function() {
 		if(this.options.after)
 			this.options.after.call(this);
+			
+		this.slider.setupImages();
 	}
 };
 

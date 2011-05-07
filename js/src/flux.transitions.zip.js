@@ -3,9 +3,9 @@ flux.transitions.zip = function(fluxslider, opts) {
 		execute: function() {
 			var _this = this;
 			
-			var height = this.image.height();
+			var height = this.slider.image1.height();
 
-			var bars = this.image.find('div.bar');
+			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
 			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){

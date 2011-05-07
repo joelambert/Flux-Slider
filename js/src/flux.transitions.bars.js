@@ -2,7 +2,7 @@ flux.transitions.bars = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
 		barWidth: 60,
 		setup: function() {
-			var barCount = Math.floor(this.image.width() / this.options.barWidth) + 1
+			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
 			
 			var delayBetweenBars = 40;
 			
@@ -14,7 +14,7 @@ flux.transitions.bars = function(fluxslider, opts) {
 					top: '0',
 					left: (i*this.options.barWidth)+'px',
 					
-					'background-image': this.image.css('background-image'),
+					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+(i*this.options.barWidth)+'px 0px',
 					
 					'-webkit-transition-duration': '400ms',
@@ -22,15 +22,15 @@ flux.transitions.bars = function(fluxslider, opts) {
 					'-webkit-transition-property': 'opacity, -webkit-transform',
 					'-webkit-transition-delay': (i*delayBetweenBars)+'ms'
 				});
-				this.image.append(bar);
+				this.slider.image1.append(bar);
 			}
 		},
 		execute: function() {
 			var _this = this;
 			
-			var height = this.image.height();
+			var height = this.slider.image1.height();
 
-			var bars = this.image.find('div.bar');
+			var bars = this.slider.image1.find('div.bar');
 			
 			// Get notified when the last transition has completed
 			$(bars[bars.length-1]).bind('webkitTransitionEnd', function(){

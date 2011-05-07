@@ -4,7 +4,7 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var largestLength = this.image.width() > this.image.height() ? this.image.width() : this.image.height();
+			var largestLength = this.slider.image1.width() > this.slider.image1.height() ? this.slider.image1.width() : this.slider.image1.height();
 			
 			// How many blocks do we need?
 			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 2; // 2 extra to account for the round border
@@ -17,12 +17,12 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					width: thisBlockSize+'px',
 					height: thisBlockSize+'px',
 					position: 'absolute',
-					top: ((this.image.height()-thisBlockSize)/2)+'px',
-					left: ((this.image.width()-thisBlockSize)/2)+'px',
+					top: ((this.slider.image1.height()-thisBlockSize)/2)+'px',
+					left: ((this.slider.image1.width()-thisBlockSize)/2)+'px',
 					
 					'z-index': 100+(blockCount-i),
 					
-					'background-image': this.image.css('background-image'),
+					'background-image': this.slider.image1.css('background-image'),
 					'background-position': 'center center',
 					
 					'-webkit-border-radius': '100000px',
@@ -32,13 +32,13 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					'-webkit-transition-property': 'opacity, -webkit-transform',
 					'-webkit-transition-delay': ((blockCount-i)*this.options.delay)+'ms'
 				});
-				this.image.append(block);
+				this.slider.image1.append(block);
 			}
 		},
 		execute: function() {
 			var _this = this;
 
-			var blocks = this.image.find('div.block');
+			var blocks = this.slider.image1.find('div.block');
 			
 			// Get notified when the last transition has completed
 			$(blocks[0]).bind('webkitTransitionEnd', function(){
