@@ -33,31 +33,26 @@ flux.browser = {
 		if(flux.browser.supports3d)
 			return 'rotate3d('+(axis == 'x' ? '1' : '0')+', '+(axis == 'y' ? '1' : '0')+', '+(axis == 'z' ? '1' : '0')+', '+deg+'deg)';
 		else
-			return 'rotate'+axis.toUpperCase()+'('+deg+'deg)';
+		{
+			if(axis == 'z')
+				return 'rotate('+deg+'deg)';
+			else
+				return '';
+		}
 	}
 };
 
 (function() {
-	// Work out which prefix this browser supports
-	// var browserPrefixes = {
-	// 	'webkit': 'Webkit',
-	// 	'moz': 'Moz',
-	// 	'ms': 'ms',
-	// 	'o': 'O'
-	// };
-	// 
-	// var dom = document.createElement('div');
-	// 
-	// for(var pre in browserPrefixes)
-	// {
-	// 	dom.style = '-'+pre+'-transform: translate(0,0)';
-	// 	if(dom.style[browserPrefixes[pre]+'Transform']!=undefined)
-	// 	{
-	// 		flux.browser.prefixCSS = pre;
-	// 		flux.browser.prefixDOM = browserPrefixes[pre];
-	// 	}
-	// }
+	var div = document.createElement('div');
 	
-	flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
+	flux.browser.supportsTransitions = false;
+	var prefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+	for(var i=0; i<prefixes.length; i++)
+	{
+		if(prefixes[i]+'Transition' in div.style)
+			flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
+	}
+	
+	//flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
 	flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
 })();

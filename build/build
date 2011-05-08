@@ -30,5 +30,6 @@
 	
 	// Compile and minify with Google Closure Compiler
 	$min_path = dirname(__FILE__)."/$docroot/$outputname.min.js";
-	system("java -jar ".dirname(__FILE__)."/google-compiler-20100917.jar --js $max_path --warning_level QUIET --js_output_file $min_path");
+
+	system("java -jar ".escapeshellarg(dirname(__FILE__)."/google-compiler-20100917.jar")." --js ".escapeshellarg($max_path)." --warning_level QUIET --js_output_file ".escapeshellarg($min_path));
 ?>

@@ -4,8 +4,8 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		blockDelays: {},
 		maxDelay: 0,
 		setup: function() {
-			var xCount = Math.floor(this.image.width() / this.options.blockSize)+1;
-			var yCount = Math.floor(this.image.height() / this.options.blockSize)+1;
+			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1;
+			var yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1;
 			
 			var delayBetweenBars = 100;
 			
@@ -22,15 +22,15 @@ flux.transitions.blocks = function(fluxslider, opts) {
 						top: (j*this.options.blockSize)+'px',
 						left: (i*this.options.blockSize)+'px',
 						
-						'background-image': this.image.css('background-image'),
-						'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px',
-						
-						'-webkit-transition-duration': '350ms',
-						'-webkit-transition-timing-function': 'ease-in',
-						'-webkit-transition-property': 'opacity, -webkit-transform',
-						'-webkit-transition-delay': delay+'ms'
+						'background-image': this.slider.image1.css('background-image'),
+						'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px'
+					}).css3({
+						'transition-duration': '350ms',
+						'transition-timing-function': 'ease-in',
+						'transition-property': 'all',
+						'transition-delay': delay+'ms'
 					});
-					this.image.append(block);
+					this.slider.image1.append(block);
 					
 					if(delay > this.options.maxDelay)
 					{
@@ -43,19 +43,19 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		execute: function() {
 			var _this = this;
 
-			var blocks = this.image.find('div.block');
+			var blocks = this.slider.image1.find('div.block');
 			
 			// Get notified when the last transition has completed
-			this.options.maxDelayBlock.bind('webkitTransitionEnd', function(){
-				$(this).unbind('webkitTransitionEnd');
+			this.options.maxDelayBlock.transitionEnd(function(){
 				_this.finished();
 			});
 			
 			blocks.each(function(index, block){				
 				setTimeout(function(){
 					$(block).css({
-						'-webkit-transform': 'scale(0.8)',
 						'opacity': '0'
+					}).css3({
+						'transform': 'scale(0.8)'
 					});
 				}, 5);
 			})

@@ -1,6 +1,21 @@
+1.2
+-----------------
+Added feature detection so any browser that supports CSS3 transitions will now work, jQuery may need to be used instead of Zepto for non Webkit based browsers.
+
+Added helper function for detecting the Transition end .transition()
+
+Added helper function for adding required vendor prefixes to CSS3 .css3()
+
+Modified the base transition object so that it now maintains a reference to the slider object to make it easier to access both current and next images. Previously only the current image was stored which limited what transitions could be created.
+
+Added support for gracefully degrading when a transition requires 3d but the browser doesn't support it
+
+Added 'bars3d' transition
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
+
 Added detection of 3d CSS effects to ensure hardware acceleration is used where possible
 
 1.0

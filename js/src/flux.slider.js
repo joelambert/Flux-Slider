@@ -8,14 +8,16 @@
  */
 
 // Flux namespace
-var flux = {};
+var flux = {
+	version: '@VERSION'
+};
 
 flux.slider = function(elem, opts) {
-	if(!flux.browser.webkit)
+	if(!flux.browser.supportsTransitions)
 	{
 		if(window.console && window.console.error)
-			console.error("Flux Slider requires a Webkit browser");
-
+			console.error("Flux Slider requires a browser that supports CSS3 transitions");
+	
 		return;
 	}
 	
@@ -44,7 +46,7 @@ flux.slider = function(elem, opts) {
 	this.playing = false;
 	
 	this.element.find('img').each(function(index, found_img){
-		_this.images.push(found_img.cloneNode());
+		_this.images.push(found_img.cloneNode(false));
 
 		var image = new Image();
 		image.onload = function() {
@@ -123,7 +125,9 @@ flux.slider.prototype = {
 		this.stop();
 		this.setupImages();
 		this.transition();
-		this.start();
+		
+		if(this.options.autoplay)
+			this.start();
 	},  
 	finishedLoading: function() {
 		var _this = this;
@@ -209,7 +213,7 @@ flux.slider.prototype = {
 		var index = Math.floor(Math.random()*(this.options.transitions.length));
 		
 		var tran = new flux.transitions[this.options.transitions[index]](this);
-		//var tran = new flux.transitions.concentric(this);
+
 		tran.run();
 		
 		this.currentImageIndex = this.nextImageIndex;

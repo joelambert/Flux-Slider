@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <build>
-	<version>1.1</version>
+	<version>1.2</version>
 	<outputname>flux</outputname>
 	<docroot>../js/</docroot>
 	<files>
@@ -8,6 +8,7 @@
 		<file>src/flux.browser.js</file>
 		<file>src/flux.transitions.js</file>
 		<file>src/flux.transitions.bars.js</file>
+		<file>src/flux.transitions.bars3d.js</file>
 		<file>src/flux.transitions.blinds.js</file>
 		<file>src/flux.transitions.zip.js</file>
 		<file>src/flux.transitions.blocks.js</file>
