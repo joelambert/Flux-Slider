@@ -25,6 +25,8 @@ body
 	min-height: 100%;
 	font-family: helvetica, arial, sans-serif;
 	
+	overflow-x: hidden; // Used to prevent scroll bars appearing for some 3d transforms
+	
  	section.container
 	{
 		width: 790px;
