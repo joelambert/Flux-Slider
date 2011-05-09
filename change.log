@@ -12,6 +12,8 @@ Added support for gracefully degrading when a transition requires 3d but the bro
 
 Added 'bars3d' transition
 
+Fixed a bug where Chrome would report 3d transformation support when it didn't. Now uses a media query to confirm support under webkit. Similar to how Modernizr works
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
