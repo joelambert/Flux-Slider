@@ -76,19 +76,19 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2).append(left).append(right);
 				
-				this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
-				
-				this.slider.imageContainer.css({
-					'overflow': 'visible'
-				}).css3({
-					'perspective': 600,
-					'perspective-origin': '50% 50%'
-				});
-				
 				this.slider.image1.append(barContainer);
 				
 				totalLeft += thisBarWidth;
 			}
+			
+			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
+			
+			this.slider.imageContainer.css({
+				'overflow': 'visible'
+			}).css3({
+				'perspective': 600,
+				'perspective-origin': '50% 50%'
+			});
 		},
 		execute: function() {
 			var _this = this;
@@ -103,12 +103,18 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.slider.image2.show();
 				
+				_this.slider.imageContainer.css({
+					'overflow': _this.imageContainerOverflow
+				})
+				
 				_this.finished();
 			});
 
 			this.slider.image1.find('div.barcontainer').css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
+			
+			
 			
 			// this.slider.image1.find('div.bar.current').css3({
 			// 	'transform': flux.browser.translate(0, height/2) + ' ' + flux.browser.rotateX(-90)
