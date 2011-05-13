@@ -112,6 +112,10 @@ flux.slider.prototype = {
 	},
 	stop: function() {
 		clearInterval(this.interval);
+		this.interval = null;
+	},
+	isPlaying: function() {
+		return this.interval != null;
 	},
 	next: function(trans) {
 		this.showImage(this.currentImageIndex+1, trans);

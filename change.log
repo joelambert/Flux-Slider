@@ -20,6 +20,8 @@ Improved the 'concentric' transition so that enough circles are always created t
 
 A specific transition can now be requested instead of one being picked at random, applies to .next(), .prev(), .showImage() and .transition() of flux.slider object
 
+Added isPlayer() function to determine if the slider is currently auto-progressing
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
