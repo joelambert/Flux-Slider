@@ -18,6 +18,8 @@ Enabled transition specific parameters to be overloaded from the main constructo
 
 Improved the 'concentric' transition so that enough circles are always created to cover the required space
 
+A specific transition can now be requested instead of one being picked at random, applies to .next(), .prev(), .showImage() and .transition() of flux.slider object
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
