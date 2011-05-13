@@ -82,6 +82,7 @@ flux.transition.prototype = {
 			this.options.after.call(this);
 			
 		this.slider.setupImages();
+		this.slider.element.trigger('fluxTransitionEnd');
 	}
 };
 

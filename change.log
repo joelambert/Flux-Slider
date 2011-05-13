@@ -22,6 +22,8 @@ A specific transition can now be requested instead of one being picked at random
 
 Added isPlayer() function to determine if the slider is currently auto-progressing
 
+Added the event 'fluxTransitionEnd' which now fires whenever a transition has completed
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
