@@ -14,6 +14,10 @@ Added 'bars3d' transition
 
 Fixed a bug where Chrome would report 3d transformation support when it didn't. Now uses a media query to confirm support under webkit. Similar to how Modernizr works
 
+Enabled transition specific parameters to be overloaded from the main constructor
+
+Improved the 'concentric' transition so that enough circles are always created to cover the required space
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery
