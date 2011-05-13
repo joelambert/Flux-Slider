@@ -24,6 +24,8 @@ Added isPlayer() function to determine if the slider is currently auto-progressi
 
 Added the event 'fluxTransitionEnd' which now fires whenever a transition has completed
 
+Fixed a chaining bug with .transitionEnd() helper function
+
 1.1
 -----------------
 Added support for Zepto.js as a drop in replacement for jQuery

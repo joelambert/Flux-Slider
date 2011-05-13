@@ -36,6 +36,8 @@
 					callback.call(this);
 			});
 		}
+		
+		return this;
 	};
 })();
 

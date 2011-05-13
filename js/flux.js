@@ -365,6 +365,8 @@ $(function() {
 					callback.call(this);
 			});
 		}
+		
+		return this;
 	};
 })();
 
