@@ -113,18 +113,18 @@ flux.slider.prototype = {
 	stop: function() {
 		clearInterval(this.interval);
 	},
-	next: function() {
-		this.showImage(this.currentImageIndex+1);
+	next: function(trans) {
+		this.showImage(this.currentImageIndex+1, trans);
 	},
-	prev: function() {
-		this.showImage(this.currentImageIndex-1);
+	prev: function(trans) {
+		this.showImage(this.currentImageIndex-1, trans);
 	},
-	showImage: function(index) {
+	showImage: function(index, trans) {
 		this.setNextIndex(index);
 		
 		this.stop();
 		this.setupImages();
-		this.transition();
+		this.transition(trans);
 		
 		if(this.options.autoplay)
 			this.start();
@@ -208,11 +208,16 @@ flux.slider.prototype = {
 			$(this.pagination.find('li')[this.currentImageIndex]).addClass('current');
 		}
 	},
-	transition: function() {
-		// Pick a transition at random
-		var index = Math.floor(Math.random()*(this.options.transitions.length));
+	transition: function(transition) {
+		// Allow a transition to be picked from ALL available transitions (not just the reduced set)
+		if(transition == undefined || !flux.transitions[transition])
+		{
+			// Pick a transition at random from the (possibly reduced set of) transitions
+			var index = Math.floor(Math.random()*(this.options.transitions.length));
+			transition = this.options.transitions[index];
+		}
 		
-		var tran = new flux.transitions[this.options.transitions[index]](this, this.options[this.options.transitions[index]]);
+		var tran = new flux.transitions[transition](this, this.options[transition]);
 
 		tran.run();
 		
