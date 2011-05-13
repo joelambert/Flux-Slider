@@ -4,10 +4,14 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var largestLength = this.slider.image1.width() > this.slider.image1.height() ? this.slider.image1.width() : this.slider.image1.height();
+			var w = this.slider.image1.width();
+			var h = this.slider.image1.height();
+			
+			// Largest length is the diagonal
+			var largestLength = Math.sqrt(w*w + h*h);
 			
 			// How many blocks do we need?
-			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 2; // 2 extra to account for the round border
+			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 1; // 1 extra to account for the round border
 			
 			for(var i=0; i<blockCount; i++)
 			{
@@ -17,8 +21,8 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					width: thisBlockSize+'px',
 					height: thisBlockSize+'px',
 					position: 'absolute',
-					top: ((this.slider.image1.height()-thisBlockSize)/2)+'px',
-					left: ((this.slider.image1.width()-thisBlockSize)/2)+'px',
+					top: ((h-thisBlockSize)/2)+'px',
+					left: ((w-thisBlockSize)/2)+'px',
 					
 					'z-index': 100+(blockCount-i),
 					

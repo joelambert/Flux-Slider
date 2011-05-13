@@ -288,7 +288,7 @@ flux.browser = {
 	}
 };
 
-(function() {
+$(function() {
 	var div = document.createElement('div');
 	
 	flux.browser.supportsTransitions = false;
@@ -298,10 +298,25 @@ flux.browser = {
 		if(prefixes[i]+'Transition' in div.style)
 			flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
 	}
-	
-	//flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
+
 	flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
-})();;
+	
+	// Chrome has a 3D matrix but doesn't support 3d transforms
+	if(flux.browser.supports3d && 'webkitPerspective' in div.style)
+	{
+		// Double check with a media query (similar to how Modernizr does this)
+		var div3D = $('<div id="csstransform3d"></div>');
+		var mq = $('<style media="(transform-3d), (-webkit-transform-3d)">div#csstransform3d { position: absolute; left: 9px }</style>');
+		
+		$('body').append(div3D);
+		$('head').append(mq);
+		
+		flux.browser.supports3d = div3D.get(0).offsetLeft == 9;
+		
+		div3D.remove();
+		mq.remove();
+	}
+});;
 
 (function(){
 	/**
@@ -685,10 +700,14 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var largestLength = this.slider.image1.width() > this.slider.image1.height() ? this.slider.image1.width() : this.slider.image1.height();
+			var w = this.slider.image1.width();
+			var h = this.slider.image1.height();
+			
+			// Largest length is the diagonal
+			var largestLength = Math.sqrt(w*w + h*h);
 			
 			// How many blocks do we need?
-			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 2; // 2 extra to account for the round border
+			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 1; // 1 extra to account for the round border
 			
 			for(var i=0; i<blockCount; i++)
 			{
@@ -698,8 +717,8 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					width: thisBlockSize+'px',
 					height: thisBlockSize+'px',
 					position: 'absolute',
-					top: ((this.slider.image1.height()-thisBlockSize)/2)+'px',
-					left: ((this.slider.image1.width()-thisBlockSize)/2)+'px',
+					top: ((h-thisBlockSize)/2)+'px',
+					left: ((w-thisBlockSize)/2)+'px',
 					
 					'z-index': 100+(blockCount-i),
 					
