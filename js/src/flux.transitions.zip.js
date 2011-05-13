@@ -1,5 +1,5 @@
 flux.transitions.zip = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		execute: function() {
 			var _this = this;
 			
@@ -22,5 +22,5 @@ flux.transitions.zip = function(fluxslider, opts) {
 				}, 5);		
 			})
 		}
-	});
+	}, opts));
 }

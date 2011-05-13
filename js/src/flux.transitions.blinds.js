@@ -1,5 +1,5 @@
 flux.transitions.blinds = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		barWidth: 70,
 		execute: function() {
 			var _this = this;
@@ -19,5 +19,5 @@ flux.transitions.blinds = function(fluxslider, opts) {
 				'transform': 'scalex(0.0001)'
 			});
 		}
-	});
+	}, opts));
 }

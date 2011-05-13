@@ -212,7 +212,7 @@ flux.slider.prototype = {
 		// Pick a transition at random
 		var index = Math.floor(Math.random()*(this.options.transitions.length));
 		
-		var tran = new flux.transitions[this.options.transitions[index]](this);
+		var tran = new flux.transitions[this.options.transitions[index]](this, this.options[this.options.transitions[index]]);
 
 		tran.run();
 		

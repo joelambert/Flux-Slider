@@ -212,7 +212,7 @@ flux.slider.prototype = {
 		// Pick a transition at random
 		var index = Math.floor(Math.random()*(this.options.transitions.length));
 		
-		var tran = new flux.transitions[this.options.transitions[index]](this);
+		var tran = new flux.transitions[this.options.transitions[index]](this, this.options[this.options.transitions[index]]);
 
 		tran.run();
 		
@@ -585,7 +585,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 };
 
 flux.transitions.blinds = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		barWidth: 70,
 		execute: function() {
 			var _this = this;
@@ -605,11 +605,11 @@ flux.transitions.blinds = function(fluxslider, opts) {
 				'transform': 'scalex(0.0001)'
 			});
 		}
-	});
+	}, opts));
 };
 
 flux.transitions.zip = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		execute: function() {
 			var _this = this;
 			
@@ -632,7 +632,7 @@ flux.transitions.zip = function(fluxslider, opts) {
 				}, 5);		
 			})
 		}
-	});
+	}, opts));
 };
 
 flux.transitions.blocks = function(fluxslider, opts) {
