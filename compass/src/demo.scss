@@ -13,6 +13,12 @@
 	@include box-sizing('border-box');
 }
 
+a
+{
+	color: #CCC;
+	text-decoration: none;
+}
+
 html
 {
 	background: #2F2F2F;
@@ -26,6 +32,8 @@ body
 	font-family: helvetica, arial, sans-serif;
 	
 	overflow-x: hidden; // Used to prevent scroll bars appearing for some 3d transforms
+	
+	margin: 0;
 	
  	section.container
 	{
