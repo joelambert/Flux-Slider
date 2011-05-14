@@ -68,6 +68,21 @@ For example, to prevent autoplay and show a pagination control you would do the 
 			pagination: true
 		});
 	});
+
+## flux.slider API
+
+### Play Controls
+- `start()` Enable autoplay
+- `stop()` Disable autoplay
+- `isPlaying()` Returns a boolean as to whether autoplay is currently enabled
+
+### Transport Controls
+- `next([transition])` Show the next image. Optionally provide the name of the transition to use, otherwise one picked at random
+- `prev([transition])` Show the previous image. Optionally provide the name of the transition to use, otherwise one picked at random
+- `showImage(index [, transition])` Show the image at `index`. Optionally provide the name of the transition to use, otherwise one picked at random
+
+### Misc
+- `getImage(index)` Returns the image with the provided index
 	
 # Writing custom transitions
 Writing your own custom transitions is easy, you just need to create an instance of a `flux.transition` object and pass in some callback functions to provide the custom behaviour you're looking for.
