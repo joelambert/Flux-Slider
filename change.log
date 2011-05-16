@@ -10,7 +10,7 @@ Modified the base transition object so that it now maintains a reference to the 
 
 Added support for gracefully degrading when a transition requires 3d but the browser doesn't support it
 
-Added 'bars3d' transition
+Added 'bars3d' & 'cube' 3D transitions
 
 Fixed a bug where Chrome would report 3d transformation support when it didn't. Now uses a media query to confirm support under webkit. Similar to how Modernizr works
 
