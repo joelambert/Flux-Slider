@@ -117,18 +117,18 @@ flux.slider.prototype = {
 	isPlaying: function() {
 		return this.interval != null;
 	},
-	next: function(trans) {
-		this.showImage(this.currentImageIndex+1, trans);
+	next: function(trans, opts) {
+		this.showImage(this.currentImageIndex+1, trans, opts);
 	},
-	prev: function(trans) {
-		this.showImage(this.currentImageIndex-1, trans);
+	prev: function(trans, opts) {
+		this.showImage(this.currentImageIndex-1, trans, opts);
 	},
-	showImage: function(index, trans) {
+	showImage: function(index, trans, opts) {
 		this.setNextIndex(index);
 		
 		this.stop();
 		this.setupImages();
-		this.transition(trans);
+		this.transition(trans, opts);
 		
 		if(this.options.autoplay)
 			this.start();
@@ -212,7 +212,7 @@ flux.slider.prototype = {
 			$(this.pagination.find('li')[this.currentImageIndex]).addClass('current');
 		}
 	},
-	transition: function(transition) {
+	transition: function(transition, opts) {
 		// Allow a transition to be picked from ALL available transitions (not just the reduced set)
 		if(transition == undefined || !flux.transitions[transition])
 		{
@@ -221,7 +221,7 @@ flux.slider.prototype = {
 			transition = this.options.transitions[index];
 		}
 		
-		var tran = new flux.transitions[transition](this, this.options[transition]);
+		var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 
 		tran.run();
 		
@@ -471,6 +471,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
 		requires3d: true,
 		barWidth: 100,
+		perspective: 600,
 		setup: function() {
 			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
 			
@@ -555,7 +556,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			this.slider.imageContainer.css({
 				'overflow': 'visible'
 			}).css3({
-				'perspective': 600,
+				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
 		},
@@ -582,16 +583,6 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			this.slider.image1.find('div.barcontainer').css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
-			
-			
-			
-			// this.slider.image1.find('div.bar.current').css3({
-			// 	'transform': flux.browser.translate(0, height/2) + ' ' + flux.browser.rotateX(-90)
-			// });
-			// 
-			// this.slider.image1.find('div.bar.next').css3({
-			// 	'transform': flux.browser.translate(0, 0) + ' ' + flux.browser.rotateX(0)
-			// });
 		}
 	}, opts));	
 };
@@ -781,4 +772,108 @@ flux.transitions.warp = function(fluxslider, opts) {
 		alternate: true
 	}, opts));
 };;
+
+flux.transitions.cube = function(fluxslider, opts) {
+	return new flux.transition(fluxslider, $.extend({
+		requires3d: true,
+		barWidth: 100,
+		direction: 'left',
+		perspective: 1000,
+		setup: function() {
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			// Setup the container to allow 3D perspective
+			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
+			
+			this.slider.imageContainer.css({
+				'overflow': 'visible'
+			}).css3({
+				'perspective': this.options.perspective,
+				'perspective-origin': '50% 50%'
+			});
+			
+			this.cubeContainer = $('<div class="cube"></div>').css({
+				width: width+'px',
+				height: height+'px',
+				position: 'relative'
+			}).css3({
+				'transition-duration': '800ms',
+				'transition-timing-function': 'linear',
+				'transition-property': 'all',
+				'transform-style': 'preserve-3d'
+			});
+			
+			var css = {
+				height: '100%',
+				width: '100%',
+				position: 'absolute',
+				top: '0px',
+				left: '0px'
+			};
+			
+			var currentFace = $('<div class="face current"></div>').css($.extend(css, {
+				background: this.slider.image1.css('background-image')	
+			}));
+			
+			this.cubeContainer.append(currentFace);
+			
+			var nextFace = $('<div class="face next"></div>').css($.extend(css, {
+				background: this.slider.image2.css('background-image')
+			})).css3({
+				//'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
+				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
+			});
+			
+			this.cubeContainer.append(nextFace);
+			
+			this.slider.image1.append(this.cubeContainer);
+		},
+		execute: function() {
+			var _this = this;
+			
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			this.slider.image2.hide();
+			this.cubeContainer.css3({
+				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
+			}).transitionEnd(function(){
+				_this.slider.image2.show();
+				
+				_this.slider.imageContainer.css({
+					'overflow': _this.imageContainerOverflow
+				})
+				
+				_this.finished();
+			});
+		},
+		transitionStrings: function(direction, elem) {
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			// Define the various transforms that are required to perform various cube rotations
+			var t = {
+				'up' : {
+					'nextFace': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2),
+					'container': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
+				},
+				'down' : {
+					'nextFace': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2),
+					'container': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
+				},
+				'left' : {
+					'nextFace': flux.browser.rotateY(90) + ' ' + flux.browser.translate(width/2, 0, width/2),
+					'container': flux.browser.rotateY(-90) + ' ' + flux.browser.translate(-width/2, 0, width/2)
+				},
+				'right' : {
+					'nextFace': flux.browser.rotateY(-90) + ' ' + flux.browser.translate(-width/2, 0, width/2),
+					'container': flux.browser.rotateY(90) + ' ' + flux.browser.translate(width/2, 0, width/2)
+				}
+			};
+			
+			return (t[direction] && t[direction][elem]) ? t[direction][elem] : false;
+		}
+	}, opts));	
+};
 

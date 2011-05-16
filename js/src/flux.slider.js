@@ -117,18 +117,18 @@ flux.slider.prototype = {
 	isPlaying: function() {
 		return this.interval != null;
 	},
-	next: function(trans) {
-		this.showImage(this.currentImageIndex+1, trans);
+	next: function(trans, opts) {
+		this.showImage(this.currentImageIndex+1, trans, opts);
 	},
-	prev: function(trans) {
-		this.showImage(this.currentImageIndex-1, trans);
+	prev: function(trans, opts) {
+		this.showImage(this.currentImageIndex-1, trans, opts);
 	},
-	showImage: function(index, trans) {
+	showImage: function(index, trans, opts) {
 		this.setNextIndex(index);
 		
 		this.stop();
 		this.setupImages();
-		this.transition(trans);
+		this.transition(trans, opts);
 		
 		if(this.options.autoplay)
 			this.start();
@@ -212,7 +212,7 @@ flux.slider.prototype = {
 			$(this.pagination.find('li')[this.currentImageIndex]).addClass('current');
 		}
 	},
-	transition: function(transition) {
+	transition: function(transition, opts) {
 		// Allow a transition to be picked from ALL available transitions (not just the reduced set)
 		if(transition == undefined || !flux.transitions[transition])
 		{
@@ -221,7 +221,7 @@ flux.slider.prototype = {
 			transition = this.options.transitions[index];
 		}
 		
-		var tran = new flux.transitions[transition](this, this.options[transition]);
+		var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 
 		tran.run();
 		

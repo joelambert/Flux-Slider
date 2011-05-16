@@ -2,6 +2,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
 		requires3d: true,
 		barWidth: 100,
+		perspective: 600,
 		setup: function() {
 			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
 			
@@ -86,7 +87,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			this.slider.imageContainer.css({
 				'overflow': 'visible'
 			}).css3({
-				'perspective': 600,
+				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
 		},
@@ -113,16 +114,6 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			this.slider.image1.find('div.barcontainer').css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
-			
-			
-			
-			// this.slider.image1.find('div.bar.current').css3({
-			// 	'transform': flux.browser.translate(0, height/2) + ' ' + flux.browser.rotateX(-90)
-			// });
-			// 
-			// this.slider.image1.find('div.bar.next').css3({
-			// 	'transform': flux.browser.translate(0, 0) + ' ' + flux.browser.rotateX(0)
-			// });
 		}
 	}, opts));	
 }

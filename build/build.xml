@@ -14,5 +14,6 @@
 		<file>src/flux.transitions.blocks.js</file>
 		<file>src/flux.transitions.concentric.js</file>
 		<file>src/flux.transitions.warp.js</file>
+		<file>src/flux.transitions.cube.js</file>
 	</files>
 </build>
