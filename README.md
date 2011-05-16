@@ -226,6 +226,6 @@ Two further convenience functions have been used in this example. The first `.tr
 
 	Returns the result of calling `flux.browser.rotate('z', deg)`
 	
-# Licence
+# License
 
 Flux is licensed under the terms of the MIT License ([more info](http://www.opensource.org/licenses/mit-license.php)).
