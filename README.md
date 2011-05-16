@@ -77,9 +77,29 @@ For example, to prevent autoplay and show a pagination control you would do the 
 - `isPlaying()` Returns a boolean as to whether autoplay is currently enabled
 
 ### Transport Controls
-- `next([transition])` Show the next image. Optionally provide the name of the transition to use, otherwise one picked at random
-- `prev([transition])` Show the previous image. Optionally provide the name of the transition to use, otherwise one picked at random
-- `showImage(index [, transition])` Show the image at `index`. Optionally provide the name of the transition to use, otherwise one picked at random
+- 	`next([transition [, options]])` 
+
+	Show the next image. 
+	
+	`transition` *(optional)* The name of the transition to use, otherwise one picked at random
+	
+	`options` *(optional)* Transition specific options for this transition only
+	
+- 	`prev([transition [, options]])` 
+
+	Show the previous image. 
+	
+	`transition` *(optional)* The name of the transition to use, otherwise one picked at random
+	
+	`options` *(optional)* Transition specific options for this transition only
+	
+- 	`showImage(index [, transition [, options]])` 
+
+	Show the image at `index`. 
+	
+	`transition` *(optional)* The name of the transition to use, otherwise one picked at random
+	
+	`options` *(optional)* Transition specific options for this transition only
 
 ### Misc
 - `getImage(index)` Returns the image with the provided index
