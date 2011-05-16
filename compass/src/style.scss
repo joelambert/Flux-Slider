@@ -37,6 +37,24 @@ section#header
 	{
 		float: right;
 	}
+	
+	div.nav
+	{
+		float: right;
+		font-size: 0.7em;
+		padding: 0.75em;
+		padding-right: 1.5em;
+		
+		a
+		{
+			margin-left: 1.5em;
+			
+			&:hover
+			{
+				border-bottom: 1px dashed #CCC;
+			}
+		}
+	}
 }
 
 section#details
