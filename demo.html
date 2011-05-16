@@ -7,7 +7,13 @@
  			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 		<link rel="stylesheet" href="css/demo.css" type="text/css" media="screen" title="no title" charset="utf-8">
-		<script src="js/zepto/zepto.js" type="text/javascript" charset="utf-8"></script>
+		
+		<!-- Use Zepto for best performance on WebKit based browser -->
+		<!-- <script src="js/zepto/zepto.js" type="text/javascript" charset="utf-8"></script> -->
+		
+		<!-- Use jQuery for best compatibility with other CSS3 enabled browsers -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		
 		<script src="js/flux.min.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
 			$(function(){
@@ -31,7 +37,7 @@
 				<img src="img/greenhornet.jpg" alt="" />
 			</div>
 			<footer>
-				<p>Flux Slider &copy; Copyright 2011 Joe Lambert. All Rights Reserved.</p>
+				<p>Flux Slider &copy; Copyright 2011 Joe Lambert. All Rights Reserved. Follow me on Twitter <a href="http://www.twitter.com/joelambert">@joelambert</a></p>
 				<img src="img/html5.png" alt="HTML5" width="35px" />
 			</footer>
 		</section>
