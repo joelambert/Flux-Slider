@@ -34,6 +34,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
+					'z-index': 200,
 					
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+totalLeft+'px 0px',
@@ -54,9 +55,11 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
-					background: '#222'
+					background: '#222',
+					'z-index': 190
 				}).css3({
-					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2)
+					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2) + ' ' + flux.browser.rotateY(180),
+					'backface-visibility': 'hidden'
 				});
 				
 				var right = $(left.get(0).cloneNode(false)).css3({
@@ -68,7 +71,8 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					height: '100%',
 					position: 'absolute',
 					top: '0px',
-					left: totalLeft+'px'
+					left: totalLeft+'px',
+					'z-index': i > barCount/2 ? 1000-i : 1000 // Fix for Chrome to ensure that the z-index layering is correct!
 				}).css3({
 					'transition-duration': '800ms',
 					'transition-timing-function': 'linear',
@@ -92,6 +96,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			});
 		},
 		execute: function() {
+			//return;
 			var _this = this;
 			
 			var height = this.slider.image1.height();

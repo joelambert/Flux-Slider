@@ -1,4 +1,8 @@
-1.2
+1.2.1 (2011/05/17)
+-----------------
+Fixed a z-index issue with 'bars3d' under Chrome. This also reduced flicker during rendering on iOS.
+
+1.2 (2011/05/16)
 -----------------
 Added feature detection so any browser that supports CSS3 transitions will now work, jQuery may need to be used instead of Zepto for non Webkit based browsers.
 
