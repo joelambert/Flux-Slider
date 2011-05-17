@@ -228,4 +228,4 @@ Two further convenience functions have been used in this example. The first `.tr
 	
 # License
 
-Flux is licensed under the terms of the MIT License ([more info](http://www.opensource.org/licenses/mit-license.php)).
+Flux is Copyright &copy; 2011 [Joe Lambert](http://www.joelambert.co.uk) and is licensed under the terms of the [MIT License](http://www.opensource.org/licenses/mit-license.php).
