@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.2
+ * @preserve Flux Slider v1.2.1
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert. All rights reserved
@@ -9,7 +9,7 @@
 
 // Flux namespace
 var flux = {
-	version: '1.2'
+	version: '1.2.1'
 };
 
 flux.slider = function(elem, opts) {
@@ -112,19 +112,23 @@ flux.slider.prototype = {
 	},
 	stop: function() {
 		clearInterval(this.interval);
+		this.interval = null;
 	},
-	next: function() {
-		this.showImage(this.currentImageIndex+1);
+	isPlaying: function() {
+		return this.interval != null;
 	},
-	prev: function() {
-		this.showImage(this.currentImageIndex-1);
+	next: function(trans, opts) {
+		this.showImage(this.currentImageIndex+1, trans, opts);
 	},
-	showImage: function(index) {
+	prev: function(trans, opts) {
+		this.showImage(this.currentImageIndex-1, trans, opts);
+	},
+	showImage: function(index, trans, opts) {
 		this.setNextIndex(index);
 		
 		this.stop();
 		this.setupImages();
-		this.transition();
+		this.transition(trans, opts);
 		
 		if(this.options.autoplay)
 			this.start();
@@ -208,11 +212,16 @@ flux.slider.prototype = {
 			$(this.pagination.find('li')[this.currentImageIndex]).addClass('current');
 		}
 	},
-	transition: function() {
-		// Pick a transition at random
-		var index = Math.floor(Math.random()*(this.options.transitions.length));
+	transition: function(transition, opts) {
+		// Allow a transition to be picked from ALL available transitions (not just the reduced set)
+		if(transition == undefined || !flux.transitions[transition])
+		{
+			// Pick a transition at random from the (possibly reduced set of) transitions
+			var index = Math.floor(Math.random()*(this.options.transitions.length));
+			transition = this.options.transitions[index];
+		}
 		
-		var tran = new flux.transitions[this.options.transitions[index]](this);
+		var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 
 		tran.run();
 		
@@ -288,7 +297,7 @@ flux.browser = {
 	}
 };
 
-(function() {
+$(function() {
 	var div = document.createElement('div');
 	
 	flux.browser.supportsTransitions = false;
@@ -298,10 +307,25 @@ flux.browser = {
 		if(prefixes[i]+'Transition' in div.style)
 			flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
 	}
-	
-	//flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
+
 	flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
-})();;
+	
+	// Chrome has a 3D matrix but doesn't support 3d transforms
+	if(flux.browser.supports3d && 'webkitPerspective' in div.style)
+	{
+		// Double check with a media query (similar to how Modernizr does this)
+		var div3D = $('<div id="csstransform3d"></div>');
+		var mq = $('<style media="(transform-3d), (-webkit-transform-3d)">div#csstransform3d { position: absolute; left: 9px }</style>');
+		
+		$('body').append(div3D);
+		$('head').append(mq);
+		
+		flux.browser.supports3d = div3D.get(0).offsetLeft == 9;
+		
+		div3D.remove();
+		mq.remove();
+	}
+});;
 
 (function(){
 	/**
@@ -341,6 +365,8 @@ flux.browser = {
 					callback.call(this);
 			});
 		}
+		
+		return this;
 	};
 })();
 
@@ -387,6 +413,7 @@ flux.transition.prototype = {
 			this.options.after.call(this);
 			
 		this.slider.setupImages();
+		this.slider.element.trigger('fluxTransitionEnd');
 	}
 };
 
@@ -444,22 +471,42 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
 		requires3d: true,
 		barWidth: 100,
+		perspective: 600,
 		setup: function() {
 			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
+			
+			// Adjust the barWidth so that we can fit inside the available space
+			this.options.barWidth = Math.floor(this.slider.image1.width() / barCount);
+			
+			// Work out how much space remains with the adjusted barWidth
+			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth);
+			var addPerLoop = Math.ceil(remainder / barCount);
 			
 			var delayBetweenBars = 150;
 			var height = this.slider.image1.height();
 			
+			var totalLeft = 0;
+			
 			for(var i=0; i<barCount; i++) {
+				var thisBarWidth = this.options.barWidth;
+				
+				if(remainder > 0)
+				{
+					var add = remainder >= addPerLoop ? addPerLoop : remainder;
+					thisBarWidth += add;
+					remainder -= add;
+				}
+				
 				var bar = $('<div class="bar bar-'+i+'"></div>').css({
-					width: this.options.barWidth+'px',
+					width: thisBarWidth+'px',
 					height: '100%',
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
+					'z-index': 200,
 					
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(i*this.options.barWidth)+'px 0px',
+					'background-position': '-'+totalLeft+'px 0px',
 					'background-repeat': 'no-repeat'
 				}).css3({
 					'backface-visibility': 'hidden'
@@ -477,21 +524,24 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
-					background: '#222'
+					background: '#222',
+					'z-index': 190
 				}).css3({
-					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2)
+					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2) + ' ' + flux.browser.rotateY(180),
+					'backface-visibility': 'hidden'
 				});
 				
 				var right = $(left.get(0).cloneNode(false)).css3({
-					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, this.options.barWidth-height/2)
+					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, thisBarWidth-height/2)
 				});
 				
 				var barContainer = $('<div class="barcontainer"></div>').css({
-					width: this.options.barWidth+'px',
+					width: thisBarWidth+'px',
 					height: '100%',
 					position: 'absolute',
 					top: '0px',
-					left: (i*this.options.barWidth)+'px'
+					left: totalLeft+'px',
+					'z-index': i > barCount/2 ? 1000-i : 1000 // Fix for Chrome to ensure that the z-index layering is correct!
 				}).css3({
 					'transition-duration': '800ms',
 					'transition-timing-function': 'linear',
@@ -500,17 +550,22 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2).append(left).append(right);
 				
-				this.slider.imageContainer.css({
-					//'overflow': 'visible'
-				}).css3({
-					'perspective': 600,
-					'perspective-origin': '50% 50%'
-				});
-				
 				this.slider.image1.append(barContainer);
+				
+				totalLeft += thisBarWidth;
 			}
+			
+			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
+			
+			this.slider.imageContainer.css({
+				'overflow': 'visible'
+			}).css3({
+				'perspective': this.options.perspective,
+				'perspective-origin': '50% 50%'
+			});
 		},
 		execute: function() {
+			//return;
 			var _this = this;
 			
 			var height = this.slider.image1.height();
@@ -523,26 +578,22 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			$(bars[bars.length-1]).transitionEnd(function(){
 				_this.slider.image2.show();
 				
+				_this.slider.imageContainer.css({
+					'overflow': _this.imageContainerOverflow
+				})
+				
 				_this.finished();
 			});
 
 			this.slider.image1.find('div.barcontainer').css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
-			
-			// this.slider.image1.find('div.bar.current').css3({
-			// 	'transform': flux.browser.translate(0, height/2) + ' ' + flux.browser.rotateX(-90)
-			// });
-			// 
-			// this.slider.image1.find('div.bar.next').css3({
-			// 	'transform': flux.browser.translate(0, 0) + ' ' + flux.browser.rotateX(0)
-			// });
 		}
 	}, opts));	
 };
 
 flux.transitions.blinds = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		barWidth: 70,
 		execute: function() {
 			var _this = this;
@@ -562,11 +613,11 @@ flux.transitions.blinds = function(fluxslider, opts) {
 				'transform': 'scalex(0.0001)'
 			});
 		}
-	});
+	}, opts));
 };
 
 flux.transitions.zip = function(fluxslider, opts) {
-	return new flux.transitions.bars(fluxslider, {
+	return new flux.transitions.bars(fluxslider, $.extend({
 		execute: function() {
 			var _this = this;
 			
@@ -589,7 +640,7 @@ flux.transitions.zip = function(fluxslider, opts) {
 				}, 5);		
 			})
 		}
-	});
+	}, opts));
 };
 
 flux.transitions.blocks = function(fluxslider, opts) {
@@ -663,10 +714,14 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var largestLength = this.slider.image1.width() > this.slider.image1.height() ? this.slider.image1.width() : this.slider.image1.height();
+			var w = this.slider.image1.width();
+			var h = this.slider.image1.height();
+			
+			// Largest length is the diagonal
+			var largestLength = Math.sqrt(w*w + h*h);
 			
 			// How many blocks do we need?
-			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 2; // 2 extra to account for the round border
+			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 1; // 1 extra to account for the round border
 			
 			for(var i=0; i<blockCount; i++)
 			{
@@ -676,8 +731,8 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					width: thisBlockSize+'px',
 					height: thisBlockSize+'px',
 					position: 'absolute',
-					top: ((this.slider.image1.height()-thisBlockSize)/2)+'px',
-					left: ((this.slider.image1.width()-thisBlockSize)/2)+'px',
+					top: ((h-thisBlockSize)/2)+'px',
+					left: ((w-thisBlockSize)/2)+'px',
 					
 					'z-index': 100+(blockCount-i),
 					
@@ -722,4 +777,108 @@ flux.transitions.warp = function(fluxslider, opts) {
 		alternate: true
 	}, opts));
 };;
+
+flux.transitions.cube = function(fluxslider, opts) {
+	return new flux.transition(fluxslider, $.extend({
+		requires3d: true,
+		barWidth: 100,
+		direction: 'left',
+		perspective: 1000,
+		setup: function() {
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			// Setup the container to allow 3D perspective
+			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
+			
+			this.slider.imageContainer.css({
+				'overflow': 'visible'
+			}).css3({
+				'perspective': this.options.perspective,
+				'perspective-origin': '50% 50%'
+			});
+			
+			this.cubeContainer = $('<div class="cube"></div>').css({
+				width: width+'px',
+				height: height+'px',
+				position: 'relative'
+			}).css3({
+				'transition-duration': '800ms',
+				'transition-timing-function': 'linear',
+				'transition-property': 'all',
+				'transform-style': 'preserve-3d'
+			});
+			
+			var css = {
+				height: '100%',
+				width: '100%',
+				position: 'absolute',
+				top: '0px',
+				left: '0px'
+			};
+			
+			var currentFace = $('<div class="face current"></div>').css($.extend(css, {
+				background: this.slider.image1.css('background-image')	
+			}));
+			
+			this.cubeContainer.append(currentFace);
+			
+			var nextFace = $('<div class="face next"></div>').css($.extend(css, {
+				background: this.slider.image2.css('background-image')
+			})).css3({
+				//'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
+				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
+			});
+			
+			this.cubeContainer.append(nextFace);
+			
+			this.slider.image1.append(this.cubeContainer);
+		},
+		execute: function() {
+			var _this = this;
+			
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			this.slider.image2.hide();
+			this.cubeContainer.css3({
+				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
+			}).transitionEnd(function(){
+				_this.slider.image2.show();
+				
+				_this.slider.imageContainer.css({
+					'overflow': _this.imageContainerOverflow
+				})
+				
+				_this.finished();
+			});
+		},
+		transitionStrings: function(direction, elem) {
+			var width = this.slider.image1.width();
+			var height = this.slider.image1.height();
+			
+			// Define the various transforms that are required to perform various cube rotations
+			var t = {
+				'up' : {
+					'nextFace': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2),
+					'container': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
+				},
+				'down' : {
+					'nextFace': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2),
+					'container': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
+				},
+				'left' : {
+					'nextFace': flux.browser.rotateY(90) + ' ' + flux.browser.translate(width/2, 0, width/2),
+					'container': flux.browser.rotateY(-90) + ' ' + flux.browser.translate(-width/2, 0, width/2)
+				},
+				'right' : {
+					'nextFace': flux.browser.rotateY(-90) + ' ' + flux.browser.translate(-width/2, 0, width/2),
+					'container': flux.browser.rotateY(90) + ' ' + flux.browser.translate(width/2, 0, width/2)
+				}
+			};
+			
+			return (t[direction] && t[direction][elem]) ? t[direction][elem] : false;
+		}
+	}, opts));	
+};
 

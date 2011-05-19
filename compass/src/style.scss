@@ -1,6 +1,62 @@
 @import 'demo';
 @import 'compass';
 
+section#header
+{
+	background: #222;
+	padding: 10px;
+	overflow: auto;
+	
+	a
+	{
+		color: #CCC;
+		text-decoration: none;
+	}
+	
+	a.name
+	{
+		font-family: 'Pacifico';
+		font-size: 1.1em;
+		margin-right: 1em;
+		position: relative;
+		top: 3px;
+	}
+	
+	a.writeup
+	{
+		font-size: 0.8em;
+		border-bottom: 1px dashed #CCC;
+		
+		&:after
+		{
+			content: ' \2192';
+		}
+	}
+	
+	a.twitter
+	{
+		float: right;
+	}
+	
+	div.nav
+	{
+		float: right;
+		font-size: 0.7em;
+		padding: 0.75em;
+		padding-right: 1.5em;
+		
+		a
+		{
+			margin-left: 1.5em;
+			
+			&:hover
+			{
+				border-bottom: 1px dashed #CCC;
+			}
+		}
+	}
+}
+
 section#details
 {
 	text-align: center;

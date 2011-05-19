@@ -1,4 +1,8 @@
-1.2
+1.2.1 (2011/05/17)
+-----------------
+Fixed a z-index issue with 'bars3d' under Chrome. This also reduced flicker during rendering on iOS.
+
+1.2 (2011/05/16)
 -----------------
 Added feature detection so any browser that supports CSS3 transitions will now work, jQuery may need to be used instead of Zepto for non Webkit based browsers.
 
@@ -10,7 +14,21 @@ Modified the base transition object so that it now maintains a reference to the 
 
 Added support for gracefully degrading when a transition requires 3d but the browser doesn't support it
 
-Added 'bars3d' transition
+Added 'bars3d' & 'cube' 3D transitions
+
+Fixed a bug where Chrome would report 3d transformation support when it didn't. Now uses a media query to confirm support under webkit. Similar to how Modernizr works
+
+Enabled transition specific parameters to be overloaded from the main constructor
+
+Improved the 'concentric' transition so that enough circles are always created to cover the required space
+
+A specific transition can now be requested instead of one being picked at random, applies to .next(), .prev(), .showImage() and .transition() of flux.slider object
+
+Added isPlayer() function to determine if the slider is currently auto-progressing
+
+Added the event 'fluxTransitionEnd' which now fires whenever a transition has completed
+
+Fixed a chaining bug with .transitionEnd() helper function
 
 1.1
 -----------------

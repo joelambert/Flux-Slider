@@ -21,20 +21,53 @@
 					alert("Flux Slider requires a browser that supports CSS3 transitions");
 					
 				window.f = new flux.slider('#slider', {
-					pagination: true
+					autoplay: false,
+					pagination: false
+				});
+				
+				// Setup a listener for user requested transitions
+				$('div#transitions').bind('click', function(event){
+					event.preventDefault();
+
+					// If this is a 3D transform and the browser doesn't support 3D then inform the user
+					if($(event.target).closest('ul').is('ul#trans3d') && !flux.browser.supports3d)
+					{
+						alert("The '"+event.target.innerHTML+"' transition requires a browser that supports 3D transforms");
+						return;
+					}
+					
+					window.f.next(event.target.href.split('#')[1]);
 				});
 			});
 		</script>
 	</head>
-	<body>
+	<body id="transitiongallery">
 		<section class="container">
 			<h1><span class="flux">Flux</span> <span class="slider">Slider</span></h1>
 			<h2>Hardware accelerated image transitions using CSS3.</h2>
-			<div id="slider">
-				<img src="img/avatar.jpg" alt="" />
-				<img src="img/ironman.jpg" alt="" />
-				<img src="img/tron.jpg" alt="" />
-				<img src="img/greenhornet.jpg" alt="" />
+			<div id="slidercontainer">
+				<div id="slider">
+					<img src="img/avatar.jpg" alt="" />
+					<img src="img/ironman.jpg" alt="" />
+					<img src="img/tron.jpg" alt="" />
+					<img src="img/greenhornet.jpg" alt="" />
+				</div>
+				<div id="transitions">
+					<h2>2D Transitions</h2>
+					<ul id="trans2D">
+						<li><a href="#bars">Bars</a></li>
+						<li><a href="#zip">Zip</a></li>
+						<li><a href="#blinds">Blinds</a></li>
+						<li><a href="#blocks">Blocks</a></li>
+						<li><a href="#concentric">Concentric</a></li>
+						<li><a href="#warp">Warp</a></li>
+					</ul>
+					<h2>3D Transitions</h2>
+					<ul id="trans3d">
+						<li><a href="#bars3d" class="new">Bars3D</a></li>
+						<li><a href="#cube" class="new">Cube</a></li>
+					</ul>
+				</div>
 			</div>
 			<footer>
 				<p>Flux Slider &copy; Copyright 2011 Joe Lambert. All Rights Reserved. Follow me on Twitter <a href="http://www.twitter.com/joelambert">@joelambert</a></p>

@@ -42,7 +42,7 @@ flux.browser = {
 	}
 };
 
-(function() {
+$(function() {
 	var div = document.createElement('div');
 	
 	flux.browser.supportsTransitions = false;
@@ -52,7 +52,22 @@ flux.browser = {
 		if(prefixes[i]+'Transition' in div.style)
 			flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
 	}
-	
-	//flux.browser.webkit = RegExp(" AppleWebKit/").test(navigator.userAgent);
+
 	flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
-})();
+	
+	// Chrome has a 3D matrix but doesn't support 3d transforms
+	if(flux.browser.supports3d && 'webkitPerspective' in div.style)
+	{
+		// Double check with a media query (similar to how Modernizr does this)
+		var div3D = $('<div id="csstransform3d"></div>');
+		var mq = $('<style media="(transform-3d), (-webkit-transform-3d)">div#csstransform3d { position: absolute; left: 9px }</style>');
+		
+		$('body').append(div3D);
+		$('head').append(mq);
+		
+		flux.browser.supports3d = div3D.get(0).offsetLeft == 9;
+		
+		div3D.remove();
+		mq.remove();
+	}
+});
