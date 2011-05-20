@@ -776,7 +776,7 @@ flux.transitions.warp = function(fluxslider, opts) {
 		delay: 30,
 		alternate: true
 	}, opts));
-};;
+};
 
 flux.transitions.cube = function(fluxslider, opts) {
 	return new flux.transition(fluxslider, $.extend({
@@ -879,6 +879,125 @@ flux.transitions.cube = function(fluxslider, opts) {
 			
 			return (t[direction] && t[direction][elem]) ? t[direction][elem] : false;
 		}
-	}, opts));	
+	}, opts));
+
 };
 
+flux.transitions.tiles3d = function(fluxslider, opts) {
+    return new flux.transition(fluxslider, $.extend({
+        rows: 5,
+        cols: 3,
+        matrix:[],
+        matrix2:[],
+        temp_matrix:[],
+        pointer:0,
+        elm_to_animate:[],
+        setup: function() {
+            var dummy = $('<div></div>'),
+            index = 0,
+            elm_width = Math.floor(this.slider.image1.width() / this.options.rows),
+            elm_height = Math.floor(this.slider.image1.height() / this.options.cols);
+
+            this.tileContainer = $('<div class="tiles"></div>').css({
+				width: this.slider.image1.width()+'px',
+				height: this.slider.image1.height()+'px',
+				position: 'relative',
+                background:'#202020'
+			}).css3({
+				'perspective': '800'
+			});
+
+			var css = {
+				height: '100%',
+				width: '100%',
+				position: 'absolute',
+				top: '0px',
+				left: '0px',
+                float: 'left'
+			};
+
+			var currentFace = $('<div class="face current"></div>').css(css);
+			var nextFace = $('<div class="face current"></div>').css(css);
+
+			this.tileContainer.append(currentFace);
+			this.tileContainer.append(nextFace);
+
+			this.slider.image1.append(this.tileContainer);
+
+            for (var i = 1; i <= this.options.cols; i++) {
+                this.options.matrix[i] = [];
+                this.options.matrix2[i] = [];
+                for (var j = 1; j <= this.options.rows; j++) {
+                    index++;
+                    //calculate appropriate bg positions
+                    var bg_pos_x = elm_width * (j - 1) * -1,
+                        bg_pos_y = elm_height * (i - 1) * -1;
+                    _elm = dummy.clone();
+                    _elm.attr({'data-id':'piece_' + index,'class':'piece front piece_' + index})
+                            .css({'width' : elm_width,
+                                 'height' :elm_height,
+                                 'background-image':this.slider.image1.css('backgroundImage'),
+                                 'background-position':bg_pos_x + 'px' + ' ' + bg_pos_y + 'px',
+                                 'float':'left'})
+                            .css3({
+                                'transform-style' : 'preserve-3d',
+                                'transition-duration' : '850ms',
+                                'backface-visibility' : 'hidden'
+                            })
+                            .data('position', '{"row":' + i + ',"col":' + j + '}');
+                    $(currentFace).append(_elm);
+                    //change the background for the next picture and append this block to the back side
+                    this.options.matrix[i].push(_elm);
+                    _elm = _elm.clone()
+                            .removeClass('front').addClass('back')
+                            .css('background-image',this.slider.image2.css('backgroundImage') )
+                            .css3({
+                                'transform' : 'rotateY(180deg)'
+                            })
+                            .appendTo(nextFace);
+                    this.options.matrix2[i].push(_elm);
+                }
+            };
+            this.options.matrix.shift();
+            this.options.matrix2.shift();
+        },
+        execute: function() {
+            var _this = this;
+            if(typeof this.options.temp_matrix[0] == 'undefined') this.options.temp_matrix = this.options.matrix;
+            for (var i = 0; i < (this.options.temp_matrix.length * 2 + 1); i++) {
+                if (typeof this.options.temp_matrix[i] == 'undefined') continue;
+                for (var j = this.options.pointer; this.options.rows; j++) {
+                    if (typeof this.options.temp_matrix[i][j - i] == 'undefined') {
+                        break
+                };
+                this.options.elm_to_animate.push(this.options.temp_matrix[i][j - i].data('id'));
+                break;
+                }
+            }
+            this.options.pointer++;
+            $.each(this.options.elm_to_animate, function(e, i) {
+                $('.front.' + i).css3({
+                                'transition-property' : 'transform',
+                                'transform' : 'rotateY(180deg)'
+                            });
+                $('.back.' + i).css3({
+                                'transition-property' : 'transform',
+                                'transform' : 'rotateY(360deg)'
+                            });
+            });
+//            expose this publicly so I can access it again
+            that = this;
+            if (this.options.elm_to_animate.length == this.options.cols * this.options.rows) {
+                $('.back.'+this.options.elm_to_animate.pop()).transitionEnd(function(){
+                    //clear some stuff up
+                    that.options.elm_to_animate = [];
+                })
+            } else {
+                setTimeout(function() {
+//                    that.options.elm_to_animate = [];
+                    that.options.execute.call(that);
+                }, 150);
+            };
+        }
+    }, opts));
+};
