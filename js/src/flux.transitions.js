@@ -33,7 +33,7 @@
 
 				// Perform the callback function
 				if(callback)
-					callback.call(this);
+					callback.call(this, event);
 			});
 		}
 		
