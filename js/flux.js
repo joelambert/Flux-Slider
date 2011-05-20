@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.2.1
+ * @preserve Flux Slider v1.3beta
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert. All rights reserved
@@ -9,7 +9,7 @@
 
 // Flux namespace
 var flux = {
-	version: '1.2.1'
+	version: '1.3beta'
 };
 
 flux.slider = function(elem, opts) {
@@ -204,7 +204,7 @@ flux.slider.prototype = {
 		this.image2.css({
 			'background-image': 'url("'+this.getImage(this.nextImageIndex).src+'")',
 			'z-index': 100
-		});
+		}).show();
 		
 		if(this.options.pagination)
 		{
@@ -362,7 +362,7 @@ $(function() {
 
 				// Perform the callback function
 				if(callback)
-					callback.call(this);
+					callback.call(this, event);
 			});
 		}
 		
@@ -405,12 +405,16 @@ flux.transition.prototype = {
 			'background-image': 'none'
 		});
 		
+		this.slider.imageContainer.css('overflow', this.options.requires3d ? 'visible' : 'hidden');
+		
 		if(this.options.execute)
 			this.options.execute.call(this);
 	},
 	finished: function() {
 		if(this.options.after)
 			this.options.after.call(this);
+			
+		this.slider.imageContainer.css('overflow', 'hidden');	
 			
 		this.slider.setupImages();
 		this.slider.element.trigger('fluxTransitionEnd');
@@ -473,19 +477,17 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 		barWidth: 100,
 		perspective: 600,
 		setup: function() {
-			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
+			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1;
 			
 			// Adjust the barWidth so that we can fit inside the available space
 			this.options.barWidth = Math.floor(this.slider.image1.width() / barCount);
 			
 			// Work out how much space remains with the adjusted barWidth
-			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth);
-			var addPerLoop = Math.ceil(remainder / barCount);
-			
-			var delayBetweenBars = 150;
-			var height = this.slider.image1.height();
-			
-			var totalLeft = 0;
+			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
+				addPerLoop = Math.ceil(remainder / barCount),
+				delayBetweenBars = 150,
+				height = this.slider.image1.height(),
+				totalLeft = 0;
 			
 			for(var i=0; i<barCount; i++) {
 				var thisBarWidth = this.options.barWidth;
@@ -510,15 +512,15 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'background-repeat': 'no-repeat'
 				}).css3({
 					'backface-visibility': 'hidden'
-				});
+				}),
 
-				var bar2 = $(bar.get(0).cloneNode(false)).css({
+				bar2 = $(bar.get(0).cloneNode(false)).css({
 					'background-image': this.slider.image2.css('background-image')
 				}).css3({
 					'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
-				});
+				}),
 				
-				var left = $('<div class="side bar bar-'+i+'"></div>').css({
+				left = $('<div class="side bar bar-'+i+'"></div>').css({
 					width: height+'px',
 					height: height+'px',
 					position: 'absolute',
@@ -529,13 +531,13 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				}).css3({
 					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2) + ' ' + flux.browser.rotateY(180),
 					'backface-visibility': 'hidden'
-				});
+				}),
 				
-				var right = $(left.get(0).cloneNode(false)).css3({
+				right = $(left.get(0).cloneNode(false)).css3({
 					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, thisBarWidth-height/2)
-				});
+				}),
 				
-				var barContainer = $('<div class="barcontainer"></div>').css({
+				barContainer = $('<div class="barcontainer"></div>').css({
 					width: thisBarWidth+'px',
 					height: '100%',
 					position: 'absolute',
@@ -555,37 +557,26 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				totalLeft += thisBarWidth;
 			}
 			
-			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
-			
-			this.slider.imageContainer.css({
-				'overflow': 'visible'
-			}).css3({
+			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
 		},
 		execute: function() {
-			//return;
-			var _this = this;
-			
-			var height = this.slider.image1.height();
-
-			var bars = this.slider.image1.find('div.barcontainer');
+			var _this = this,
+				height = this.slider.image1.height(),
+				bars = this.slider.image1.find('div.barcontainer');
 			
 			this.slider.image2.hide();
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).transitionEnd(function(){
+			bars.last().transitionEnd(function(event){
 				_this.slider.image2.show();
-				
-				_this.slider.imageContainer.css({
-					'overflow': _this.imageContainerOverflow
-				})
-				
+
 				_this.finished();
 			});
 
-			this.slider.image1.find('div.barcontainer').css3({
+			bars.css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
 		}
@@ -789,11 +780,8 @@ flux.transitions.cube = function(fluxslider, opts) {
 			var height = this.slider.image1.height();
 			
 			// Setup the container to allow 3D perspective
-			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
 			
-			this.slider.imageContainer.css({
-				'overflow': 'visible'
-			}).css3({
+			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
@@ -826,7 +814,6 @@ flux.transitions.cube = function(fluxslider, opts) {
 			var nextFace = $('<div class="face next"></div>').css($.extend(css, {
 				background: this.slider.image2.css('background-image')
 			})).css3({
-				//'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
 				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
 			});
 			
@@ -845,10 +832,6 @@ flux.transitions.cube = function(fluxslider, opts) {
 				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 			}).transitionEnd(function(){
 				_this.slider.image2.show();
-				
-				_this.slider.imageContainer.css({
-					'overflow': _this.imageContainerOverflow
-				})
 				
 				_this.finished();
 			});

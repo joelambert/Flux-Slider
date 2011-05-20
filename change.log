@@ -1,9 +1,17 @@
+1.3
+------------------
+Made it easier to handle 3d transitions by moving the overflow logic into flux.transition.js
+
+Ensured event object is sent to callback for .transitionEnd() helper function
+
+Updated zepto.js to v0.6
+
 1.2.1 (2011/05/17)
------------------
+------------------
 Fixed a z-index issue with 'bars3d' under Chrome. This also reduced flicker during rendering on iOS.
 
 1.2 (2011/05/16)
------------------
+------------------
 Added feature detection so any browser that supports CSS3 transitions will now work, jQuery may need to be used instead of Zepto for non Webkit based browsers.
 
 Added helper function for detecting the Transition end .transition()
@@ -31,11 +39,11 @@ Added the event 'fluxTransitionEnd' which now fires whenever a transition has co
 Fixed a chaining bug with .transitionEnd() helper function
 
 1.1
------------------
+------------------
 Added support for Zepto.js as a drop in replacement for jQuery
 
 Added detection of 3d CSS effects to ensure hardware acceleration is used where possible
 
 1.0
------------------
+------------------
 Initial release

@@ -76,12 +76,16 @@ flux.transition.prototype = {
 			'background-image': 'none'
 		});
 		
+		this.slider.imageContainer.css('overflow', this.options.requires3d ? 'visible' : 'hidden');
+		
 		if(this.options.execute)
 			this.options.execute.call(this);
 	},
 	finished: function() {
 		if(this.options.after)
 			this.options.after.call(this);
+			
+		this.slider.imageContainer.css('overflow', 'hidden');	
 			
 		this.slider.setupImages();
 		this.slider.element.trigger('fluxTransitionEnd');

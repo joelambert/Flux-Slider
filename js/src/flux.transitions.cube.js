@@ -9,11 +9,8 @@ flux.transitions.cube = function(fluxslider, opts) {
 			var height = this.slider.image1.height();
 			
 			// Setup the container to allow 3D perspective
-			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
 			
-			this.slider.imageContainer.css({
-				'overflow': 'visible'
-			}).css3({
+			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
@@ -46,7 +43,6 @@ flux.transitions.cube = function(fluxslider, opts) {
 			var nextFace = $('<div class="face next"></div>').css($.extend(css, {
 				background: this.slider.image2.css('background-image')
 			})).css3({
-				//'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
 				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
 			});
 			
@@ -65,10 +61,6 @@ flux.transitions.cube = function(fluxslider, opts) {
 				'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 			}).transitionEnd(function(){
 				_this.slider.image2.show();
-				
-				_this.slider.imageContainer.css({
-					'overflow': _this.imageContainerOverflow
-				})
 				
 				_this.finished();
 			});

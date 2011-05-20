@@ -84,17 +84,12 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				totalLeft += thisBarWidth;
 			}
 			
-			this.imageContainerOverflow = this.slider.imageContainer.css('overflow');
-			
-			this.slider.imageContainer.css({
-				'overflow': 'visible'
-			}).css3({
+			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
 			});
 		},
 		execute: function() {
-			//return;
 			var _this = this,
 				height = this.slider.image1.height(),
 				bars = this.slider.image1.find('div.barcontainer');
@@ -105,10 +100,6 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 			bars.last().transitionEnd(function(event){
 				_this.slider.image2.show();
 
-				_this.slider.imageContainer.css({
-					'overflow': _this.imageContainerOverflow
-				})
-				
 				_this.finished();
 			});
 

@@ -204,7 +204,7 @@ flux.slider.prototype = {
 		this.image2.css({
 			'background-image': 'url("'+this.getImage(this.nextImageIndex).src+'")',
 			'z-index': 100
-		});
+		}).show();
 		
 		if(this.options.pagination)
 		{
