@@ -396,6 +396,8 @@ flux.transition = function(fluxslider, opts) {
 flux.transition.prototype = {
 	constructor: flux.transition,
 	run: function() {
+		var _this = this;
+		
 		// do something
 		if(this.options.setup)
 			this.options.setup.call(this);
@@ -407,8 +409,11 @@ flux.transition.prototype = {
 		
 		this.slider.imageContainer.css('overflow', this.options.requires3d ? 'visible' : 'hidden');
 		
-		if(this.options.execute)
-			this.options.execute.call(this);
+		// For some of the 3D effects using Zepto we need to delay the transitions for some reason
+		setTimeout(function(){
+			if(_this.options.execute)
+				_this.options.execute.call(_this);
+		}, 5);
 	},
 	finished: function() {
 		if(this.options.after)
