@@ -4,19 +4,17 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 		barWidth: 100,
 		perspective: 600,
 		setup: function() {
-			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
+			var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1;
 			
 			// Adjust the barWidth so that we can fit inside the available space
 			this.options.barWidth = Math.floor(this.slider.image1.width() / barCount);
 			
 			// Work out how much space remains with the adjusted barWidth
-			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth);
-			var addPerLoop = Math.ceil(remainder / barCount);
-			
-			var delayBetweenBars = 150;
-			var height = this.slider.image1.height();
-			
-			var totalLeft = 0;
+			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
+				addPerLoop = Math.ceil(remainder / barCount),
+				delayBetweenBars = 150,
+				height = this.slider.image1.height(),
+				totalLeft = 0;
 			
 			for(var i=0; i<barCount; i++) {
 				var thisBarWidth = this.options.barWidth;
@@ -41,15 +39,15 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'background-repeat': 'no-repeat'
 				}).css3({
 					'backface-visibility': 'hidden'
-				});
+				}),
 
-				var bar2 = $(bar.get(0).cloneNode(false)).css({
+				bar2 = $(bar.get(0).cloneNode(false)).css({
 					'background-image': this.slider.image2.css('background-image')
 				}).css3({
 					'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
-				});
+				}),
 				
-				var left = $('<div class="side bar bar-'+i+'"></div>').css({
+				left = $('<div class="side bar bar-'+i+'"></div>').css({
 					width: height+'px',
 					height: height+'px',
 					position: 'absolute',
@@ -60,13 +58,13 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				}).css3({
 					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2) + ' ' + flux.browser.rotateY(180),
 					'backface-visibility': 'hidden'
-				});
+				}),
 				
-				var right = $(left.get(0).cloneNode(false)).css3({
+				right = $(left.get(0).cloneNode(false)).css3({
 					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, thisBarWidth-height/2)
-				});
+				}),
 				
-				var barContainer = $('<div class="barcontainer"></div>').css({
+				barContainer = $('<div class="barcontainer"></div>').css({
 					width: thisBarWidth+'px',
 					height: '100%',
 					position: 'absolute',
@@ -97,18 +95,16 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 		},
 		execute: function() {
 			//return;
-			var _this = this;
-			
-			var height = this.slider.image1.height();
-
-			var bars = this.slider.image1.find('div.barcontainer');
+			var _this = this,
+				height = this.slider.image1.height(),
+				bars = this.slider.image1.find('div.barcontainer');
 			
 			this.slider.image2.hide();
 			
 			// Get notified when the last transition has completed
-			$(bars[bars.length-1]).transitionEnd(function(){
+			bars.last().transitionEnd(function(event){
 				_this.slider.image2.show();
-				
+
 				_this.slider.imageContainer.css({
 					'overflow': _this.imageContainerOverflow
 				})
@@ -116,7 +112,7 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				_this.finished();
 			});
 
-			this.slider.image1.find('div.barcontainer').css3({
+			bars.css3({
 				'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 			});
 		}
