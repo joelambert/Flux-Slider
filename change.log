@@ -8,6 +8,8 @@ Updated zepto.js to v0.6
 
 Added a short 5ms delay before transition execution as Zepto sometimes failed to catch the transitionEnd() with some 3D transitions
 
+Added 'tiles3d' & 'blinds3d' transitions. Thanks to Altryne (twitter.com/altryne) for porting his 'tiles3d' code to Flux!
+
 1.2.1 (2011/05/17)
 ------------------
 Fixed a z-index issue with 'bars3d' under Chrome. This also reduced flicker during rendering on iOS.

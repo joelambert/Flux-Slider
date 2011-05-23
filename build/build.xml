@@ -10,10 +10,12 @@
 		<file>src/flux.transitions.bars.js</file>
 		<file>src/flux.transitions.bars3d.js</file>
 		<file>src/flux.transitions.blinds.js</file>
+		<file>src/flux.transitions.blinds3d.js</file>
 		<file>src/flux.transitions.zip.js</file>
 		<file>src/flux.transitions.blocks.js</file>
 		<file>src/flux.transitions.concentric.js</file>
 		<file>src/flux.transitions.warp.js</file>
 		<file>src/flux.transitions.cube.js</file>
+		<file>src/flux.transitions.tiles3d.js</file>
 	</files>
 </build>
