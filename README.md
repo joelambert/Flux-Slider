@@ -194,6 +194,34 @@ The `execute` function is where the CSS changes should be made, as transitions h
 	
 Two further convenience functions have been used in this example. The first `.transitionEnd()` is a cross-browser event function to catch the 'transition end' event. In this example we want to be notified when the final bar as finished animating, this is how we know the transition is complete. We can then perform some custom code but its important to remember to call the transitions `finished()` function to ensure that the DOM is reset for the next transition.
 
+## Transition writing guidelines
+
+Here are some guidelines for writing transitions if you'd like to have them considered for inclusion into the main distribution:
+
+- 	If the transition requires 3D transforms you must set the `requires3d` property to `true`. e.g.
+	
+		flux.transitions.bars3d = function(fluxslider, opts) {
+			return new flux.transition(fluxslider, $.extend({
+				requires3d: true,
+				setup: function() {
+					...
+				}
+			}
+		};
+
+- 	For delaying animations to specific bars/blocks/tiles use `-[webkit/moz/o]-transform-delay` rather than `setTimeout()`/`setInterval()`. This enables the GPU to handle the timing and makes for smoother transitions.
+
+- 	When using many new bars/blocks/tiles, add them to a container element off DOM and then add the container in one go, e.g.
+	
+		var container = $('<div></div>');
+		
+		for(var i=0; i<10; i++) {
+			var elem = $('<div></div');
+			container.append(elem);
+		}
+		
+		this.image.slider1.append(container);
+
 # flux.browser
 
 `flux.browser` is an object designed to help determine browser support for CSS3 transitions.
