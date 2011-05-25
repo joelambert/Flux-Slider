@@ -49,12 +49,18 @@ The <flux.slider> constructor can also take an optional second parameter which i
 
 	An array with the names of the transitions to use, available options are:
 	
-	+ **bars**
-	+ **blinds**
-	+ **blocks**
-	+ **concentric**
-	+ **warp**
-	+ **zip**
+	+ **2D**
+		- `bars`
+		- `blinds`
+		- `blocks`
+		- `concentric`
+		- `warp`
+		- `zip`
+	+ **3D**
+		- `bars3d`
+		- `blinds3d`
+		- `cube`
+		- `tiles3d`
 	
 - 	**delay** Integer *(default: 4000)*
 
