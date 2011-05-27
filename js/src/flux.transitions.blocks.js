@@ -4,10 +4,10 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		blockDelays: {},
 		maxDelay: 0,
 		setup: function() {
-			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1;
-			var yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1;
-			
-			var delayBetweenBars = 100;
+			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1,
+				yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1,
+				delayBetweenBars = 100,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<xCount; i++)
 			{
@@ -30,7 +30,8 @@ flux.transitions.blocks = function(fluxslider, opts) {
 						'transition-property': 'all',
 						'transition-delay': delay+'ms'
 					});
-					this.slider.image1.append(block);
+					
+					fragment.appendChild(block.get(0));
 					
 					if(delay > this.options.maxDelay)
 					{
@@ -39,6 +40,9 @@ flux.transitions.blocks = function(fluxslider, opts) {
 					}
 				}
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 		},
 		execute: function() {
 			var _this = this;

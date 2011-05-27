@@ -12,12 +12,11 @@ flux.transitions.blinds3d = function(fluxslider, opts) {
 			
 			// Work out how much space remains with the adjusted barWidth
 			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
-				addPerLoop = Math.ceil(remainder / barCount);
-			
-			var delayBetweenBars = 150,
-				height = this.slider.image1.height();
-			
-			var totalLeft = 0;
+				addPerLoop = Math.ceil(remainder / barCount),
+				delayBetweenBars = 150,
+				height = this.slider.image1.height(),
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<barCount; i++) {
 				
@@ -73,11 +72,14 @@ flux.transitions.blinds3d = function(fluxslider, opts) {
 					'transition-delay': (i*delayBetweenBars)+'ms',
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2);
-
-				this.slider.image1.append(barContainer);
+				
+				fragment.appendChild(barContainer.get(0));
 				
 				totalLeft += thisbarWidth;
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,

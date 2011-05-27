@@ -436,6 +436,8 @@ flux.transitions.bars = function(fluxslider, opts) {
 			
 			var delayBetweenBars = 40;
 			
+			var fragment = document.createDocumentFragment();
+			
 			for(var i=0; i<barCount; i++) {
 				var bar = $('<div></div>').attr('class', 'bar bar-'+i).css({
 					width: this.options.barWidth+'px',
@@ -452,8 +454,12 @@ flux.transitions.bars = function(fluxslider, opts) {
 					'transition-property': 'all',
 					'transition-delay': (i*delayBetweenBars)+'ms'
 				});
-				this.slider.image1.append(bar);
+				
+				fragment.appendChild(bar.get(0));
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 		},
 		execute: function() {
 			var _this = this;
@@ -492,7 +498,8 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				addPerLoop = Math.ceil(remainder / barCount),
 				delayBetweenBars = 150,
 				height = this.slider.image1.height(),
-				totalLeft = 0;
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<barCount; i++) {
 				var thisBarWidth = this.options.barWidth;
@@ -557,10 +564,13 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2).append(left).append(right);
 				
-				this.slider.image1.append(barContainer);
+				fragment.appendChild(barContainer.get(0));
 				
 				totalLeft += thisBarWidth;
 			}
+			
+			//this.slider.image1.append(barContainer);
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
@@ -626,12 +636,11 @@ flux.transitions.blinds3d = function(fluxslider, opts) {
 			
 			// Work out how much space remains with the adjusted barWidth
 			var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
-				addPerLoop = Math.ceil(remainder / barCount);
-			
-			var delayBetweenBars = 150,
-				height = this.slider.image1.height();
-			
-			var totalLeft = 0;
+				addPerLoop = Math.ceil(remainder / barCount),
+				delayBetweenBars = 150,
+				height = this.slider.image1.height(),
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<barCount; i++) {
 				
@@ -687,11 +696,14 @@ flux.transitions.blinds3d = function(fluxslider, opts) {
 					'transition-delay': (i*delayBetweenBars)+'ms',
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2);
-
-				this.slider.image1.append(barContainer);
+				
+				fragment.appendChild(barContainer.get(0));
 				
 				totalLeft += thisbarWidth;
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
@@ -752,10 +764,10 @@ flux.transitions.blocks = function(fluxslider, opts) {
 		blockDelays: {},
 		maxDelay: 0,
 		setup: function() {
-			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1;
-			var yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1;
-			
-			var delayBetweenBars = 100;
+			var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1,
+				yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1,
+				delayBetweenBars = 100,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<xCount; i++)
 			{
@@ -778,7 +790,8 @@ flux.transitions.blocks = function(fluxslider, opts) {
 						'transition-property': 'all',
 						'transition-delay': delay+'ms'
 					});
-					this.slider.image1.append(block);
+					
+					fragment.appendChild(block.get(0));
 					
 					if(delay > this.options.maxDelay)
 					{
@@ -787,6 +800,9 @@ flux.transitions.blocks = function(fluxslider, opts) {
 					}
 				}
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 		},
 		execute: function() {
 			var _this = this;
@@ -817,14 +833,13 @@ flux.transitions.concentric = function(fluxslider, opts) {
 		delay: 150,
 		alternate: false,
 		setup: function() {
-			var w = this.slider.image1.width();
-			var h = this.slider.image1.height();
+			var w = this.slider.image1.width(),
+				h = this.slider.image1.height(),
+				largestLength = Math.sqrt(w*w + h*h), // Largest length is the diagonal
 			
-			// Largest length is the diagonal
-			var largestLength = Math.sqrt(w*w + h*h);
-			
-			// How many blocks do we need?
-			var blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 1; // 1 extra to account for the round border
+				// How many blocks do we need?
+				blockCount = Math.ceil(((largestLength-this.options.blockSize)/2) / this.options.blockSize) + 1, // 1 extra to account for the round border
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<blockCount; i++)
 			{
@@ -848,8 +863,12 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					'transition-property': 'all',
 					'transition-delay': ((blockCount-i)*this.options.delay)+'ms'
 				});
-				this.slider.image1.append(block);
+				
+				fragment.appendChild(block.get(0));
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 		},
 		execute: function() {
 			var _this = this;
@@ -983,8 +1002,8 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 		tileWidth: 180,
 		perspective: 600,
 		setup: function() {
-			var blockCountX = Math.floor(this.slider.image1.width() / this.options.tileWidth) + 1;
-			var blockCountY = Math.floor(this.slider.image1.height() / this.options.tileWidth) + 1;
+			var blockCountX = Math.floor(this.slider.image1.width() / this.options.tileWidth) + 1,
+				blockCountY = Math.floor(this.slider.image1.height() / this.options.tileWidth) + 1;
 
 			// Adjust the tileWidth so that we can fit inside the available space
 			this.options.tileWidth = Math.floor(this.slider.image1.width() / blockCountX);
@@ -993,15 +1012,15 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 			var remainderX = this.slider.image1.width() - (blockCountX * this.options.tileWidth),
 				addPerLoopX = Math.ceil(remainderX / blockCountX),
 				remainderY = this.slider.image1.height() - (blockCountY * this.options.tileWidth),
-				addPerLoopY = Math.ceil(remainderY / blockCountY);
-
-			var delayBetweenBarsX = 200,
-				delayBetweenBarsY = 150;
-			var height = this.slider.image1.height();
+				addPerLoopY = Math.ceil(remainderY / blockCountY),
+				
+				delayBetweenBarsX = 200,
+				delayBetweenBarsY = 150,
+				
+				height = this.slider.image1.height(),
 			
-			var totalLeft = 0;
-			
-			var docFrag = $('<div></div>');
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<blockCountX; i++) {
 				
@@ -1066,7 +1085,7 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 						'transform-style': 'preserve-3d'
 					}).append(tile).append(tile2);
 
-					$(docFrag).append(tileContainer);
+					fragment.appendChild(tileContainer.get(0));
 					//this.slider.image1.append(tileContainer);
 
 					totalTop += thisTileHeight;
@@ -1075,7 +1094,8 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 				totalLeft += thisTileWidth;
 			}
 			
-			this.slider.image1.append(docFrag);
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,

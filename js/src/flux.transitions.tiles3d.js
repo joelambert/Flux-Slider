@@ -4,8 +4,8 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 		tileWidth: 180,
 		perspective: 600,
 		setup: function() {
-			var blockCountX = Math.floor(this.slider.image1.width() / this.options.tileWidth) + 1;
-			var blockCountY = Math.floor(this.slider.image1.height() / this.options.tileWidth) + 1;
+			var blockCountX = Math.floor(this.slider.image1.width() / this.options.tileWidth) + 1,
+				blockCountY = Math.floor(this.slider.image1.height() / this.options.tileWidth) + 1;
 
 			// Adjust the tileWidth so that we can fit inside the available space
 			this.options.tileWidth = Math.floor(this.slider.image1.width() / blockCountX);
@@ -14,15 +14,15 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 			var remainderX = this.slider.image1.width() - (blockCountX * this.options.tileWidth),
 				addPerLoopX = Math.ceil(remainderX / blockCountX),
 				remainderY = this.slider.image1.height() - (blockCountY * this.options.tileWidth),
-				addPerLoopY = Math.ceil(remainderY / blockCountY);
-
-			var delayBetweenBarsX = 200,
-				delayBetweenBarsY = 150;
-			var height = this.slider.image1.height();
+				addPerLoopY = Math.ceil(remainderY / blockCountY),
+				
+				delayBetweenBarsX = 200,
+				delayBetweenBarsY = 150,
+				
+				height = this.slider.image1.height(),
 			
-			var totalLeft = 0;
-			
-			var docFrag = $('<div></div>');
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<blockCountX; i++) {
 				
@@ -87,7 +87,7 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 						'transform-style': 'preserve-3d'
 					}).append(tile).append(tile2);
 
-					$(docFrag).append(tileContainer);
+					fragment.appendChild(tileContainer.get(0));
 					//this.slider.image1.append(tileContainer);
 
 					totalTop += thisTileHeight;
@@ -96,7 +96,8 @@ flux.transitions.tiles3d = function(fluxslider, opts) {
 				totalLeft += thisTileWidth;
 			}
 			
-			this.slider.image1.append(docFrag);
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,

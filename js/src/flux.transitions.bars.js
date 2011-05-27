@@ -6,6 +6,8 @@ flux.transitions.bars = function(fluxslider, opts) {
 			
 			var delayBetweenBars = 40;
 			
+			var fragment = document.createDocumentFragment();
+			
 			for(var i=0; i<barCount; i++) {
 				var bar = $('<div></div>').attr('class', 'bar bar-'+i).css({
 					width: this.options.barWidth+'px',
@@ -22,8 +24,12 @@ flux.transitions.bars = function(fluxslider, opts) {
 					'transition-property': 'all',
 					'transition-delay': (i*delayBetweenBars)+'ms'
 				});
-				this.slider.image1.append(bar);
+				
+				fragment.appendChild(bar.get(0));
 			}
+			
+			//this.slider.image1.append($(fragment));
+			this.slider.image1.get(0).appendChild(fragment);
 		},
 		execute: function() {
 			var _this = this;

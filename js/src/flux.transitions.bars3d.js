@@ -14,7 +14,8 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 				addPerLoop = Math.ceil(remainder / barCount),
 				delayBetweenBars = 150,
 				height = this.slider.image1.height(),
-				totalLeft = 0;
+				totalLeft = 0,
+				fragment = document.createDocumentFragment();
 			
 			for(var i=0; i<barCount; i++) {
 				var thisBarWidth = this.options.barWidth;
@@ -79,10 +80,13 @@ flux.transitions.bars3d = function(fluxslider, opts) {
 					'transform-style': 'preserve-3d'
 				}).append(bar).append(bar2).append(left).append(right);
 				
-				this.slider.image1.append(barContainer);
+				fragment.appendChild(barContainer.get(0));
 				
 				totalLeft += thisBarWidth;
 			}
+			
+			//this.slider.image1.append(barContainer);
+			this.slider.image1.get(0).appendChild(fragment);
 			
 			this.slider.imageContainer.css3({
 				'perspective': this.options.perspective,
