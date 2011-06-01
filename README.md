@@ -5,12 +5,13 @@ Instead of the traditional Javascript timer based animations used by jQuery, Flu
 
 The aim is to use hardware acceleration where possible to improve performace on less powerful devices, such as mobiles & tablets.
 
-## Tested Under
-- Safari
+## Known to work with
+- Safari 
 - Chrome
 - iOS
-- Firefox 4 *(since v1.2)*
-- Opera 11 *(since v1.2)*
+- Blackberry Playbook
+- Firefox 4
+- Opera 11
 
 ## May/should also work for
 - Android (Known to be jerky due to lack of hardware acceleration)
