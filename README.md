@@ -34,6 +34,11 @@ Next instantiate Flux Slider:
 	$(function(){
 		window.myFlux = new flux.slider('#slider');
 	});
+
+## A note on feature detection
+Flux now makes use of (Modernizr)[http://www.modernizr.com] when available for feature detection. Flux **does not** require Modernizr but it will use it instead of the inbuilt code if it's loaded.
+
+Note: If you have a need to initialise Flux before the `$.ready()` event (*not recommended!*) then you will need to use Modernizr for feature detection as the inbuilt code does not play well with an uninitialised DOM.
 	
 ## Configuration options
 The <flux.slider> constructor can also take an optional second parameter which is an object of key/value configuration options.

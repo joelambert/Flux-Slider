@@ -13,12 +13,15 @@ var flux = {
 };
 
 flux.slider = function(elem, opts) {
+	// Setup the flux.browser singleton to perform feature detection
+	flux.browser.init();
+	
 	if(!flux.browser.supportsTransitions)
 	{
 		if(window.console && window.console.error)
 			console.error("Flux Slider requires a browser that supports CSS3 transitions");
-	
-		return;
+
+		return false;
 	}
 	
 	var _this = this;

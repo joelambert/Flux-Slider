@@ -10,7 +10,9 @@ Added a short 5ms delay before transition execution as Zepto sometimes failed to
 
 Added 'tiles3d' & 'blinds3d' transitions. Thanks to Altryne (twitter.com/altryne) for porting his 'tiles3d' code to Flux!
 
-Improved performance by using Document Fragments to reduce DOM reflows
+Improved performance by using Document Fragments to reduce DOM reflows.
+
+Added support for Modernizr feature detection with a fallback to custom detection code.
 
 1.2.1 (2011/05/17)
 ------------------
