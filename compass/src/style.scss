@@ -86,3 +86,18 @@ section#details
 		}
 	}
 }
+
+footer
+{
+	div#carbonads-container
+	{
+		div.carbonad
+		{
+			background: #353535;
+			margin: 6em auto 3em;
+			border: 1px solid rgba(#FFF, 0.1);
+			@include border-radius(3px);
+			text-align: left;
+		}
+	}
+}

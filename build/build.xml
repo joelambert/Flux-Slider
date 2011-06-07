@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <build>
-	<version>1.3beta</version>
+	<version>1.3a</version>
 	<outputname>flux</outputname>
 	<docroot>../js/</docroot>
 	<files>

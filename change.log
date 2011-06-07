@@ -14,6 +14,8 @@ Improved performance by using Document Fragments to reduce DOM reflows.
 
 Added support for Modernizr feature detection with a fallback to custom detection code.
 
+3D transformations are removed from the list of loaded transitions when the browser does not support 3D
+
 1.2.1 (2011/05/17)
 ------------------
 Fixed a z-index issue with 'bars3d' under Chrome. This also reduced flicker during rendering on iOS.

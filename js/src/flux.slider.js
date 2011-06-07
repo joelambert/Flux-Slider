@@ -41,6 +41,20 @@ flux.slider = function(elem, opts) {
 		controls: true
 	}, opts);
 	
+	// Filter out 3d transitions if the browser doesn't support them
+	if(!flux.browser.supports3d)
+	{
+		var newTrans = [];
+		$(this.options.transitions).each(function(index, tran){
+			var t = new flux.transitions[tran](this);
+
+			if(!t.options.requires3d)
+				newTrans.push(tran);
+		});		
+		
+		this.options.transitions = newTrans;
+	}
+
 	// Get a list the images to use
 	this.images = new Array();
 	this.imageLoadedCount = 0;
@@ -217,19 +231,19 @@ flux.slider.prototype = {
 	},
 	transition: function(transition, opts) {
 		// Allow a transition to be picked from ALL available transitions (not just the reduced set)
-		if(transition == undefined || !flux.transitions[transition])
-		{
-			// Pick a transition at random from the (possibly reduced set of) transitions
-			var index = Math.floor(Math.random()*(this.options.transitions.length));
-			transition = this.options.transitions[index];
-		}
-		
-		var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+        if(transition == undefined || !flux.transitions[transition])
+        {
+            // Pick a transition at random from the (possibly reduced set of) transitions
+            var index = Math.floor(Math.random()*(this.options.transitions.length));
+            transition = this.options.transitions[index];
+        }
 
-		tran.run();
-		
-		this.currentImageIndex = this.nextImageIndex;
-		this.setNextIndex(this.currentImageIndex+1);
+        var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+
+        tran.run();
+
+        this.currentImageIndex = this.nextImageIndex;
+        this.setNextIndex(this.currentImageIndex+1);
 	},
 	getImage: function(index) {
 		index = index % this.images.length;
