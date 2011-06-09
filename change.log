@@ -1,6 +1,8 @@
-Github
+1.3.1 (2011/06/09)
 ------------------
 Made it easier to handle 3d transitions by moving the overflow logic into flux.transition.js
+
+Fixed a bug where 3d transitions could leave the viewport in an overflow: visible state.
 
 Ensured event object is sent to callback for .transitionEnd() helper function
 

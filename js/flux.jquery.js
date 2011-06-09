@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.3a jQuery Widget 
+ * @preserve Flux Slider v1.3 jQuery Widget 
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
