@@ -2,7 +2,7 @@
  * @preserve Flux Slider v@VERSION
  * http://www.joelambert.co.uk/flux
  *
- * Copyright 2011, Joe Lambert. All rights reserved
+ * Copyright 2011, Joe Lambert.
  * Free to use under the MIT license.
  * http://www.opensource.org/licenses/mit-license.php
  */

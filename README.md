@@ -34,9 +34,17 @@ Next instantiate Flux Slider:
 	$(function(){
 		window.myFlux = new flux.slider('#slider');
 	});
+	
+Or, if you're using the provided jQuery widget then you can also do the following:
+	
+	$(function(){
+		window.myFlux = $('#slider').flux();
+	});
+	
+*Note: If you plan to use the Zepto framework then the widget method won't work*
 
 ## A note on feature detection
-Flux now makes use of (Modernizr)[http://www.modernizr.com] when available for feature detection. Flux **does not** require Modernizr but it will use it instead of the inbuilt code if it's loaded.
+Flux now makes use of [Modernizr](http://www.modernizr.com) when available for feature detection. Flux **does not** require Modernizr but it will use it instead of the inbuilt code if it's loaded.
 
 Note: If you have a need to initialise Flux before the `$.ready()` event (*not recommended!*) then you will need to use Modernizr for feature detection as the inbuilt code does not play well with an uninitialised DOM.
 	
@@ -80,8 +88,31 @@ For example, to prevent autoplay and show a pagination control you would do the 
 			pagination: true
 		});
 	});
+	
+Or with the jQuery widget:
+
+	$(function(){
+		window.myFlux = $('#slider').flux({
+			autoplay: false,
+			pagination: true
+		});
+	});
 
 ## flux.slider API
+
+The API functions work with both the native Javascript object and the jQuery widget. For example:
+
+	// Show next image using the bars3d transition (native Javascript object)
+	window.myFlux.next('bars3d');
+	
+or
+
+	// Show next image using the bars3d transition (jQuery widget)
+	window.myFlux.flux('next', 'bars3d');
+	
+*Note: All the jQuery widget functions are chainable except those that return something specific, such as `isPlaying()` & `getImage()`.*
+
+For more information on using jQuery widgets see the [jQuery Doc's](http://docs.jquery.com/UI_Developer_Guide);
 
 ### Play Controls
 - `start()` Enable autoplay

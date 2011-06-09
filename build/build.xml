@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <build>
 	<version>1.3a</version>
-	<outputname>flux</outputname>
 	<docroot>../js/</docroot>
-	<files>
-		<file>src/flux.slider.js</file>
-		<file>src/flux.browser.js</file>
-		<file>src/flux.transitions.js</file>
-		<file>src/flux.transitions.bars.js</file>
-		<file>src/flux.transitions.bars3d.js</file>
-		<file>src/flux.transitions.blinds.js</file>
-		<file>src/flux.transitions.blinds3d.js</file>
-		<file>src/flux.transitions.zip.js</file>
-		<file>src/flux.transitions.blocks.js</file>
-		<file>src/flux.transitions.concentric.js</file>
-		<file>src/flux.transitions.warp.js</file>
-		<file>src/flux.transitions.cube.js</file>
-		<file>src/flux.transitions.tiles3d.js</file>
-	</files>
+	<output>
+		<file name="flux">
+			<source>src/flux.slider.js</source>
+			<source>src/flux.browser.js</source>
+			<source>src/flux.transitions.js</source>
+			<source>src/flux.transitions.bars.js</source>
+			<source>src/flux.transitions.bars3d.js</source>
+			<source>src/flux.transitions.blinds.js</source>
+			<source>src/flux.transitions.blinds3d.js</source>
+			<source>src/flux.transitions.zip.js</source>
+			<source>src/flux.transitions.blocks.js</source>
+			<source>src/flux.transitions.concentric.js</source>
+			<source>src/flux.transitions.warp.js</source>
+			<source>src/flux.transitions.cube.js</source>
+			<source>src/flux.transitions.tiles3d.js</source>
+		</file>
+		<file name="flux.jquery">
+			<source>src/flux.jquery.js</source>
+		</file>
+	</output>
 </build>

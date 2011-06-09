@@ -14,7 +14,9 @@ Improved performance by using Document Fragments to reduce DOM reflows.
 
 Added support for Modernizr feature detection with a fallback to custom detection code.
 
-3D transformations are removed from the list of loaded transitions when the browser does not support 3D
+3D transformations are removed from the list of loaded transitions when the browser does not support 3D.
+
+Added a jQuery widget for better integration with jQuery.
 
 1.2.1 (2011/05/17)
 ------------------
