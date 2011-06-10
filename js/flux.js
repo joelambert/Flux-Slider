@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.3
+ * @preserve Flux Slider v1.3.1
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 var flux = {
-	version: '1.3'
+	version: '1.3.1'
 };
 
 flux.slider = function(elem, opts) {
@@ -376,11 +376,17 @@ $(function(){
 	$.fn.css3 = function(props) {
 		var css = {};
 		var prefixes = ['webkit', 'moz', 'ms', 'o'];
-		
+
 		for(var prop in props)
+		{
+			// Add the vendor specific versions
 			for(var i=0; i<prefixes.length; i++)
 				css['-'+prefixes[i]+'-'+prop] = props[prop];
 			
+			// Add the actual version	
+			css[prop] = props[prop];
+		}
+		
 		this.css(css);
 		return this;
 	};
@@ -898,7 +904,7 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': 'center center'
 				}).css3({
-					'border-radius': '1000px',
+					'border-radius': thisBlockSize+'px',
 					'transition-duration': '800ms',
 					'transition-timing-function': 'linear',
 					'transition-property': 'all',

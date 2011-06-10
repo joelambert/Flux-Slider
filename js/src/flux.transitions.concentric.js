@@ -28,7 +28,7 @@ flux.transitions.concentric = function(fluxslider, opts) {
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': 'center center'
 				}).css3({
-					'border-radius': '1000px',
+					'border-radius': thisBlockSize+'px',
 					'transition-duration': '800ms',
 					'transition-timing-function': 'linear',
 					'transition-property': 'all',

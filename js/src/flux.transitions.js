@@ -6,11 +6,17 @@
 	$.fn.css3 = function(props) {
 		var css = {};
 		var prefixes = ['webkit', 'moz', 'ms', 'o'];
-		
+
 		for(var prop in props)
+		{
+			// Add the vendor specific versions
 			for(var i=0; i<prefixes.length; i++)
 				css['-'+prefixes[i]+'-'+prop] = props[prop];
 			
+			// Add the actual version	
+			css[prop] = props[prop];
+		}
+		
 		this.css(css);
 		return this;
 	};
