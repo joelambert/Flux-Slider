@@ -38,8 +38,14 @@ flux.slider = function(elem, opts) {
 		transitions: this.transitions,
 		delay: 4000,
 		pagination: true,
-		controls: true
+		controls: true,
+		width: null,
+		height: null
 	}, opts);
+	
+	// Set the height/width if given
+	this.height = this.options.height ? this.options.height	: null;
+	this.width 	= this.options.width  ? this.options.width 	: null;
 	
 	// Filter out 3d transitions if the browser doesn't support them
 	if(!flux.browser.supports3d)
@@ -68,9 +74,9 @@ flux.slider = function(elem, opts) {
 		var image = new Image();
 		image.onload = function() {
 			_this.imageLoadedCount++;
-
-			_this.width  = this.width;
-			_this.height = this.height;
+			
+			_this.width  = _this.width 	? _this.width  : this.width;
+			_this.height = _this.height ? _this.height : this.height;
 			
 			if(_this.imageLoadedCount >= _this.images.length)
 			{
