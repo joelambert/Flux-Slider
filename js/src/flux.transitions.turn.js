@@ -26,7 +26,7 @@ flux.transitions.turn = function(fluxslider, opts) {
 					height: '100%',
 					position: 'absolute',
 					top: '0',
-					left: '0',
+					left: '0'
 				}),
 				
 			back = $('<div></div>').appendTo(tab).css({
@@ -36,7 +36,7 @@ flux.transitions.turn = function(fluxslider, opts) {
 					height: '100%',
 					position: 'absolute',
 					top: '0',
-					left: '0',
+					left: '0'
 				}).css3({
 					transform: flux.browser.rotateY(180),
 					'backface-visibility': 'hidden'
@@ -64,12 +64,12 @@ flux.transitions.turn = function(fluxslider, opts) {
 			}).css3({
 				'transition-duration': '800ms',
 				'transition-timing-function': 'linear',
-				'transition-property': 'opacity',
+				'transition-property': 'opacity'
 			}),
 			
 			container = $('<div></div>').css3({
 				width: '100%',
-				height: '100%',
+				height: '100%'
 			}).css3({
 				'perspective': this.options.perspective,
 				'perspective-origin': '50% 50%'
