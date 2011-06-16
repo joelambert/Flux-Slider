@@ -1205,6 +1205,8 @@ flux.transitions.turn = function(fluxslider, opts) {
 					position: 'absolute',
 					top: '0',
 					left: '0'
+				}).css3({
+					'backface-visibility': 'hidden'
 				}),
 				
 			back = $('<div></div>').appendTo(tab).css({
