@@ -99,7 +99,11 @@ flux.transition.prototype = {
 		this.slider.imageContainer.css('overflow', 'hidden');	
 			
 		this.slider.setupImages();
-		this.slider.element.trigger('fluxTransitionEnd');
+		
+		// Trigger an event to signal the end of a transition
+		this.slider.element.trigger('fluxTransitionEnd', {
+			currentImage: this.slider.getImage(this.slider.currentImageIndex)
+		});
 	}
 };
 

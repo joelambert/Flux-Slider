@@ -40,10 +40,11 @@ flux.slider = function(elem, opts) {
 		pagination: true,
 		controls: true,
 		width: null,
-		height: null
+		height: null,
+		onTransitionEnd: null
 	}, opts);
 	
-	// Set the height/width if given
+	// Set the height/width if given [EXPERIMENTAL!]
 	this.height = this.options.height ? this.options.height	: null;
 	this.width 	= this.options.width  ? this.options.width 	: null;
 	
@@ -61,7 +62,7 @@ flux.slider = function(elem, opts) {
 		this.options.transitions = newTrans;
 	}
 
-	// Get a list the images to use
+	// Get a list of the images to use
 	this.images = new Array();
 	this.imageLoadedCount = 0;
 	this.currentImageIndex = 0;
@@ -92,33 +93,31 @@ flux.slider = function(elem, opts) {
 		$(found_img).remove();
 	});
 	
-	this.container = $('<div class="fluxslider"></div>');
-	this.element.append(this.container);
+	this.container = $('<div class="fluxslider"></div>').appendTo(this.element);
 	
 	this.imageContainer = $('<div class="images loading"></div>').css({
 		'position': 'relative',
 		'overflow': 'hidden',
 		'min-height': '100px'
-	});
-	this.container.append(this.imageContainer);
+	}).appendTo(this.container);
 	
-	this.image1 = $('<div class="image1" style="height: 100%; width: 100%"></div>');
-	this.imageContainer.append(this.image1);
+	// Create the placeholders for the current and next image
+	this.image1 = $('<div class="image1" style="height: 100%; width: 100%"></div>').appendTo(this.imageContainer);
+	this.image2 = $('<div class="image2" style="height: 100%; width: 100%"></div>').appendTo(this.imageContainer);
 	
-	this.image2 = $('<div class="image2" style="height: 100%; width: 100%"></div>');
-	this.imageContainer.append(this.image2);
-	
-	$(this.image1).css({
+	$(this.image1).add(this.image2).css({
 		'position': 'absolute',
 		'top': '0px',
 		'left': '0px'
 	});
 	
-	$(this.image2).css({
-		'position': 'absolute',
-		'top': '0px',
-		'left': '0px'
-	});
+	// Are we using a callback instead of events for notifying about transition ends?
+	if(this.options.onTransitionEnd) {
+		this.element.bind('fluxTransitionEnd', function(event) {
+			event.preventDefault();
+			_this.options.onTransitionEnd(event.data);
+		});
+	}
 	
 	// Should we auto start the slider?
 	if(this.options.autoplay)
@@ -186,9 +185,7 @@ flux.slider.prototype = {
 					display: 'inline-block',
 					'margin-left': '0.5em',
 					'cursor': 'pointer'
-				});
-				
-				_this.pagination.append(li);
+				}).appendTo(_this.pagination);
 				
 				if(index == 0)
 					li.css('margin-left', 0).addClass('current');

@@ -3,7 +3,7 @@ Flux slider is a CSS3 animation based image transition framework, inspired in pa
 
 Instead of the traditional Javascript timer based animations used by jQuery, Flux utilises the newer, more powerful CSS3 animation technology. Its in a fairly early/rough state at the moment but testing on the iPhone/iPad does appear to produce much smoother animations. Desktop performance (as with Nivo) is very smooth but the use of CSS3 enables us to produce some new effects that Nivo can’t, e.g. rotations.
 
-The aim is to use hardware acceleration where possible to improve performace on less powerful devices, such as mobiles & tablets.
+The aim is to use hardware acceleration where possible to improve performance on less powerful devices, such as mobiles & tablets.
 
 ## Known to work with
 - Safari 
@@ -114,12 +114,12 @@ or
 
 For more information on using jQuery widgets see the [jQuery Doc's](http://docs.jquery.com/UI_Developer_Guide);
 
-### Play Controls
+### Play controls
 - `start()` Enable autoplay
 - `stop()` Disable autoplay
 - `isPlaying()` Returns a boolean as to whether autoplay is currently enabled
 
-### Transport Controls
+### Transport controls
 - 	`next([transition [, options]])` 
 
 	Show the next image. 
@@ -146,6 +146,34 @@ For more information on using jQuery widgets see the [jQuery Doc's](http://docs.
 
 ### Misc
 - `getImage(index)` Returns the image with the provided index
+
+### Receiving notification when a transition completes
+
+There are occasions where you may wish to know when a transition has completed, or that the currently displayed image has changed.
+
+Flux provides a couple of mechanisms for this:
+
+#### `fluxTransitionEnd` Javascript Event
+
+After each transition, Flux dispatches a `fluxTransitionEnd` event. To listen for these events you can do the following:
+
+	$('#slider').bind('fluxTransitionEnd', function(event) {
+		var img = event.data.currentImage;
+		// Do something with img...
+	});
+
+#### `onTransitionEnd` callback function
+	
+You can alternatively pass in a callback function as part of the configuration options when you instantiate Flux, e.g.
+
+	window.myFlux = $('#slider').flux({
+		autoplay: false,
+		pagination: true,
+		onTransitionEnd: function(data) {
+			var img = data.currentImage;
+			// Do something with img...
+		}
+	});
 	
 # Writing custom transitions
 Writing your own custom transitions is easy, you just need to create an instance of a `flux.transition` object and pass in some callback functions to provide the custom behaviour you're looking for.

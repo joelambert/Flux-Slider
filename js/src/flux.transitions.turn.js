@@ -86,8 +86,8 @@ flux.transitions.turn = function(fluxslider, opts) {
 				_this.finished();
 			}).css3({
 				transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
-			}).end().end()
-			.find('div.overlay').css({
+			});
+			this.slider.image1.find('div.overlay').css({
 				opacity: 0
 			});
 		}
