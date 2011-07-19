@@ -18,6 +18,7 @@
 			<source>src/flux.transitions.cube.js</source>
 			<source>src/flux.transitions.tiles3d.js</source>
 			<source>src/flux.transitions.turn.js</source>
+			<source>src/flux.transitions.slide.js</source>
 		</file>
 		<file name="flux.jquery">
 			<source>src/flux.jquery.js</source>

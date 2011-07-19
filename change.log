@@ -1,6 +1,6 @@
 GitHub
 ------------------
-Added the 'turn' 3D transition.
+Added the 'turn' (3D) & 'slide' (2D) transitions.
 
 Can now specify a size for the slider canvas on init, images crop for the top-left edge [EXPERIMENTAL]
 
