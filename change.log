@@ -6,7 +6,7 @@ Can now specify a size for the slider canvas on init, images crop for the top-le
 
 Updated coding style of flux.slider to make use of .appendTo to reduce code size (Zepto added this in 0.6 so now safe to use for jQuery/Zepto compatibility).
 
-Added the current image URL to the event data object associated with the 'fluxTransitionEnd' event.
+Added the current image to the event data object associated with the 'fluxTransitionEnd' event.
 
 Can now pass in a callback function 'onTransitionEnd' to receive notifications of when transitions have completed (Alternative to listening for 'fluxTransitionEnd' events).
 
