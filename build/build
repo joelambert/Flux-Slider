@@ -23,7 +23,7 @@
 
 		// Concat javascript files
 		foreach($output->source as $file)
-			$concat .= file_get_contents(dirname(__FILE__)."/$docroot/$file").";\n\n";
+			$concat .= file_get_contents(dirname(__FILE__)."/$docroot/$file")."\n\n";
 
 		// Process any replacements
 		$concat = str_replace('@VERSION', $version, $concat);
@@ -36,5 +36,8 @@
 		$min_path = dirname(__FILE__)."/$docroot/$outputname.min.js";
 
 		system("java -jar ".escapeshellarg(dirname(__FILE__)."/google-compiler-20100917.jar")." --js ".escapeshellarg($max_path)." --warning_level QUIET --js_output_file ".escapeshellarg($min_path));
+		
+		echo $outputname.".js:\n  ".round(strlen(file_get_contents($max_path))/1024, 2)."KB\n  ".round(strlen(gzcompress(file_get_contents($max_path)))/1024, 2)."KB (gzipped)\n\n";
+		echo $outputname.".min.js:\n  ".round(strlen(file_get_contents($min_path))/1024, 2)."KB\n  ".round(strlen(gzcompress(file_get_contents($min_path)))/1024, 2)."KB (gzipped)\n\n";
 	}
 ?>
