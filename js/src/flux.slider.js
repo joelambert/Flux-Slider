@@ -69,8 +69,15 @@ flux.slider = function(elem, opts) {
 	this.nextImageIndex = 1;
 	this.playing = false;
 	
-	this.element.find('img').each(function(index, found_img){
-		_this.images.push(found_img.cloneNode(false));
+	this.element.find('img, a img').each(function(index, found_img){
+		var imgClone = found_img.cloneNode(false),
+			link = $(found_img).parent();
+		
+		// If this img is directly inside a link then save the link for later use
+		if(link.is('a'))
+			$(imgClone).data('href', link.attr('href'));
+		
+		_this.images.push(imgClone);
 
 		var image = new Image();
 		image.onload = function() {
@@ -94,6 +101,12 @@ flux.slider = function(elem, opts) {
 	});
 	
 	this.container = $('<div class="fluxslider"></div>').appendTo(this.element);
+	
+	// Listen for click events as we may want to follow a link
+	this.container.bind('click', function(event) {
+		if($(event.target).hasClass('hasLink'))
+			window.location = $(event.target).data('href');
+	});
 	
 	this.imageContainer = $('<div class="images loading"></div>').css({
 		'position': 'relative',
@@ -216,10 +229,27 @@ flux.slider.prototype = {
 		});
 	},
 	setupImages: function() {
-		this.image1.css({
-			'background-image': 'url("'+this.getImage(this.currentImageIndex).src+'")',
-			'z-index': 101
-		}).children().remove();
+		var img1 = this.getImage(this.currentImageIndex),
+			css1 = {
+				'background-image': 'url("'+img1.src+'")',
+				'z-index': 101,
+				'cursor': 'auto'
+			};
+		
+		// Does this image have an associated link?
+		if($(img1).data('href'))
+		{
+			css1.cursor = 'pointer'
+			this.image1.addClass('hasLink');
+			this.image1.data('href', $(img1).data('href'));
+		}
+		else
+		{
+			this.image1.removeClass('hasLink');
+			this.image1.data('href', null);
+		}
+		
+		this.image1.css(css1).children().remove();
 		
 		this.image2.css({
 			'background-image': 'url("'+this.getImage(this.nextImageIndex).src+'")',
