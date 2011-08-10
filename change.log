@@ -2,6 +2,14 @@
 ------------------
 Added support for `img` tags nested inside `a`. These images inherit the link from their parent and are clickable.
 
+Flux will now run when jQuery is in compatibility mode.
+
+Added basic inbuilt next/prev buttons. Pass in `control: true` to the constructor.
+
+Flux no longer silently fails on unsupported browsers, it builds the slider but just switches from one image to the other.
+
+Refactored setup code so that it works on IE.
+
 1.3.2 (2011/07/24)
 ------------------
 Added the 'turn' (3D) & 'slide' (2D) transitions.

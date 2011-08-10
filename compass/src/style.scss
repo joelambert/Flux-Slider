@@ -101,3 +101,22 @@ footer
 		}
 	}
 }
+
+div.announcement
+{
+	color: #000;
+	padding: 0.8em;
+	background: rgba(#DADBB1, 0.5);
+	border: 1px solid #FFF;
+	@include border-radius(5px);
+	width: 60%;
+	margin: 2em auto -2em;
+	font-size: 0.8em;
+	text-align: center;
+	
+	a
+	{
+		color: #000;
+		font-weight: bold;
+	}
+}
