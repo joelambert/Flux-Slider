@@ -33,9 +33,33 @@ section#header
 		}
 	}
 	
-	a.twitter
+	div.twitter
 	{
 		float: right;
+		margin-left: 1em;
+		
+		iframe
+		{
+			position: relative;
+			top: 3px;
+			margin-right: -1em;
+		}
+		
+		a.twitter
+		{
+			font-size: 0.8em;
+			padding: 0.4em 0.6em;
+			//background: rgba(#FFF, 0.2);
+			@include border-radius(3px);
+			//border: 1px solid rgba(#FFF, 0.4);
+			position: relative;
+			top: -2px;
+			
+			&:hover
+			{
+				color: #FFF;
+			}
+		}
 	}
 	
 	div.nav

@@ -13,6 +13,8 @@
 					top: '0px',
 					left: '0px',
 					background: this.slider[this.options.direction == 'left' ? 'image1' : 'image2'].css('background-image')	
+				}).css3({
+					'backface-visibility': 'hidden'
 				}),
 
 				nextImage = $('<div class="next"></div>').css({
@@ -22,13 +24,16 @@
 					top: '0px',
 					left: width+'px',
 					background: this.slider[this.options.direction == 'left' ? 'image2' : 'image1'].css('background-image')
+				}).css3({
+					'backface-visibility': 'hidden'
 				});
 
 				this.slideContainer = $('<div class="slide"></div>').css({
 					width: (2*width)+'px',
 					height: height+'px',
 					position: 'relative',
-					left: this.options.direction == 'left' ? '0px' : -width+'px'
+					left: this.options.direction == 'left' ? '0px' : -width+'px',
+					'z-index': 101
 				}).css3({
 					'transition-duration': '600ms',
 					'transition-timing-function': 'ease-in',

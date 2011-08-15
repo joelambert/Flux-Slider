@@ -10,6 +10,14 @@ Flux no longer silently fails on unsupported browsers, it builds the slider but 
 
 Refactored setup code so that it works on IE.
 
+Added a lock to ensure that the `finish()` function of `flux.transition` only ever fires once per transition.
+
+Added support for `swipeLeft` & `swipeRight` when used with Zepto.js.
+
+Forced hardware acceleration on the `slide` transition so that it works better on iOS.
+
+The `next()` & `prev()` functions now pass on the `left`/`right` param for supported transitions.
+
 1.3.2 (2011/07/24)
 ------------------
 Added the 'turn' (3D) & 'slide' (2D) transitions.

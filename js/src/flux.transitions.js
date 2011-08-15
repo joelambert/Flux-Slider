@@ -70,6 +70,7 @@
 
 	flux.transition.prototype = {
 		constructor: flux.transition,
+		hasFinished: false, // This is a lock to ensure that the fluxTransitionEnd event is only fired once per tansition
 		run: function() {
 			var _this = this;
 
@@ -91,6 +92,11 @@
 			}, 5);
 		},
 		finished: function() {
+			if(this.hasFinished)
+				return;
+				
+			this.hasFinished = true;
+			
 			if(this.options.after)
 				this.options.after.call(this);
 

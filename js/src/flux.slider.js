@@ -151,6 +151,13 @@ window.flux = {
 		// Should we auto start the slider?
 		if(this.options.autoplay)
 			this.start();
+			
+		// Handle swipes
+		this.element.bind('swipeLeft', function(event){
+			_this.next(null, {direction: 'left'});
+		}).bind('swipeRight', function(event){
+			_this.prev(null, {direction: 'right'});
+		});
 	};
 
 	flux.slider.prototype = {
@@ -169,9 +176,13 @@ window.flux = {
 			return this.interval != null;
 		},
 		next: function(trans, opts) {
+			opts = opts || {};
+			opts.direction = 'left';
 			this.showImage(this.currentImageIndex+1, trans, opts);
 		},
 		prev: function(trans, opts) {
+			opts = opts || {};
+			opts.direction = 'right';
 			this.showImage(this.currentImageIndex-1, trans, opts);
 		},
 		showImage: function(index, trans, opts) {
