@@ -280,7 +280,7 @@ Here are some guidelines for writing transitions if you'd like to have them cons
 			}
 		};
 
-- 	For delaying animations to specific bars/blocks/tiles use `-[webkit/moz/o]-transform-delay` rather than `setTimeout()`/`setInterval()`. This enables the GPU to handle the timing and makes for smoother transitions.
+- 	For delaying animations to specific bars/blocks/tiles use `-[webkit/moz/o]-transition-delay` rather than `setTimeout()`/`setInterval()`. This enables the GPU to handle the timing and makes for smoother transitions.
 
 - 	When using many new bars/blocks/tiles, add them to a container element off DOM and then add the container in one go, e.g.
 	
