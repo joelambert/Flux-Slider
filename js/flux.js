@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.3.3 (pre release)
+ * @preserve Flux Slider v1.4 (pre release)
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.3.3 (pre release)'
+	version: '1.4 (pre release)'
 };
 
 (function($){
@@ -40,6 +40,7 @@ window.flux = {
 			delay: 4000,
 			pagination: true,
 			controls: false,
+			captions: false,
 			width: null,
 			height: null,
 			onTransitionEnd: null
@@ -49,19 +50,23 @@ window.flux = {
 		this.height = this.options.height ? this.options.height	: null;
 		this.width 	= this.options.width  ? this.options.width 	: null;
 
-		// Filter out 3d transitions if the browser doesn't support them
-		if(!flux.browser.supports3d)
-		{
-			var newTrans = [];
-			$(this.options.transitions).each(function(index, tran){
-				var t = new flux.transitions[tran](this);
+		// Filter out non compatible transitions
+		var newTrans = [];
+		$(this.options.transitions).each(function(index, tran){
+			var t = new flux.transitions[tran](this),
+				compatible = true;
+			
+			if(t.options.requires3d && !flux.browser.supports3d)
+				compatible = false;
+				
+			if(t.options.compatibilityCheck)
+				compatible = t.options.compatibilityCheck();
 
-				if(!t.options.requires3d)
-					newTrans.push(tran);
-			});		
+			if(compatible)
+				newTrans.push(tran);
+		});		
 
-			this.options.transitions = newTrans;
-		}
+		this.options.transitions = newTrans;
 
 		this.images = new Array();
 		this.imageLoadedCount = 0;
@@ -71,6 +76,8 @@ window.flux = {
 
 
 		this.container = $('<div class="fluxslider"></div>').appendTo(this.element);
+		
+		this.surface = $('<div class="surface" style="position: relative"></div>').appendTo(this.container);
 		
 		// Listen for click events as we may want to follow a link
 		this.container.bind('click', function(event) {
@@ -82,7 +89,7 @@ window.flux = {
 			'position': 'relative',
 			'overflow': 'hidden',
 			'min-height': '100px'
-		}).appendTo(this.container);
+		}).appendTo(this.surface);
 		
 		// If the height/width is already set then resize the container
 		if(this.width && this.height)
@@ -273,14 +280,14 @@ window.flux = {
 				
 				this.nextButton = $('<a href="#">»</a>').css(css).css3({
 					'border-radius': '4px'
-				}).appendTo(this.imageContainer).bind('click', function(event){
+				}).appendTo(this.surface).bind('click', function(event){
 					event.preventDefault();
 					_this.next();
 				});
 				
 				this.prevButton = $('<a href="#">«</a>').css(css).css3({
 					'border-radius': '4px'
-				}).appendTo(this.imageContainer).bind('click', function(event){
+				}).appendTo(this.surface).bind('click', function(event){
 					event.preventDefault();
 					_this.prev();
 				});
@@ -296,6 +303,30 @@ window.flux = {
 					left: '10px'
 				});
 			}
+			
+			// Should we use captions?
+			if(this.options.captions)
+			{
+				this.captionBar = $('<div class="caption"></div>').css({
+					background: 'rgba(0,0,0,0.6)',
+					color: '#FFF',
+					'font-size': '16px',
+					'font-family': 'helvetica, arial, sans-serif',
+					'text-decoration': 'none',
+					'font-weight': 'bold',
+					padding: '1.5em 1em',
+					opacity: 0,
+					position: 'absolute',
+					'z-index': 110,
+					width: '100%',
+					bottom: 0
+				}).css3({
+					'transition-property': 'opacity',
+					'transition-duration': '800ms'
+				}).prependTo(this.surface);
+			}
+			
+			this.updateCaption();
 		},
 		setupImages: function() {
 			var img1 = this.getImage(this.currentImageIndex),
@@ -339,13 +370,32 @@ window.flux = {
 	            var index = Math.floor(Math.random()*(this.options.transitions.length));
 	            transition = this.options.transitions[index];
 	        }
-//console.log(transition);
-	        var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+			
+			var tran = null;
+			
+			try {
+		        tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+			}
+			catch(e) {
+				// If an invalid transition has been provided then just switch the images
+				tran = new flux.transition(this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+			}
 
 	        tran.run();
-
+			
 	        this.currentImageIndex = this.nextImageIndex;
 	        this.setNextIndex(this.currentImageIndex+1);
+			this.updateCaption();
+		},
+		updateCaption: function() {
+			var str = $(this.getImage(this.currentImageIndex)).attr('title');
+			if(this.options.captions && this.captionBar)
+			{
+				if(str !== "")
+					this.captionBar.html(str);
+					
+				this.captionBar.css('opacity', str === "" ? 0 : 1);
+			}
 		},
 		getImage: function(index) {
 			index = index % this.images.length;
@@ -394,13 +444,7 @@ window.flux = {
 				flux.browser.supportsTransitions = Modernizr.csstransitions;
 			else
 			{
-				// Custom detection when Modernizr isn't available
-				flux.browser.supportsTransitions = false;
-				for(var i=0; i<domPrefixes.length; i++)
-				{
-					if(domPrefixes[i]+'Transition' in div.style)
-						flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
-				}
+				flux.browser.supportsTransitions = this.supportsCSSProperty('Transition');
 			}
 
 			// Does the current browser support 3D CSS Transforms?
@@ -428,6 +472,20 @@ window.flux = {
 				// }	
 			}
 
+		},
+		supportsCSSProperty: function(prop) {
+			var div = document.createElement('div'),
+				prefixes = ['-webkit', '-moz', '-o', '-ms'],
+				domPrefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+				
+			var support = false;
+			for(var i=0; i<domPrefixes.length; i++)
+			{
+				if(domPrefixes[i]+prop in div.style)
+					support = support || true;
+			}
+			
+			return support;
 		},
 		translate: function(x, y, z) {
 			x = (x != undefined) ? x : 0;
