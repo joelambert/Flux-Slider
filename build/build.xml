@@ -13,12 +13,15 @@
 			<source>src/flux.transitions.blinds3d.js</source>
 			<source>src/flux.transitions.zip.js</source>
 			<source>src/flux.transitions.blocks.js</source>
+			<source>src/flux.transitions.blocks2.js</source>
 			<source>src/flux.transitions.concentric.js</source>
 			<source>src/flux.transitions.warp.js</source>
 			<source>src/flux.transitions.cube.js</source>
 			<source>src/flux.transitions.tiles3d.js</source>
 			<source>src/flux.transitions.turn.js</source>
 			<source>src/flux.transitions.slide.js</source>
+			<source>src/flux.transitions.swipe.js</source>
+			<source>src/flux.transitions.dissolve.js</source>
 		</file>
 		<file name="flux.jquery">
 			<source>src/flux.jquery.js</source>
