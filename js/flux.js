@@ -339,7 +339,7 @@ window.flux = {
 	            var index = Math.floor(Math.random()*(this.options.transitions.length));
 	            transition = this.options.transitions[index];
 	        }
-
+//console.log(transition);
 	        var tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 
 	        tran.run();
@@ -587,159 +587,83 @@ window.flux = {
 	};
 
 	flux.transitions = {};
-})(window.jQuery || window.Zepto);
-
-(function($) {
-	flux.transitions.bars = function(fluxslider, opts) {
+	
+	// Flux grid transition
+	
+	flux.transition_grid = function(fluxslider, opts) {
 		return new flux.transition(fluxslider, $.extend({
-			barWidth: 60,
+			columns: 6,
+			rows: 6,
+			forceSquare: false,
 			setup: function() {
-				var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1
-
-				var delayBetweenBars = 40;
-
-				var fragment = document.createDocumentFragment();
-
-				for(var i=0; i<barCount; i++) {
-					var bar = $('<div></div>').attr('class', 'bar bar-'+i).css({
-						width: this.options.barWidth+'px',
-						height: '100%',
-						position: 'absolute',
-						top: '0',
-						left: (i*this.options.barWidth)+'px',
-
-						'background-image': this.slider.image1.css('background-image'),
-						'background-position': '-'+(i*this.options.barWidth)+'px 0px'
-					}).css3({
-						'transition-duration': '400ms',
-						'transition-timing-function': 'ease-in',
-						'transition-property': 'all',
-						'transition-delay': (i*delayBetweenBars)+'ms'
-					});
-
-					fragment.appendChild(bar.get(0));
+				var imgWidth = this.slider.image1.width(),
+					imgHeight = this.slider.image1.height();
+					
+				var colWidth = Math.floor(imgWidth / this.options.columns),
+					rowHeight = Math.floor(imgHeight / this.options.rows);
+					
+				if(this.options.forceSquare)
+				{
+					rowHeight = colWidth;
+					this.options.rows = Math.floor(imgHeight / rowHeight);
 				}
 
-				//this.slider.image1.append($(fragment));
-				this.slider.image1.get(0).appendChild(fragment);
-			},
-			execute: function() {
-				var _this = this;
-
-				var height = this.slider.image1.height();
-
-				var bars = this.slider.image1.find('div.bar');
-
-				// Get notified when the last transition has completed
-				$(bars[bars.length-1]).transitionEnd(function(){
-					_this.finished();
-				});
-
-				bars.css({
-					'opacity': '0.5'
-				}).css3({
-					'transform': flux.browser.translate(0, height)
-				});
-			}
-		}, opts));	
-	}
-})(window.jQuery || window.Zepto);
-
-(function($) {
-	flux.transitions.bars3d = function(fluxslider, opts) {
-		return new flux.transition(fluxslider, $.extend({
-			requires3d: true,
-			barWidth: 100,
-			perspective: 600,
-			setup: function() {
-				var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1;
-
-				// Adjust the barWidth so that we can fit inside the available space
-				this.options.barWidth = Math.floor(this.slider.image1.width() / barCount);
-
 				// Work out how much space remains with the adjusted barWidth
-				var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
-					addPerLoop = Math.ceil(remainder / barCount),
+				var colRemainder = imgWidth - (this.options.columns * colWidth),
+					colAddPerLoop = Math.ceil(colRemainder / this.options.columns),
+					
+					rowRemainder = imgHeight - (this.options.rows * rowHeight),
+					rowAddPerLoop = Math.ceil(rowRemainder / this.options.rows),
+					
 					delayBetweenBars = 150,
 					height = this.slider.image1.height(),
 					totalLeft = 0,
+					totalTop = 0,
 					fragment = document.createDocumentFragment();
 
-				for(var i=0; i<barCount; i++) {
-					var thisBarWidth = this.options.barWidth;
+				for(var i=0; i<this.options.columns; i++) {
+					var thisColWidth = colWidth,
+						totalTop = 0;
 
-					if(remainder > 0)
+					if(colRemainder > 0)
 					{
-						var add = remainder >= addPerLoop ? addPerLoop : remainder;
-						thisBarWidth += add;
-						remainder -= add;
+						var add = colRemainder >= colAddPerLoop ? colAddPerLoop : colRemainder;
+						thisColWidth += add;
+						colRemainder -= add;
 					}
+					
+					for(var j=0; j<this.options.rows; j++)
+					{
+						var thisRowHeight = rowHeight,
+							thisRowRemainder = rowRemainder;
 
-					var bar = $('<div class="bar bar-'+i+'"></div>').css({
-						width: thisBarWidth+'px',
-						height: '100%',
-						position: 'absolute',
-						top: '0px',
-						left: '0px',
-						'z-index': 200,
-
-						'background-image': this.slider.image1.css('background-image'),
-						'background-position': '-'+totalLeft+'px 0px',
-						'background-repeat': 'no-repeat'
-					}).css3({
-						'backface-visibility': 'hidden'
-					}),
-
-					bar2 = $(bar.get(0).cloneNode(false)).css({
-						'background-image': this.slider.image2.css('background-image')
-					}).css3({
-						'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -height/2, height/2)
-					}),
-
-					left = $('<div class="side bar bar-'+i+'"></div>').css({
-						width: height+'px',
-						height: height+'px',
-						position: 'absolute',
-						top: '0px',
-						left: '0px',
-						background: '#222',
-						'z-index': 190
-					}).css3({
-						'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, -height/2) + ' ' + flux.browser.rotateY(180),
-						'backface-visibility': 'hidden'
-					}),
-
-					right = $(left.get(0).cloneNode(false)).css3({
-						'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(height/2, 0, thisBarWidth-height/2)
-					}),
-
-					barContainer = $('<div class="barcontainer"></div>').css({
-						width: thisBarWidth+'px',
-						height: '100%',
-						position: 'absolute',
-						top: '0px',
-						left: totalLeft+'px',
-						'z-index': i > barCount/2 ? 1000-i : 1000 // Fix for Chrome to ensure that the z-index layering is correct!
-					}).css3({
-						'transition-duration': '800ms',
-						'transition-timing-function': 'linear',
-						'transition-property': 'all',
-						'transition-delay': (i*delayBetweenBars)+'ms',
-						'transform-style': 'preserve-3d'
-					}).append(bar).append(bar2).append(left).append(right);
-
-					fragment.appendChild(barContainer.get(0));
-
-					totalLeft += thisBarWidth;
+						if(thisRowRemainder > 0)
+						{
+							var add = thisRowRemainder >= rowAddPerLoop ? rowAddPerLoop : thisRowRemainder;
+							thisRowHeight += add;
+							thisRowRemainder -= add;
+						}
+						
+						var tile = $('<div class="tile tile-'+i+'-'+j+'"></div>').css({
+							width: thisColWidth+'px',
+							height: thisRowHeight+'px',
+							position: 'absolute',
+							top: totalTop+'px',
+							left: totalLeft+'px'
+						});
+						
+						this.options.renderTile.call(this, tile, i, j, thisColWidth, thisRowHeight, totalLeft, totalTop);
+						
+						fragment.appendChild(tile.get(0));
+						
+						totalTop += thisRowHeight;
+					}
+					
+					totalLeft += thisColWidth;
 				}
 
-				//this.slider.image1.append(barContainer);
+				// Append the fragement to the surface
 				this.slider.image1.get(0).appendChild(fragment);
-
-				this.slider.imageContainer.css3({
-					'perspective': this.options.perspective,
-					'perspective-origin': '50% 50%'
-				});
 			},
 			execute: function() {
 				var _this = this,
@@ -758,21 +682,151 @@ window.flux = {
 				bars.css3({
 					'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 				});
+			},
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				
 			}
 		}, opts));	
 	}
 })(window.jQuery || window.Zepto);
 
+(function($) {
+	flux.transitions.bars = function(fluxslider, opts) {
+		return new flux.transition_grid(fluxslider, $.extend({
+			columns: 10,
+			rows: 1,
+			delayBetweenBars: 40,
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				$(elem).css({
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+(colIndex*colWidth)+'px 0px'
+				}).css3({
+					'transition-duration': '400ms',
+					'transition-timing-function': 'ease-in',
+					'transition-property': 'all',
+					'transition-delay': (colIndex*this.options.delayBetweenBars)+'ms'
+				});
+			},
+			execute: function() {
+				var _this = this;
+	
+				var height = this.slider.image1.height();
+	
+				var bars = this.slider.image1.find('div.tile');
+	
+				// Get notified when the last transition has completed
+				$(bars[bars.length-1]).transitionEnd(function(){
+					_this.finished();
+				});
+	
+				bars.css({
+					'opacity': '0.5'
+				}).css3({
+					'transform': flux.browser.translate(0, height)
+				});
+			}
+		}, opts));
+	};
+})(window.jQuery || window.Zepto);
+
+(function($) {
+	flux.transitions.bars3d = function(fluxslider, opts) {
+		return new flux.transition_grid(fluxslider, $.extend({
+			requires3d: true,
+			columns: 7,
+			rows: 1,
+			delayBetweenBars: 150,
+			perspective: 1000,
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				var bar = $('<div class="bar bar-'+colIndex+'"></div>').css({
+					width: colWidth+'px',
+					height: '100%',
+					position: 'absolute',
+					top: '0px',
+					left: '0px',
+					'z-index': 200,
+
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+leftOffset+'px 0px',
+					'background-repeat': 'no-repeat'
+				}).css3({
+					'backface-visibility': 'hidden'
+				}),
+
+				bar2 = $(bar.get(0).cloneNode(false)).css({
+					'background-image': this.slider.image2.css('background-image')
+				}).css3({
+					'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -rowHeight/2, rowHeight/2)
+				}),
+
+				left = $('<div class="side bar bar-'+colIndex+'"></div>').css({
+					width: rowHeight+'px',
+					height: rowHeight+'px',
+					position: 'absolute',
+					top: '0px',
+					left: '0px',
+					background: '#222',
+					'z-index': 190
+				}).css3({
+					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(rowHeight/2, 0, -rowHeight/2) + ' ' + flux.browser.rotateY(180),
+					'backface-visibility': 'hidden'
+				}),
+
+				right = $(left.get(0).cloneNode(false)).css3({
+					'transform': flux.browser.rotateY(90) + ' ' + flux.browser.translate(rowHeight/2, 0, colWidth-rowHeight/2)
+				});
+
+				$(elem).css({
+					width: colWidth+'px',
+					height: '100%',
+					position: 'absolute',
+					top: '0px',
+					left: leftOffset+'px',
+					'z-index': colIndex > this.options.columns/2 ? 1000-colIndex : 1000 // Fix for Chrome to ensure that the z-index layering is correct!
+				}).css3({
+					'transition-duration': '800ms',
+					'transition-timing-function': 'linear',
+					'transition-property': 'all',
+					'transition-delay': (colIndex*this.options.delayBetweenBars)+'ms',
+					'transform-style': 'preserve-3d'
+				}).append(bar).append(bar2).append(left).append(right);
+			},
+			execute: function() {
+				this.slider.imageContainer.css3({
+					'perspective': this.options.perspective,
+					'perspective-origin': '50% 50%'
+				});
+				
+				var _this = this,
+					height = this.slider.image1.height(),
+					bars = this.slider.image1.find('div.tile');
+
+				this.slider.image2.hide();
+
+				// Get notified when the last transition has completed
+				bars.last().transitionEnd(function(event){
+					_this.slider.image2.show();
+
+					_this.finished();
+				});
+
+				bars.css3({
+					'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
+				});
+			}
+		}, opts));
+	};
+})(window.jQuery || window.Zepto);
+
 (function($) {	
 	flux.transitions.blinds = function(fluxslider, opts) {
 		return new flux.transitions.bars(fluxslider, $.extend({
-			barWidth: 70,
 			execute: function() {
 				var _this = this;
 
 				var height = this.slider.image1.height();
 
-				var bars = this.slider.image1.find('div.bar');
+				var bars = this.slider.image1.find('div.tile');
 
 				// Get notified when the last transition has completed
 				$(bars[bars.length-1]).transitionEnd(function(){
@@ -791,113 +845,12 @@ window.flux = {
 
 (function($) {
 	flux.transitions.blinds3d = function(fluxslider, opts) {
-		return new flux.transition(fluxslider, $.extend({
-			requires3d: true,
-			barWidth: 150,
-			perspective: 600,
-			setup: function() {
-				var barCount = Math.floor(this.slider.image1.width() / this.options.barWidth) + 1;
-				var blockCountY = Math.floor(this.slider.image1.height() / this.options.barWidth) + 1;
-
-				// Adjust the barWidth so that we can fit inside the available space
-				this.options.barWidth = Math.floor(this.slider.image1.width() / barCount);
-
-				// Work out how much space remains with the adjusted barWidth
-				var remainder = this.slider.image1.width() - (barCount * this.options.barWidth),
-					addPerLoop = Math.ceil(remainder / barCount),
-					delayBetweenBars = 150,
-					height = this.slider.image1.height(),
-					totalLeft = 0,
-					fragment = document.createDocumentFragment();
-
-				for(var i=0; i<barCount; i++) {
-
-					var totalTop = 0,
-						addX,
-						thisbarWidth,
-						bar,
-						bar2,
-						barContainer;
-
-					if(remainder > 0)
-					{
-						addX = remainder >= addPerLoop ? addPerLoop : remainderY;
-						thisbarWidth += addX;
-						remainder -= addX;
-					}
-
-					thisbarWidth = this.options.barWidth;
-
-					bar = $('<div class="bar bar-'+i+'"></div>').css({
-						width: thisbarWidth+'px',
-						height: '100%',
-						position: 'absolute',
-						top: '0px',
-						left: '0px',
-						'z-index': 200,
-
-						'background-image': this.slider.image1.css('background-image'),
-						'background-position': '-'+totalLeft+'px 0px',
-						'background-repeat': 'no-repeat'
-					}).css3({
-						'backface-visibility': 'hidden'
-					});
-
-					bar2 = $(bar.get(0).cloneNode(false)).css({
-						'background-image': this.slider.image2.css('background-image'),
-						'z-index': 190
-					}).css3({
-						'transform': flux.browser.rotateY(180)
-					});
-
-					barContainer = $('<div class="barcontainer"></div>').css({
-						width: thisbarWidth+'px',
-						height: height+'px',
-						position: 'absolute',
-						top: totalTop+'px',
-						left: totalLeft+'px',
-						'z-index': i > barCount/2 ? 1000-i : 1000 // Fix for Chrome to ensure that the z-index layering is correct!
-					}).css3({
-						'transition-duration': '800ms',
-						'transition-timing-function': 'ease-out',
-						'transition-property': 'all',
-						'transition-delay': (i*delayBetweenBars)+'ms',
-						'transform-style': 'preserve-3d'
-					}).append(bar).append(bar2);
-
-					fragment.appendChild(barContainer.get(0));
-
-					totalLeft += thisbarWidth;
-				}
-
-				//this.slider.image1.append($(fragment));
-				this.slider.image1.get(0).appendChild(fragment);
-
-				this.slider.imageContainer.css3({
-					'perspective': this.options.perspective,
-					'perspective-origin': '50% 50%'
-				});
-			},
-			execute: function() {
-				var _this = this;
-
-				var bars = this.slider.image1.find('div.barcontainer');
-
-				this.slider.image2.hide();
-
-				// Get notified when the last transition has completed
-				bars.last().transitionEnd(function(event){
-					_this.slider.image2.show();
-
-					_this.finished();
-				});
-
-				bars.css3({
-					'transform': flux.browser.rotateY(180)
-				});
-			}
-		}, opts));	
-	}
+		return new flux.transitions.tiles3d(fluxslider, $.extend({
+			forceSquare: false,
+			rows: 1,
+			columns: 6
+		}, opts));
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -908,7 +861,7 @@ window.flux = {
 
 				var height = this.slider.image1.height();
 
-				var bars = this.slider.image1.find('div.bar');
+				var bars = this.slider.image1.find('div.tile');
 
 				// Get notified when the last transition has completed
 				$(bars[bars.length-1]).transitionEnd(function(){
@@ -931,61 +884,43 @@ window.flux = {
 
 (function($) {
 	flux.transitions.blocks = function(fluxslider, opts) {
-		return new flux.transition(fluxslider, $.extend({
-			blockSize: 80,
-			blockDelays: {},
-			maxDelay: 0,
-			setup: function() {
-				var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1,
-					yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1,
-					delayBetweenBars = 100,
-					fragment = document.createDocumentFragment();
-
-				for(var i=0; i<xCount; i++)
+		return new flux.transition_grid(fluxslider, $.extend({
+			cols: 12,
+			forceSquare: true,
+			delayBetweenBars: 100,
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				var delay = Math.floor(Math.random()*10*this.options.delayBetweenBars);
+				
+				$(elem).css({
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+(colIndex*colWidth)+'px -'+(rowIndex*rowHeight)+'px'
+				}).css3({
+					'transition-duration': '350ms',
+					'transition-timing-function': 'ease-in',
+					'transition-property': 'all',
+					'transition-delay': delay+'ms'
+				});
+				
+				// Keep track of the last elem to fire
+				if(this.maxDelay === undefined)
+					this.maxDelay = 0;
+					
+				if(delay > this.maxDelay)
 				{
-					for(var j=0; j<yCount; j++)
-					{
-						var delay = Math.floor(Math.random()*10*delayBetweenBars);
-
-						var block = $('<div></div>').attr('class', 'block block-'+i+'-'+j).data('id', i+':'+j).css({
-							width: this.options.blockSize+'px',
-							height: this.options.blockSize+'px',
-							position: 'absolute',
-							top: (j*this.options.blockSize)+'px',
-							left: (i*this.options.blockSize)+'px',
-
-							'background-image': this.slider.image1.css('background-image'),
-							'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px'
-						}).css3({
-							'transition-duration': '350ms',
-							'transition-timing-function': 'ease-in',
-							'transition-property': 'all',
-							'transition-delay': delay+'ms'
-						});
-
-						fragment.appendChild(block.get(0));
-
-						if(delay > this.options.maxDelay)
-						{
-							this.options.maxDelayBlock = block;
-							this.options.maxDelay = delay;
-						}
-					}
+					this.maxDelay = delay;
+					this.maxDelayTile = elem;
 				}
-
-				//this.slider.image1.append($(fragment));
-				this.slider.image1.get(0).appendChild(fragment);
 			},
 			execute: function() {
 				var _this = this;
-
-				var blocks = this.slider.image1.find('div.block');
-
+	
+				var blocks = this.slider.image1.find('div.tile');
+	
 				// Get notified when the last transition has completed
-				this.options.maxDelayBlock.transitionEnd(function(){
+				this.maxDelayTile.transitionEnd(function(){
 					_this.finished();
 				});
-
+	
 				blocks.each(function(index, block){				
 					setTimeout(function(){
 						$(block).css({
@@ -1177,115 +1112,55 @@ window.flux = {
 
 (function($) {
 	flux.transitions.tiles3d = function(fluxslider, opts) {
-		return new flux.transition(fluxslider, $.extend({
+		return new flux.transition_grid(fluxslider, $.extend({
 			requires3d: true,
-			tileWidth: 180,
+			forceSquare: true,
+			columns: 5,
 			perspective: 600,
-			setup: function() {
-				var blockCountX = Math.floor(this.slider.image1.width() / this.options.tileWidth) + 1,
-					blockCountY = Math.floor(this.slider.image1.height() / this.options.tileWidth) + 1;
+			delayBetweenBarsX: 200,
+			delayBetweenBarsY: 150,
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				var tile = $('<div></div>').css({
+					width: colWidth+'px',
+					height: rowHeight+'px',
+					position: 'absolute',
+					top: '0px',
+					left: '0px',
+					'z-index': 200,
 
-				// Adjust the tileWidth so that we can fit inside the available space
-				this.options.tileWidth = Math.floor(this.slider.image1.width() / blockCountX);
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+leftOffset+'px -'+topOffset+'px',
+					'background-repeat': 'no-repeat'
+				}).css3({
+					'backface-visibility': 'hidden'
+				});
 
-				// Work out how much space remains with the adjusted tileWidth
-				var remainderX = this.slider.image1.width() - (blockCountX * this.options.tileWidth),
-					addPerLoopX = Math.ceil(remainderX / blockCountX),
-					remainderY = this.slider.image1.height() - (blockCountY * this.options.tileWidth),
-					addPerLoopY = Math.ceil(remainderY / blockCountY),
+				var tile2 = $(tile.get(0).cloneNode(false)).css({
+					'background-image': this.slider.image2.css('background-image'),
+					'z-index': 190
+				}).css3({
+					'transform': flux.browser.rotateY(180)
+				});
 
-					delayBetweenBarsX = 200,
-					delayBetweenBarsY = 150,
-
-					height = this.slider.image1.height(),
-
-					totalLeft = 0,
-					fragment = document.createDocumentFragment();
-
-				for(var i=0; i<blockCountX; i++) {
-
-					var totalTop = 0;
-
-					var thisTileWidth = this.options.tileWidth;
-
-					if(remainderX > 0)
-					{
-						var addX = remainderX >= addPerLoopX ? addPerLoopX : remainderX;
-						thisTileWidth += addX;
-						remainderX -= addX;
-					}
-
-					for(var j=0; j<blockCountY; j++)
-					{
-						var thisTileHeight = this.options.tileWidth;
-
-						var remainderY2 = remainderY;
-
-						if(remainderY2 > 0)
-						{
-							var addY = remainderY2 >= addPerLoopY ? addPerLoopY : remainderY2;
-							thisTileHeight += addY;
-							remainderY2 -= addY;
-						}
-
-						var tile = $('<div class="tile tile-'+i+'-'+j+'"></div>').css({
-							width: thisTileWidth+'px',
-							height: thisTileHeight+'px',
-							position: 'absolute',
-							top: '0px',
-							left: '0px',
-							'z-index': 200,
-
-							'background-image': this.slider.image1.css('background-image'),
-							'background-position': '-'+totalLeft+'px -'+totalTop+'px',
-							'background-repeat': 'no-repeat'
-						}).css3({
-							'backface-visibility': 'hidden'
-						});
-
-						var tile2 = $(tile.get(0).cloneNode(false)).css({
-							'background-image': this.slider.image2.css('background-image'),
-							'z-index': 190
-						}).css3({
-							'transform': flux.browser.rotateY(180)
-						});
-
-						var tileContainer = $('<div class="tilecontainer"></div>').css({
-							width: thisTileWidth+'px',
-							height: thisTileHeight+'px',
-							position: 'absolute',
-							top: totalTop+'px',
-							left: totalLeft+'px',
-							'z-index': (i > blockCountX/2 ? 500-i : 500) + (j > blockCountY/2 ? 500-j : 500) // Fix for Chrome to ensure that the z-index layering is correct!
-						}).css3({
-							'transition-duration': '800ms',
-							'transition-timing-function': 'ease-out',
-							'transition-property': 'all',
-							'transition-delay': (i*delayBetweenBarsX+j*delayBetweenBarsY)+'ms',
-							'transform-style': 'preserve-3d'
-						}).append(tile).append(tile2);
-
-						fragment.appendChild(tileContainer.get(0));
-						//this.slider.image1.append(tileContainer);
-
-						totalTop += thisTileHeight;
-					}
-
-					totalLeft += thisTileWidth;
-				}
-
-				//this.slider.image1.append($(fragment));
-				this.slider.image1.get(0).appendChild(fragment);
-
+				$(elem).css({
+					'z-index': (colIndex > this.options.columns/2 ? 500-colIndex : 500) + (rowIndex > this.options.rows/2 ? 500-rowIndex : 500) // Fix for Chrome to ensure that the z-index layering is correct!
+				}).css3({
+					'transition-duration': '800ms',
+					'transition-timing-function': 'ease-out',
+					'transition-property': 'all',
+					'transition-delay': (colIndex*this.options.delayBetweenBarsX+rowIndex*this.options.delayBetweenBarsY)+'ms',
+					'transform-style': 'preserve-3d'
+				}).append(tile).append(tile2);
+			},
+			execute: function() {
 				this.slider.imageContainer.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
-			},
-			execute: function() {
+				
 				var _this = this;
 
-				var tiles = this.slider.image1.find('div.tilecontainer');
+				var tiles = this.slider.image1.find('div.tile');
 
 				this.slider.image2.hide();
 
@@ -1300,8 +1175,8 @@ window.flux = {
 					'transform': flux.browser.rotateY(180)
 				});
 			}
-		}, opts));	
-	}
+		}, opts));
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {

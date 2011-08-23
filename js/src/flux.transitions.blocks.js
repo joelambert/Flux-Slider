@@ -1,60 +1,42 @@
 (function($) {
 	flux.transitions.blocks = function(fluxslider, opts) {
-		return new flux.transition(fluxslider, $.extend({
-			blockSize: 80,
-			blockDelays: {},
-			maxDelay: 0,
-			setup: function() {
-				var xCount = Math.floor(this.slider.image1.width() / this.options.blockSize)+1,
-					yCount = Math.floor(this.slider.image1.height() / this.options.blockSize)+1,
-					delayBetweenBars = 100,
-					fragment = document.createDocumentFragment();
-
-				for(var i=0; i<xCount; i++)
+		return new flux.transition_grid(fluxslider, $.extend({
+			cols: 12,
+			forceSquare: true,
+			delayBetweenBars: 100,
+			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
+				var delay = Math.floor(Math.random()*10*this.options.delayBetweenBars);
+				
+				$(elem).css({
+					'background-image': this.slider.image1.css('background-image'),
+					'background-position': '-'+(colIndex*colWidth)+'px -'+(rowIndex*rowHeight)+'px'
+				}).css3({
+					'transition-duration': '350ms',
+					'transition-timing-function': 'ease-in',
+					'transition-property': 'all',
+					'transition-delay': delay+'ms'
+				});
+				
+				// Keep track of the last elem to fire
+				if(this.maxDelay === undefined)
+					this.maxDelay = 0;
+					
+				if(delay > this.maxDelay)
 				{
-					for(var j=0; j<yCount; j++)
-					{
-						var delay = Math.floor(Math.random()*10*delayBetweenBars);
-
-						var block = $('<div></div>').attr('class', 'block block-'+i+'-'+j).data('id', i+':'+j).css({
-							width: this.options.blockSize+'px',
-							height: this.options.blockSize+'px',
-							position: 'absolute',
-							top: (j*this.options.blockSize)+'px',
-							left: (i*this.options.blockSize)+'px',
-
-							'background-image': this.slider.image1.css('background-image'),
-							'background-position': '-'+(i*this.options.blockSize)+'px -'+(j*this.options.blockSize)+'px'
-						}).css3({
-							'transition-duration': '350ms',
-							'transition-timing-function': 'ease-in',
-							'transition-property': 'all',
-							'transition-delay': delay+'ms'
-						});
-
-						fragment.appendChild(block.get(0));
-
-						if(delay > this.options.maxDelay)
-						{
-							this.options.maxDelayBlock = block;
-							this.options.maxDelay = delay;
-						}
-					}
+					this.maxDelay = delay;
+					this.maxDelayTile = elem;
 				}
-
-				//this.slider.image1.append($(fragment));
-				this.slider.image1.get(0).appendChild(fragment);
 			},
 			execute: function() {
 				var _this = this;
-
-				var blocks = this.slider.image1.find('div.block');
-
+	
+				var blocks = this.slider.image1.find('div.tile');
+	
 				// Get notified when the last transition has completed
-				this.options.maxDelayBlock.transitionEnd(function(){
+				this.maxDelayTile.transitionEnd(function(){
 					_this.finished();
 				});
-
+	
 				blocks.each(function(index, block){				
 					setTimeout(function(){
 						$(block).css({

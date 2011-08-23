@@ -20,13 +20,13 @@ The aim is to use hardware acceleration where possible to improve performance on
 Flux requires a browser which supports CSS3 transformations and has been built to use either jQuery or [Zepto.js](http://zepto.js) as they share the same API. For mobile deployment Zepto is recommended due to its <5k deployment footprint.
 
 # Usage
-Create HTML markup with the images you wish to use. For example:
+Create HTML markup with the images you wish to use. You can also wrap images in a link if you need them to be clickable. For example:
 
 	<div id="slider">
 		<img src="img/avatar.jpg" alt="" />
-		<img src="img/ironman.jpg" alt="" />
+		<img src="img/ironman.jpg" alt="" title="Ironman Screenshot" />
+		<a href=""><img src="img/imagewithlink.jpg" alt="" /></a>
 		<img src="img/tron.jpg" alt="" />
-		<img src="img/greenhornet.jpg" alt="" />
 	</div>
 	
 Next instantiate Flux Slider:
@@ -58,6 +58,14 @@ The <flux.slider> constructor can also take an optional second parameter which i
 - 	**pagination** Boolean *(default: false)*
 
 	Whether or not to show a pagination control for manually selecting the image to show
+	
+- 	**controls** Boolean *(default: false)*
+
+	Whether or not to show a next/prev controls
+	
+- 	**captions** Boolean *(default: false)*
+
+	Whether or not to show a caption bar. Captions are read from the `title` attribute of loaded `img` elements
 	
 - 	**transitions** Array *(default: all available transitions)*
 

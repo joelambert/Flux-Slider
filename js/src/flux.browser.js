@@ -19,13 +19,7 @@
 				flux.browser.supportsTransitions = Modernizr.csstransitions;
 			else
 			{
-				// Custom detection when Modernizr isn't available
-				flux.browser.supportsTransitions = false;
-				for(var i=0; i<domPrefixes.length; i++)
-				{
-					if(domPrefixes[i]+'Transition' in div.style)
-						flux.browser.supportsTransitions = flux.browser.supportsTransitions || true;
-				}
+				flux.browser.supportsTransitions = this.supportsCSSProperty('Transition');
 			}
 
 			// Does the current browser support 3D CSS Transforms?
@@ -53,6 +47,20 @@
 				// }	
 			}
 
+		},
+		supportsCSSProperty: function(prop) {
+			var div = document.createElement('div'),
+				prefixes = ['-webkit', '-moz', '-o', '-ms'],
+				domPrefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+				
+			var support = false;
+			for(var i=0; i<domPrefixes.length; i++)
+			{
+				if(domPrefixes[i]+prop in div.style)
+					support = support || true;
+			}
+			
+			return support;
 		},
 		translate: function(x, y, z) {
 			x = (x != undefined) ? x : 0;

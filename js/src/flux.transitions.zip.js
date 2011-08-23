@@ -6,7 +6,7 @@
 
 				var height = this.slider.image1.height();
 
-				var bars = this.slider.image1.find('div.bar');
+				var bars = this.slider.image1.find('div.tile');
 
 				// Get notified when the last transition has completed
 				$(bars[bars.length-1]).transitionEnd(function(){
