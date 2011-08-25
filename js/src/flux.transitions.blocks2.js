@@ -9,7 +9,7 @@
 				
 				$(elem).css({
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(colIndex*colWidth)+'px -'+(rowIndex*rowHeight)+'px'
+					'background-position': '-'+leftOffset+'px -'+topOffset+'px'
 				}).css3({
 					'transition-duration': '350ms',
 					'transition-timing-function': 'ease-in',

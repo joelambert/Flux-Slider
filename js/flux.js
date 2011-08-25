@@ -678,7 +678,7 @@ window.flux = {
 					totalLeft = 0,
 					totalTop = 0,
 					fragment = document.createDocumentFragment();
-
+				
 				for(var i=0; i<this.options.columns; i++) {
 					var thisColWidth = colWidth,
 						totalTop = 0;
@@ -757,7 +757,7 @@ window.flux = {
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
 				$(elem).css({
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(colIndex*colWidth)+'px 0px'
+					'background-position': '-'+leftOffset+'px 0px'
 				}).css3({
 					'transition-duration': '400ms',
 					'transition-timing-function': 'ease-in',
@@ -951,7 +951,7 @@ window.flux = {
 				
 				$(elem).css({
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(colIndex*colWidth)+'px -'+(rowIndex*rowHeight)+'px'
+					'background-position': '-'+leftOffset+'px -'+topOffset+'px'
 				}).css3({
 					'transition-duration': '350ms',
 					'transition-timing-function': 'ease-in',
@@ -1004,7 +1004,7 @@ window.flux = {
 				
 				$(elem).css({
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(colIndex*colWidth)+'px -'+(rowIndex*rowHeight)+'px'
+					'background-position': '-'+leftOffset+'px -'+topOffset+'px'
 				}).css3({
 					'transition-duration': '350ms',
 					'transition-timing-function': 'ease-in',

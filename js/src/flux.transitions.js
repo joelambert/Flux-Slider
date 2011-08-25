@@ -145,7 +145,7 @@
 					totalLeft = 0,
 					totalTop = 0,
 					fragment = document.createDocumentFragment();
-
+				
 				for(var i=0; i<this.options.columns; i++) {
 					var thisColWidth = colWidth,
 						totalTop = 0;

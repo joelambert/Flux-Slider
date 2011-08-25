@@ -7,7 +7,7 @@
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
 				$(elem).css({
 					'background-image': this.slider.image1.css('background-image'),
-					'background-position': '-'+(colIndex*colWidth)+'px 0px'
+					'background-position': '-'+leftOffset+'px 0px'
 				}).css3({
 					'transition-duration': '400ms',
 					'transition-timing-function': 'ease-in',
