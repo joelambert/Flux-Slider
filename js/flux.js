@@ -21,8 +21,6 @@ window.flux = {
 		{
 			if(window.console && window.console.error)
 				console.error("Flux Slider requires a browser that supports CSS3 transitions");
-
-			//return false;
 		}
 
 		var _this = this;
@@ -121,8 +119,6 @@ window.flux = {
 
 			_this.images.push(imgClone);
 
-			
-
 			// Remove the images from the DOM
 			$(found_img).remove();
 		});
@@ -146,14 +142,19 @@ window.flux = {
 			// Load the image to ensure its cached by the browser
 			image.src = this.images[i].src;
 		}
-
-		// Are we using a callback instead of events for notifying about transition ends?
-		if(this.options.onTransitionEnd) {
-			this.element.bind('fluxTransitionEnd', function(event) {
+		
+		// Catch when a transition has finished
+		this.element.bind('fluxTransitionEnd', function(event) {
+			// If the slider is currently playing then set the timeout for the next transition
+			if(_this.isPlaying())
+				_this.start();
+			
+			// Are we using a callback instead of events for notifying about transition ends?
+			if(_this.options.onTransitionEnd) {					
 				event.preventDefault();
 				_this.options.onTransitionEnd(event.data);
-			});
-		}
+			}
+		});
 
 		// Should we auto start the slider?
 		if(this.options.autoplay)
@@ -169,18 +170,22 @@ window.flux = {
 
 	flux.slider.prototype = {
 		constructor: flux.slider,
+		playing: false,
 		start: function() {
 			var _this = this;
-			this.interval = setInterval(function() {
+			this.playing = true;
+			this.interval = setTimeout(function() {
 				_this.transition();
 			}, this.options.delay);
 		},
 		stop: function() {
-			clearInterval(this.interval);
+			this.playing = false;
+			clearTimeout(this.interval);
 			this.interval = null;
 		},
 		isPlaying: function() {
-			return this.interval != null;
+			return this.playing;
+			//return this.interval != null;
 		},
 		next: function(trans, opts) {
 			opts = opts || {};
@@ -194,13 +199,13 @@ window.flux = {
 		},
 		showImage: function(index, trans, opts) {
 			this.setNextIndex(index);
-
-			this.stop();
+			
+			// Temporarily stop the transition interval
+			clearTimeout(this.interval);
+			this.interval = null;
+			
 			this.setupImages();
 			this.transition(trans, opts);
-
-			if(this.options.autoplay)
-				this.start();
 		},  
 		finishedLoading: function() {
 			var _this = this;
