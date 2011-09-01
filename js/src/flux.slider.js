@@ -377,8 +377,8 @@ window.flux = {
 		        tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 			}
 			catch(e) {
-				// If an invalid transition has been provided then just switch the images
-				tran = new flux.transition(this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+				// If an invalid transition has been provided then use the fallback (default is to just switch the image)
+				tran = new flux.transition(this, {fallback: true});
 			}
 
 	        tran.run();

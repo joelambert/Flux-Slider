@@ -377,8 +377,8 @@ window.flux = {
 		        tran = new flux.transitions[transition](this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
 			}
 			catch(e) {
-				// If an invalid transition has been provided then just switch the images
-				tran = new flux.transition(this, $.extend(this.options[transition] ? this.options[transition] : {}, opts));
+				// If an invalid transition has been provided then use the fallback (default is to just switch the image)
+				tran = new flux.transition(this, {fallback: true});
 			}
 
 	        tran.run();
@@ -589,15 +589,22 @@ window.flux = {
 
 		this.slider = fluxslider;
 
-		// We need to ensure transitions degrade gracefully if they require 3d but the browser doesn't support it
-		if((this.options.requires3d && !flux.browser.supports3d) || !flux.browser.supportsTransitions)
+		// We need to ensure transitions degrade gracefully if the transition is unsupported or not loaded
+		if((this.options.requires3d && !flux.browser.supports3d) || !flux.browser.supportsTransitions || this.options.fallback === true)
 		{
 			var _this = this;
-			this.options.setup = undefined;
+			
 			this.options.after = undefined;
-			this.options.execute = function() {
-				_this.finished();
+
+			this.options.setup = function() {
+				//console.error("Fallback setup()");
+				_this.fallbackSetup();
 			};
+			
+			this.options.execute = function() {
+				//console.error("Fallback execute()");
+				_this.fallbackExecute();
+			}
 		}
 	};
 
@@ -608,9 +615,9 @@ window.flux = {
 			var _this = this;
 
 			// do something
-			if(this.options.setup)
+			if(this.options.setup !== undefined)
 				this.options.setup.call(this);
-
+			
 			// Remove the background image from the top image
 			this.slider.image1.css({
 				'background-image': 'none'
@@ -620,7 +627,7 @@ window.flux = {
 
 			// For some of the 3D effects using Zepto we need to delay the transitions for some reason
 			setTimeout(function(){
-				if(_this.options.execute)
+				if(_this.options.execute !== undefined)
 					_this.options.execute.call(_this);
 			}, 5);
 		},
@@ -641,6 +648,12 @@ window.flux = {
 			this.slider.element.trigger('fluxTransitionEnd', {
 				currentImage: this.slider.getImage(this.slider.currentImageIndex)
 			});
+		},
+		fallbackSetup: function() {
+			
+		},
+		fallbackExecute: function() {
+			this.finished();
 		}
 	};
 
