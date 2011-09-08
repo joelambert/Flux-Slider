@@ -12,16 +12,16 @@
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-
-				bars.each(function(index, bar){	
-					setTimeout(function(){
+				
+				setTimeout(function(){
+					bars.each(function(index, bar){						
 						$(bar).css({
 							'opacity': '0.3'
 						}).css3({
 							'transform': flux.browser.translate(0, (index%2 ? '-'+(2*height) : height))
-						});
-					}, 5);		
-				})
+						});		
+					});
+				}, 20);
 			}
 		}, opts));
 	}

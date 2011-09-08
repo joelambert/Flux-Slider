@@ -7,7 +7,7 @@
 			delayBetweenBars: 150,
 			perspective: 1000,
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
-				var bar = $('<div class="bar bar-'+colIndex+'"></div>').css({
+				var bar = $('<div class="bar-'+colIndex+'"></div>').css({
 					width: colWidth+'px',
 					height: '100%',
 					position: 'absolute',
@@ -28,7 +28,7 @@
 					'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -rowHeight/2, rowHeight/2)
 				}),
 
-				left = $('<div class="side bar bar-'+colIndex+'"></div>').css({
+				left = $('<div class="side bar-'+colIndex+'"></div>').css({
 					width: rowHeight+'px',
 					height: rowHeight+'px',
 					position: 'absolute',

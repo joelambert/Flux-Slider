@@ -144,7 +144,7 @@ window.flux = {
 		}
 		
 		// Catch when a transition has finished
-		this.element.bind('fluxTransitionEnd', function(event) {
+		this.element.bind('fluxTransitionEnd', function(event, data) {
 			// If the slider is currently playing then set the timeout for the next transition
 			if(_this.isPlaying())
 				_this.start();
@@ -152,7 +152,7 @@ window.flux = {
 			// Are we using a callback instead of events for notifying about transition ends?
 			if(_this.options.onTransitionEnd) {					
 				event.preventDefault();
-				_this.options.onTransitionEnd(event.data);
+				_this.options.onTransitionEnd(data);
 			}
 		});
 
@@ -327,7 +327,8 @@ window.flux = {
 					bottom: 0
 				}).css3({
 					'transition-property': 'opacity',
-					'transition-duration': '800ms'
+					'transition-duration': '800ms',
+					'box-sizing': 'border-box'
 				}).prependTo(this.surface);
 			}
 			
@@ -814,7 +815,7 @@ window.flux = {
 			delayBetweenBars: 150,
 			perspective: 1000,
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
-				var bar = $('<div class="bar bar-'+colIndex+'"></div>').css({
+				var bar = $('<div class="bar-'+colIndex+'"></div>').css({
 					width: colWidth+'px',
 					height: '100%',
 					position: 'absolute',
@@ -835,7 +836,7 @@ window.flux = {
 					'transform': flux.browser.rotateX(90) + ' ' + flux.browser.translate(0, -rowHeight/2, rowHeight/2)
 				}),
 
-				left = $('<div class="side bar bar-'+colIndex+'"></div>').css({
+				left = $('<div class="side bar-'+colIndex+'"></div>').css({
 					width: rowHeight+'px',
 					height: rowHeight+'px',
 					position: 'absolute',
@@ -943,16 +944,16 @@ window.flux = {
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-
-				bars.each(function(index, bar){	
-					setTimeout(function(){
+				
+				setTimeout(function(){
+					bars.each(function(index, bar){						
 						$(bar).css({
 							'opacity': '0.3'
 						}).css3({
 							'transform': flux.browser.translate(0, (index%2 ? '-'+(2*height) : height))
-						});
-					}, 5);		
-				})
+						});		
+					});
+				}, 20);
 			}
 		}, opts));
 	}
@@ -997,15 +998,15 @@ window.flux = {
 					_this.finished();
 				});
 	
-				blocks.each(function(index, block){				
-					setTimeout(function(){
+				setTimeout(function(){
+					blocks.each(function(index, block){				
 						$(block).css({
 							'opacity': '0'
 						}).css3({
 							'transform': 'scale(0.8)'
 						});
-					}, 5);
-				})
+					});
+				}, 5);
 			}
 		}, opts));
 	};
@@ -1040,16 +1041,16 @@ window.flux = {
 				blocks.last().transitionEnd(function(){
 					_this.finished();
 				});
-	
-				blocks.each(function(index, block){				
-					setTimeout(function(){
+				
+				setTimeout(function(){
+					blocks.each(function(index, block){				
 						$(block).css({
 							'opacity': '0'
 						}).css3({
 							'transform': 'scale(0.8)'
 						});
-					}, 5);
-				})
+					});
+				}, 5);
 			}
 		}, opts));
 	};
@@ -1109,15 +1110,15 @@ window.flux = {
 					_this.finished();
 				});
 
-				blocks.each(function(index, block){
-					setTimeout(function(){
+				setTimeout(function(){
+					blocks.each(function(index, block){
 						$(block).css({
 							'opacity': '0'
 						}).css3({
 							'transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90')
 						});
-					}, 5);
-				})
+					});
+				}, 20);
 			}
 		}, opts));
 	};
@@ -1192,12 +1193,12 @@ window.flux = {
 				var height = this.slider.image1.height();
 
 				this.slider.image2.hide();
-				this.cubeContainer.css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
-				}).transitionEnd(function(){
+				this.cubeContainer.transitionEnd(function(){
 					_this.slider.image2.show();
 
 					_this.finished();
+				}).css3({
+					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 				});
 			},
 			transitionStrings: function(direction, elem) {
@@ -1450,10 +1451,10 @@ window.flux = {
 				if(this.options.direction == 'left')
 					delta = -delta;
 
-				this.slideContainer.css3({
-					'transform' : flux.browser.translate(delta)
-				}).transitionEnd(function(){
+				this.slideContainer.transitionEnd(function(){
 					_this.finished();
+				}).css3({
+					'transform' : flux.browser.translate(delta)
 				});
 			}
 		}, opts));	
@@ -1493,7 +1494,7 @@ window.flux = {
 					$(img).css3({
 						'mask-position': '30%'
 					});
-				}, 5);
+				}, 20);
 			},
 			compatibilityCheck: function() {
 				return flux.browser.supportsCSSProperty('MaskImage');
@@ -1506,7 +1507,7 @@ window.flux = {
 	flux.transitions.dissolve = function(fluxslider, opts) {
 		return new flux.transition(fluxslider, $.extend({
 			setup: function() {
-				var img = $('<div></div>').css({
+				var img = $('<div class="image"></div>').css({
 					width: '100%',
 					height: '100%',
 					'background-image': this.slider.image1.css('background-image')	
@@ -1520,7 +1521,7 @@ window.flux = {
 			},
 			execute: function() {
 				var _this = this,
-					img = this.slider.image1.find('div');
+					img = this.slider.image1.find('div.image');
 
 				// Get notified when the last transition has completed
 				$(img).transitionEnd(function(){
@@ -1531,7 +1532,7 @@ window.flux = {
 					$(img).css({
 						'opacity': '0.0'
 					});
-				}, 5);
+				}, 20);
 			}
 		}, opts));
 	}

@@ -37,15 +37,15 @@
 					_this.finished();
 				});
 	
-				blocks.each(function(index, block){				
-					setTimeout(function(){
+				setTimeout(function(){
+					blocks.each(function(index, block){				
 						$(block).css({
 							'opacity': '0'
 						}).css3({
 							'transform': 'scale(0.8)'
 						});
-					}, 5);
-				})
+					});
+				}, 5);
 			}
 		}, opts));
 	};

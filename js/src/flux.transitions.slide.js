@@ -51,10 +51,10 @@
 				if(this.options.direction == 'left')
 					delta = -delta;
 
-				this.slideContainer.css3({
-					'transform' : flux.browser.translate(delta)
-				}).transitionEnd(function(){
+				this.slideContainer.transitionEnd(function(){
 					_this.finished();
+				}).css3({
+					'transform' : flux.browser.translate(delta)
 				});
 			}
 		}, opts));	

@@ -34,6 +34,7 @@ Ensured that images still switch if no valid transitions are available.
 
 Autoplay now uses `setTimeout` rather than `setInterval` so that the delay between transitions is started only when a transition has completed. This prevents the case where a transition might take longer to execute than the provided delay time.
 
+
 1.3.2 (2011/07/24)
 ------------------
 Added the 'turn' (3D) & 'slide' (2D) transitions.

@@ -144,3 +144,41 @@ div.announcement
 		font-weight: bold;
 	}
 }
+
+body section.container
+{	
+	position: relative;
+	
+	h1, h2
+	{
+		font-family: 'AllerLight', Helvetica, Arial, sans-serif;
+		text-transform: none;
+		text-align: left;
+	}
+	
+	div.flux-wp
+	{
+		position: absolute;
+		top: 0;
+		right: 0;
+		
+		@include background(url('img/flux_wp_new.png') top left no-repeat, url('img/flux_wp_logo.png') center right no-repeat, linear-gradient(#FF9900, #FF6600));
+		@include border-radius(4px);
+		@include box-shadow(0px 1px 0px rgba(#FFF, 0.6) inset, 0px 2px 4px rgba(#000, 0.2));
+		padding: 15px 70px 15px 15px;
+		
+		color: #FFF;
+		font-family: 'AllerLight', Helvetica, Arial, sans-serif;
+		text-shadow: 0px 1px 0px rgba(#000, 0.3);
+		text-align: right;
+		
+		p.large
+		{
+			font-family: 'Aller', Helvetica, Arial, sans-serif;
+			font-weight: bold;
+			text-transform: uppercase;
+			font-size: 24px;
+			margin-bottom: 0.2em;
+		}
+	}
+}

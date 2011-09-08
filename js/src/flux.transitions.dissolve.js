@@ -2,7 +2,7 @@
 	flux.transitions.dissolve = function(fluxslider, opts) {
 		return new flux.transition(fluxslider, $.extend({
 			setup: function() {
-				var img = $('<div></div>').css({
+				var img = $('<div class="image"></div>').css({
 					width: '100%',
 					height: '100%',
 					'background-image': this.slider.image1.css('background-image')	
@@ -16,7 +16,7 @@
 			},
 			execute: function() {
 				var _this = this,
-					img = this.slider.image1.find('div');
+					img = this.slider.image1.find('div.image');
 
 				// Get notified when the last transition has completed
 				$(img).transitionEnd(function(){
@@ -27,7 +27,7 @@
 					$(img).css({
 						'opacity': '0.0'
 					});
-				}, 5);
+				}, 20);
 			}
 		}, opts));
 	}

@@ -52,15 +52,15 @@
 					_this.finished();
 				});
 
-				blocks.each(function(index, block){
-					setTimeout(function(){
+				setTimeout(function(){
+					blocks.each(function(index, block){
 						$(block).css({
 							'opacity': '0'
 						}).css3({
 							'transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90')
 						});
-					}, 5);
-				})
+					});
+				}, 20);
 			}
 		}, opts));
 	};

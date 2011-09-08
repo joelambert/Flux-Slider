@@ -58,12 +58,12 @@
 				var height = this.slider.image1.height();
 
 				this.slider.image2.hide();
-				this.cubeContainer.css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
-				}).transitionEnd(function(){
+				this.cubeContainer.transitionEnd(function(){
 					_this.slider.image2.show();
 
 					_this.finished();
+				}).css3({
+					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 				});
 			},
 			transitionStrings: function(direction, elem) {

@@ -144,7 +144,7 @@ window.flux = {
 		}
 		
 		// Catch when a transition has finished
-		this.element.bind('fluxTransitionEnd', function(event) {
+		this.element.bind('fluxTransitionEnd', function(event, data) {
 			// If the slider is currently playing then set the timeout for the next transition
 			if(_this.isPlaying())
 				_this.start();
@@ -152,7 +152,7 @@ window.flux = {
 			// Are we using a callback instead of events for notifying about transition ends?
 			if(_this.options.onTransitionEnd) {					
 				event.preventDefault();
-				_this.options.onTransitionEnd(event.data);
+				_this.options.onTransitionEnd(data);
 			}
 		});
 
@@ -327,7 +327,8 @@ window.flux = {
 					bottom: 0
 				}).css3({
 					'transition-property': 'opacity',
-					'transition-duration': '800ms'
+					'transition-duration': '800ms',
+					'box-sizing': 'border-box'
 				}).prependTo(this.surface);
 			}
 			

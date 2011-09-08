@@ -31,7 +31,7 @@
 					$(img).css3({
 						'mask-position': '30%'
 					});
-				}, 5);
+				}, 20);
 			},
 			compatibilityCheck: function() {
 				return flux.browser.supportsCSSProperty('MaskImage');
