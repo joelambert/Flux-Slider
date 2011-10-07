@@ -1,4 +1,4 @@
-1.4 (Unreleased)
+1.4 (2011/10/07)
 ------------------
 Added support for `img` tags nested inside `a`. These images inherit the link from their parent and are clickable.
 
