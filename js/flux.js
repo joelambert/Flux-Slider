@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4
+ * @preserve Flux Slider v1.4.1 (unreleased)
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4'
+	version: '1.4.1 (unreleased)'
 };
 
 (function($){
@@ -41,7 +41,8 @@ window.flux = {
 			captions: false,
 			width: null,
 			height: null,
-			onTransitionEnd: null
+			onTransitionEnd: null,
+			responsive: false
 		}, opts);
 
 		// Set the height/width if given [EXPERIMENTAL!]
@@ -71,11 +72,21 @@ window.flux = {
 		this.currentImageIndex = 0;
 		this.nextImageIndex = 1;
 		this.playing = false;
-
+		
+		this.responsiveWrapper = $('<div class="responsive"></div>')
 
 		this.container = $('<div class="fluxslider"></div>').appendTo(this.element);
 		
-		this.surface = $('<div class="surface" style="position: relative"></div>').appendTo(this.container);
+		if(this.options.responsive)
+		{
+			this.responsiveWrapper.appendTo(this.container);
+			
+			$(window).resize(function(event){
+				_this.resize();
+			});
+		}
+		
+		this.surface = $('<div class="surface" style="position: relative"></div>').appendTo(this.options.responsive ? this.responsiveWrapper : this.container);
 		
 		// Listen for click events as we may want to follow a link
 		this.container.bind('click', function(event) {
@@ -207,13 +218,27 @@ window.flux = {
 			this.setupImages();
 			this.transition(trans, opts);
 		},  
+		resize: function() {
+			if(!this.width || !this.options.responsive)
+				return;
+				
+			var w = this.responsiveWrapper.width(),
+				scaleFactor = w/this.width;
+				
+			this.surface.css3({
+				'transform': 'scale('+scaleFactor+')',
+				'transform-origin': 'top left'
+			});
+			
+			this.responsiveWrapper.height(this.surface.height()*scaleFactor);
+		},
 		finishedLoading: function() {
 			var _this = this;
 
-			this.container.css({
-				width: this.width+'px',
-				height: this.height+'px'
-			});
+			// this.container.css({
+			// 	width: this.width+'px',
+			// 	height: this.height+'px'
+			// });
 
 			this.imageContainer.removeClass('loading');
 
@@ -262,7 +287,17 @@ window.flux = {
 				height: this.height+'px'
 			});
 
-			this.container.css({
+			if(!this.options.responsive)
+			{
+				this.container.css({
+					width: this.width+'px'
+				});
+			}
+			else
+				this.resize();
+			
+			
+			this.surface.css({
 				width: this.width+'px',
 				height: this.height+(this.options.pagination?this.pagination.height():0)+'px'
 			});

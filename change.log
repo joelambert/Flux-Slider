@@ -1,3 +1,7 @@
+Unreleased
+------------------
+Added code to enable the slider to be responsive [EXPERIMENTAL].
+
 1.4 (2011/10/07)
 ------------------
 Added support for `img` tags nested inside `a`. These images inherit the link from their parent and are clickable.
