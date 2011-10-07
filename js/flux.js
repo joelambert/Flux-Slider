@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4 (pre release)
+ * @preserve Flux Slider v1.4
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4 (pre release)'
+	version: '1.4'
 };
 
 (function($){
