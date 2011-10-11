@@ -2,6 +2,8 @@ Unreleased
 ------------------
 Added a check for focus which fixes a bug on FF where autoplay would break when a tab had lost focus.
 
+Added a timeout before each css change in a transition to be sure that the end event listener has been registered.
+
 1.4 (2011/10/07)
 ------------------
 Added support for `img` tags nested inside `a`. These images inherit the link from their parent and are clickable.

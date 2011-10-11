@@ -53,9 +53,13 @@
 
 				this.slideContainer.transitionEnd(function(){
 					_this.finished();
-				}).css3({
-					'transform' : flux.browser.translate(delta)
 				});
+				
+				setTimeout({
+					_this.slideContainer.css3({
+						'transform' : flux.browser.translate(delta)
+					});
+				}, 50);
 			}
 		}, opts));	
 	}

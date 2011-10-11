@@ -62,9 +62,13 @@
 					_this.slider.image2.show();
 
 					_this.finished();
-				}).css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 				});
+				
+				setTimeout({
+					_this.cubeContainer.css3({
+						'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
+					});
+				}, 50);
 			},
 			transitionStrings: function(direction, elem) {
 				var width = this.slider.image1.width();

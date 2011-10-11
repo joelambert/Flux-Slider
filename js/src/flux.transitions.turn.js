@@ -85,12 +85,16 @@
 
 				this.slider.image1.find('div.tab').first().transitionEnd(function(){
 					_this.finished();
-				}).css3({
-					transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
 				});
-				this.slider.image1.find('div.overlay').css({
-					opacity: 0
-				});
+				
+				setTimeout({
+					_this.slider.image1.find('div.tab').css3({
+						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
+					});
+					_this.slider.image1.find('div.overlay').css({
+						opacity: 0
+					});
+				}, 50);
 			}
 		}, opts));
 	};

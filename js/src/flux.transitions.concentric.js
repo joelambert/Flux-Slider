@@ -60,7 +60,7 @@
 							'transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90')
 						});
 					});
-				}, 20);
+				}, 50);
 			}
 		}, opts));
 	};

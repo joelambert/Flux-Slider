@@ -58,10 +58,12 @@
 
 					_this.finished();
 				});
-
-				tiles.css3({
-					'transform': flux.browser.rotateY(180)
-				});
+				
+				setTimeout({
+					tiles.css3({
+						'transform': flux.browser.rotateY(180)
+					});
+				}, 50);
 			}
 		}, opts));
 	};

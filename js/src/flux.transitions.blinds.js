@@ -12,12 +12,14 @@
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-
-				bars.css({
-					'opacity': '0.5'
-				}).css3({
-					'transform': 'scalex(0.0001)'
-				});
+				
+				setTimeout({
+					bars.css({
+						'opacity': '0.5'
+					}).css3({
+						'transform': 'scalex(0.0001)'
+					});
+				}, 50);
 			}
 		}, opts));
 	}

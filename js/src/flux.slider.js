@@ -170,7 +170,6 @@ window.flux = {
 		// Under FF7 autoplay breaks when the current tab loses focus
 		setTimeout(function(){
 			$(window).focus(function(){
-				console.log('event');
 				if(_this.isPlaying())
 					_this.next();
 			});

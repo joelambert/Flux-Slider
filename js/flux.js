@@ -170,7 +170,6 @@ window.flux = {
 		// Under FF7 autoplay breaks when the current tab loses focus
 		setTimeout(function(){
 			$(window).focus(function(){
-				console.log('event');
 				if(_this.isPlaying())
 					_this.next();
 			});
@@ -804,12 +803,15 @@ window.flux = {
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-	
-				bars.css({
-					'opacity': '0.5'
-				}).css3({
-					'transform': flux.browser.translate(0, height)
-				});
+				
+				setTimeout(function(){
+					bars.css({
+						'opacity': '0.5'
+					}).css3({
+						'transform': flux.browser.translate(0, height)
+					});
+				}, 50);
+				
 			}
 		}, opts));
 	};
@@ -895,10 +897,12 @@ window.flux = {
 
 					_this.finished();
 				});
-
-				bars.css3({
-					'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
-				});
+				
+				setTimeout({
+					bars.css3({
+						'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
+					});
+				}, 50);
 			}
 		}, opts));
 	};
@@ -918,12 +922,14 @@ window.flux = {
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-
-				bars.css({
-					'opacity': '0.5'
-				}).css3({
-					'transform': 'scalex(0.0001)'
-				});
+				
+				setTimeout({
+					bars.css({
+						'opacity': '0.5'
+					}).css3({
+						'transform': 'scalex(0.0001)'
+					});
+				}, 50);
 			}
 		}, opts));
 	}
@@ -1015,7 +1021,7 @@ window.flux = {
 							'transform': 'scale(0.8)'
 						});
 					});
-				}, 5);
+				}, 50);
 			}
 		}, opts));
 	};
@@ -1059,7 +1065,7 @@ window.flux = {
 							'transform': 'scale(0.8)'
 						});
 					});
-				}, 5);
+				}, 50);
 			}
 		}, opts));
 	};
@@ -1127,7 +1133,7 @@ window.flux = {
 							'transform': flux.browser.rotateZ((!_this.options.alternate || index%2 ? '' : '-')+'90')
 						});
 					});
-				}, 20);
+				}, 50);
 			}
 		}, opts));
 	};
@@ -1206,9 +1212,13 @@ window.flux = {
 					_this.slider.image2.show();
 
 					_this.finished();
-				}).css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 				});
+				
+				setTimeout({
+					_this.cubeContainer.css3({
+						'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
+					});
+				}, 50);
 			},
 			transitionStrings: function(direction, elem) {
 				var width = this.slider.image1.width();
@@ -1300,10 +1310,12 @@ window.flux = {
 
 					_this.finished();
 				});
-
-				tiles.css3({
-					'transform': flux.browser.rotateY(180)
-				});
+				
+				setTimeout({
+					tiles.css3({
+						'transform': flux.browser.rotateY(180)
+					});
+				}, 50);
 			}
 		}, opts));
 	};
@@ -1396,12 +1408,16 @@ window.flux = {
 
 				this.slider.image1.find('div.tab').first().transitionEnd(function(){
 					_this.finished();
-				}).css3({
-					transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
 				});
-				this.slider.image1.find('div.overlay').css({
-					opacity: 0
-				});
+				
+				setTimeout({
+					_this.slider.image1.find('div.tab').css3({
+						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
+					});
+					_this.slider.image1.find('div.overlay').css({
+						opacity: 0
+					});
+				}, 50);
 			}
 		}, opts));
 	};
@@ -1462,9 +1478,13 @@ window.flux = {
 
 				this.slideContainer.transitionEnd(function(){
 					_this.finished();
-				}).css3({
-					'transform' : flux.browser.translate(delta)
 				});
+				
+				setTimeout({
+					_this.slideContainer.css3({
+						'transform' : flux.browser.translate(delta)
+					});
+				}, 50);
 			}
 		}, opts));	
 	}
@@ -1503,7 +1523,7 @@ window.flux = {
 					$(img).css3({
 						'mask-position': '30%'
 					});
-				}, 20);
+				}, 50);
 			},
 			compatibilityCheck: function() {
 				return flux.browser.supportsCSSProperty('MaskImage');
@@ -1541,7 +1561,7 @@ window.flux = {
 					$(img).css({
 						'opacity': '0.0'
 					});
-				}, 20);
+				}, 50);
 			}
 		}, opts));
 	}

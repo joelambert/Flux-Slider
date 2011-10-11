@@ -26,12 +26,15 @@
 				$(bars[bars.length-1]).transitionEnd(function(){
 					_this.finished();
 				});
-	
-				bars.css({
-					'opacity': '0.5'
-				}).css3({
-					'transform': flux.browser.translate(0, height)
-				});
+				
+				setTimeout(function(){
+					bars.css({
+						'opacity': '0.5'
+					}).css3({
+						'transform': flux.browser.translate(0, height)
+					});
+				}, 50);
+				
 			}
 		}, opts));
 	};
