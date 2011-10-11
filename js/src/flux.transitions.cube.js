@@ -64,7 +64,7 @@
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.cubeContainer.css3({
 						'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 					});

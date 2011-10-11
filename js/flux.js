@@ -898,7 +898,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					bars.css3({
 						'transform': flux.browser.rotateX(-90) + ' ' + flux.browser.translate(0, height/2, height/2)
 					});
@@ -923,7 +923,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					bars.css({
 						'opacity': '0.5'
 					}).css3({
@@ -1214,7 +1214,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.cubeContainer.css3({
 						'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
 					});
@@ -1311,7 +1311,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					tiles.css3({
 						'transform': flux.browser.rotateY(180)
 					});
@@ -1410,7 +1410,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
 						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
 					});
@@ -1480,7 +1480,7 @@ window.flux = {
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.slideContainer.css3({
 						'transform' : flux.browser.translate(delta)
 					});

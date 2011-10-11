@@ -87,7 +87,7 @@
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
 						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
 					});

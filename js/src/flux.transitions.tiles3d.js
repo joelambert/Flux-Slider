@@ -59,7 +59,7 @@
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					tiles.css3({
 						'transform': flux.browser.rotateY(180)
 					});

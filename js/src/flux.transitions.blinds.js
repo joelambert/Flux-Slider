@@ -13,7 +13,7 @@
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					bars.css({
 						'opacity': '0.5'
 					}).css3({

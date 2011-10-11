@@ -55,7 +55,7 @@
 					_this.finished();
 				});
 				
-				setTimeout({
+				setTimeout(function(){
 					_this.slideContainer.css3({
 						'transform' : flux.browser.translate(delta)
 					});
