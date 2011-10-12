@@ -89,7 +89,7 @@
 				
 				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
-						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
+						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -180 : 180)
 					});
 					_this.slider.image1.find('div.overlay').css({
 						opacity: 0

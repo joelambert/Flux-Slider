@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4.1 (pre-release)
+ * @preserve Flux Slider v1.4.1
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4.1 (pre-release)'
+	version: '1.4.1'
 };
 
 (function($){
@@ -1216,7 +1216,7 @@ window.flux = {
 				
 				setTimeout(function(){
 					_this.cubeContainer.css3({
-						'transform' : this.options.transitionStrings.call(this, this.options.direction, 'container')
+						'transform' : _this.options.transitionStrings.call(_this, _this.options.direction, 'container')
 					});
 				}, 50);
 			},
@@ -1412,7 +1412,7 @@ window.flux = {
 				
 				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
-						transform: flux.browser.rotateY(this.options.direction == 'left' ? -180 : 180)
+						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -180 : 180)
 					});
 					_this.slider.image1.find('div.overlay').css({
 						opacity: 0

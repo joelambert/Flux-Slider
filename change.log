@@ -1,4 +1,4 @@
-Unreleased
+1.4.1 (2011/10/12)
 ------------------
 Added a check for focus which fixes a bug on FF where autoplay would break when a tab had lost focus.
 
