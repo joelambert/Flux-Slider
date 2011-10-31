@@ -84,6 +84,10 @@ window.flux = {
 			$(window).resize(function(event){
 				_this.resize();
 			});
+			
+			window.addEventListener('orientationchange', function() {
+				_this.resize();
+			});
 		}
 		
 		this.surface = $('<div class="surface" style="position: relative"></div>').appendTo(this.options.responsive ? this.responsiveWrapper : this.container);
