@@ -75,7 +75,10 @@ The <flux.slider> constructor can also take an optional second parameter which i
 		- `bars`
 		- `blinds`
 		- `blocks`
+		- `blocks2`
 		- `concentric`
+		- `dissolve` *requires mask support*
+		- `slide`
 		- `warp`
 		- `zip`
 	+ **3D**
@@ -83,6 +86,7 @@ The <flux.slider> constructor can also take an optional second parameter which i
 		- `blinds3d`
 		- `cube`
 		- `tiles3d`
+		- `turn`
 	
 - 	**delay** Integer *(default: 4000)*
 
