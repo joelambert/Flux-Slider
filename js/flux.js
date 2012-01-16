@@ -291,14 +291,14 @@ window.flux = {
 					'z-index': 2000
 				};
 				
-				this.nextButton = $('<a href="#">»</a>').css(css).css3({
+				this.nextButton = $('<a href="#" class="next">»</a>').css(css).css3({
 					'border-radius': '4px'
 				}).appendTo(this.surface).bind('click', function(event){
 					event.preventDefault();
 					_this.next();
 				});
 				
-				this.prevButton = $('<a href="#">«</a>').css(css).css3({
+				this.prevButton = $('<a href="#" class="previous">«</a>').css(css).css3({
 					'border-radius': '4px'
 				}).appendTo(this.surface).bind('click', function(event){
 					event.preventDefault();
