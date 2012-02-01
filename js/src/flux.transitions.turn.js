@@ -4,7 +4,7 @@
 			requires3d: true,
 			perspective: 1300,
 			direction: 'left',
-			setup: function() {
+			setup: function() {				
 				var tab = $('<div class="tab"></div>').css({
 						width: '50%',
 						height: '100%',
@@ -89,7 +89,8 @@
 				
 				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
-						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -180 : 180)
+						// 179 not 180 so that the tab rotates the correct way in Firefox
+						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -179 : 179)
 					});
 					_this.slider.image1.find('div.overlay').css({
 						opacity: 0
