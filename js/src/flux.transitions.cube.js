@@ -11,7 +11,7 @@
 
 				// Setup the container to allow 3D perspective
 
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
@@ -36,15 +36,18 @@
 				};
 
 				var currentFace = $('<div class="face current"></div>').css($.extend(css, {
-					background: this.slider.image1.css('background-image')	
-				}));
+					background: this.slider.image1.css('background-image')
+				})).css3({
+					'backface-visibility': 'hidden'
+				});
 
 				this.cubeContainer.append(currentFace);
 
 				var nextFace = $('<div class="face next"></div>').css($.extend(css, {
 					background: this.slider.image2.css('background-image')
 				})).css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
+					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace'),
+					'backface-visibility': 'hidden'
 				});
 
 				this.cubeContainer.append(nextFace);
