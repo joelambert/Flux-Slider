@@ -27,6 +27,9 @@
 				flux.browser.supports3d = Modernizr.csstransforms3d;
 			else
 			{
+				flux.browser.supports3d = this.supportsCSSProperty("Perspective");
+				
+				if ( flux.browser.supports3d && 'webkitPerspective' in $('body').get(0).style ) {
 				// Custom detection when Modernizr isn't available
 				// flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
 				// 
@@ -45,6 +48,7 @@
 					div3D.remove();
 					mq.remove();
 				// }	
+				}
 			}
 
 		},
