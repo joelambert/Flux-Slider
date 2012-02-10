@@ -61,7 +61,7 @@
 				}).append(bar).append(bar2).append(left).append(right);
 			},
 			execute: function() {
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
