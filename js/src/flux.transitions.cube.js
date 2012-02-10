@@ -100,5 +100,5 @@
 				return (t[direction] && t[direction][elem]) ? t[direction][elem] : false;
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);

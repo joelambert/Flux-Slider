@@ -71,7 +71,7 @@
 			this.options.execute = function() {
 				//console.error("Fallback execute()");
 				_this.fallbackExecute();
-			}
+			};
 		}
 	};
 
@@ -225,5 +225,5 @@
 				
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);

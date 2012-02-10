@@ -95,7 +95,7 @@ window.flux = {
 			this.imageContainer.css({
 				width: this.width+'px',
 				height: this.height+'px'
-			})
+			});
 		}
 
 		// Create the placeholders for the current and next image
@@ -354,7 +354,7 @@ window.flux = {
 			// Does this image have an associated link?
 			if($(img1).data('href'))
 			{
-				css1.cursor = 'pointer'
+				css1.cursor = 'pointer';
 				this.image1.addClass('hasLink');
 				this.image1.data('href', $(img1).data('href'));
 			}
@@ -435,5 +435,5 @@ window.flux = {
 			if(this.currentImageIndex > this.images.length-1)
 				this.currentImageIndex = 0;
 		}
-	}
+	};
 })(window.jQuery || window.Zepto);

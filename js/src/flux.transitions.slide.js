@@ -62,5 +62,5 @@
 				}, 50);
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);

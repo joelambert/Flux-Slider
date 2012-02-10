@@ -24,5 +24,5 @@
 				}, 20);
 			}
 		}, opts));
-	}
+	};
 })(window.jQuery || window.Zepto);

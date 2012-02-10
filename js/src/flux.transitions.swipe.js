@@ -37,5 +37,5 @@
 				return flux.browser.supportsCSSProperty('MaskImage');
 			}
 		}, opts));
-	}
+	};
 })(window.jQuery || window.Zepto);

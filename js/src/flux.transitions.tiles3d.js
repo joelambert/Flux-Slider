@@ -24,7 +24,7 @@
 				});
 
 				var tile2 = $(tile.get(0).cloneNode(false)).css({
-					'background-image': this.slider.image2.css('background-image'),
+					'background-image': this.slider.image2.css('background-image')
 					//'z-index': 190 // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 				}).css3({
 					'transform': flux.browser.rotateY(180),
