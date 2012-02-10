@@ -14,7 +14,7 @@
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
-					'z-index': 200,
+					//'z-index': 200, // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+leftOffset+'px -'+topOffset+'px',
@@ -25,9 +25,10 @@
 
 				var tile2 = $(tile.get(0).cloneNode(false)).css({
 					'background-image': this.slider.image2.css('background-image'),
-					'z-index': 190
+					//'z-index': 190 // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 				}).css3({
-					'transform': flux.browser.rotateY(180)
+					'transform': flux.browser.rotateY(180),
+					'backface-visibility': 'hidden'
 				});
 
 				$(elem).css({
@@ -41,7 +42,7 @@
 				}).append(tile).append(tile2);
 			},
 			execute: function() {
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
