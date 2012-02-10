@@ -27,15 +27,10 @@
 				flux.browser.supports3d = Modernizr.csstransforms3d;
 			else
 			{
+				// Custom detection when Modernizr isn't available
 				flux.browser.supports3d = this.supportsCSSProperty("Perspective");
 				
 				if ( flux.browser.supports3d && 'webkitPerspective' in $('body').get(0).style ) {
-				// Custom detection when Modernizr isn't available
-				// flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
-				// 
-				// // Chrome has a 3D matrix but doesn't support 3d transforms
-				// if(flux.browser.supports3d && 'webkitPerspective' in div.style)
-				// {
 					// Double check with a media query (similar to how Modernizr does this)
 					var div3D = $('<div id="csstransform3d"></div>');
 					var mq = $('<style media="(transform-3d), ('+prefixes.join('-transform-3d),(')+'-transform-3d)">div#csstransform3d { position: absolute; left: 9px }</style>');
@@ -46,8 +41,7 @@
 					flux.browser.supports3d = div3D.get(0).offsetLeft == 9;
 
 					div3D.remove();
-					mq.remove();
-				// }	
+					mq.remove();	
 				}
 			}
 

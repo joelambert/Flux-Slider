@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4.1
+ * @preserve Flux Slider v1.4.2
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4.1'
+	version: '1.4.2'
 };
 
 (function($){
@@ -146,8 +146,8 @@ window.flux = {
 		// Catch when a transition has finished
 		this.element.bind('fluxTransitionEnd', function(event, data) {
 			// If the slider is currently playing then set the timeout for the next transition
-			if(_this.isPlaying())
-				_this.start();
+			// if(_this.isPlaying())
+			// 	_this.start();
 			
 			// Are we using a callback instead of events for notifying about transition ends?
 			if(_this.options.onTransitionEnd) {					
@@ -182,13 +182,14 @@ window.flux = {
 		start: function() {
 			var _this = this;
 			this.playing = true;
-			this.interval = setTimeout(function() {
+			this.interval = setInterval(function() {
+				console.log('play');
 				_this.transition();
 			}, this.options.delay);
 		},
 		stop: function() {
 			this.playing = false;
-			clearTimeout(this.interval);
+			clearInterval(this.interval);
 			this.interval = null;
 		},
 		isPlaying: function() {
@@ -209,8 +210,8 @@ window.flux = {
 			this.setNextIndex(index);
 			
 			// Temporarily stop the transition interval
-			clearTimeout(this.interval);
-			this.interval = null;
+			//clearInterval(this.interval);
+			//this.interval = null;
 			
 			this.setupImages();
 			this.transition(trans, opts);
@@ -467,11 +468,9 @@ window.flux = {
 			else
 			{
 				// Custom detection when Modernizr isn't available
-				// flux.browser.supports3d = 'WebKitCSSMatrix' in window && 'm11' in new WebKitCSSMatrix();
-				// 
-				// // Chrome has a 3D matrix but doesn't support 3d transforms
-				// if(flux.browser.supports3d && 'webkitPerspective' in div.style)
-				// {
+				flux.browser.supports3d = this.supportsCSSProperty("Perspective");
+				
+				if ( flux.browser.supports3d && 'webkitPerspective' in $('body').get(0).style ) {
 					// Double check with a media query (similar to how Modernizr does this)
 					var div3D = $('<div id="csstransform3d"></div>');
 					var mq = $('<style media="(transform-3d), ('+prefixes.join('-transform-3d),(')+'-transform-3d)">div#csstransform3d { position: absolute; left: 9px }</style>');
@@ -482,8 +481,8 @@ window.flux = {
 					flux.browser.supports3d = div3D.get(0).offsetLeft == 9;
 
 					div3D.remove();
-					mq.remove();
-				// }	
+					mq.remove();	
+				}
 			}
 
 		},
@@ -880,7 +879,7 @@ window.flux = {
 				}).append(bar).append(bar2).append(left).append(right);
 			},
 			execute: function() {
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
@@ -1161,7 +1160,7 @@ window.flux = {
 
 				// Setup the container to allow 3D perspective
 
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
@@ -1186,15 +1185,18 @@ window.flux = {
 				};
 
 				var currentFace = $('<div class="face current"></div>').css($.extend(css, {
-					background: this.slider.image1.css('background-image')	
-				}));
+					background: this.slider.image1.css('background-image')
+				})).css3({
+					'backface-visibility': 'hidden'
+				});
 
 				this.cubeContainer.append(currentFace);
 
 				var nextFace = $('<div class="face next"></div>').css($.extend(css, {
 					background: this.slider.image2.css('background-image')
 				})).css3({
-					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace')
+					'transform' : this.options.transitionStrings.call(this, this.options.direction, 'nextFace'),
+					'backface-visibility': 'hidden'
 				});
 
 				this.cubeContainer.append(nextFace);
@@ -1266,7 +1268,7 @@ window.flux = {
 					position: 'absolute',
 					top: '0px',
 					left: '0px',
-					'z-index': 200,
+					//'z-index': 200, // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+leftOffset+'px -'+topOffset+'px',
@@ -1277,9 +1279,10 @@ window.flux = {
 
 				var tile2 = $(tile.get(0).cloneNode(false)).css({
 					'background-image': this.slider.image2.css('background-image'),
-					'z-index': 190
+					//'z-index': 190 // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 				}).css3({
-					'transform': flux.browser.rotateY(180)
+					'transform': flux.browser.rotateY(180),
+					'backface-visibility': 'hidden'
 				});
 
 				$(elem).css({
@@ -1293,7 +1296,7 @@ window.flux = {
 				}).append(tile).append(tile2);
 			},
 			execute: function() {
-				this.slider.imageContainer.css3({
+				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
 				});
@@ -1327,7 +1330,7 @@ window.flux = {
 			requires3d: true,
 			perspective: 1300,
 			direction: 'left',
-			setup: function() {
+			setup: function() {				
 				var tab = $('<div class="tab"></div>').css({
 						width: '50%',
 						height: '100%',
@@ -1412,7 +1415,8 @@ window.flux = {
 				
 				setTimeout(function(){
 					_this.slider.image1.find('div.tab').css3({
-						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -180 : 180)
+						// 179 not 180 so that the tab rotates the correct way in Firefox
+						transform: flux.browser.rotateY(_this.options.direction == 'left' ? -179 : 179)
 					});
 					_this.slider.image1.find('div.overlay').css({
 						opacity: 0

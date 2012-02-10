@@ -1,3 +1,16 @@
+1.4.2 (2012/01/10)
+------------------
+Fixed a bug with the jQuery Widget that prevented `isPlaying` from working.
+
+Added `getImages` function to the jQuery Widget.
+
+Fixed feature detect code for Firefox 10.
+
+Made 3D transitions work with Firefox 10.
+
+Reverted to setInterval for play loop better timing.
+
+
 1.4.1 (2011/10/12)
 ------------------
 Added a check for focus which fixes a bug on FF where autoplay would break when a tab had lost focus.

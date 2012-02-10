@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4.1 jQuery Widget 
+ * @preserve Flux Slider v1.4.2 jQuery Widget 
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -21,7 +21,7 @@
 			this.slider.stop();
 		},
 		isPlaying: function() {
-			return this.slider.isPlaying();
+			return this.slider.isPlayer();
 		},
 		
 		next: function(t, o) {
@@ -36,9 +36,6 @@
 		
 		getImage: function(i) {
 			return this.slider.getImage(i);
-		},
-		getImages: function() {
-			return this.slider.images;
 		}
 	});
 }(jQuery));
