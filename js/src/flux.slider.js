@@ -146,8 +146,8 @@ window.flux = {
 		// Catch when a transition has finished
 		this.element.bind('fluxTransitionEnd', function(event, data) {
 			// If the slider is currently playing then set the timeout for the next transition
-			if(_this.isPlaying())
-				_this.start();
+			// if(_this.isPlaying())
+			// 	_this.start();
 			
 			// Are we using a callback instead of events for notifying about transition ends?
 			if(_this.options.onTransitionEnd) {					
@@ -182,13 +182,14 @@ window.flux = {
 		start: function() {
 			var _this = this;
 			this.playing = true;
-			this.interval = setTimeout(function() {
+			this.interval = setInterval(function() {
+				console.log('play');
 				_this.transition();
 			}, this.options.delay);
 		},
 		stop: function() {
 			this.playing = false;
-			clearTimeout(this.interval);
+			clearInterval(this.interval);
 			this.interval = null;
 		},
 		isPlaying: function() {
@@ -209,8 +210,8 @@ window.flux = {
 			this.setNextIndex(index);
 			
 			// Temporarily stop the transition interval
-			clearTimeout(this.interval);
-			this.interval = null;
+			//clearInterval(this.interval);
+			//this.interval = null;
 			
 			this.setupImages();
 			this.transition(trans, opts);
