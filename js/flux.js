@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4.2
+ * @preserve Flux Slider v1.4.3
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4.2'
+	version: '1.4.3'
 };
 
 (function($){
@@ -95,7 +95,7 @@ window.flux = {
 			this.imageContainer.css({
 				width: this.width+'px',
 				height: this.height+'px'
-			})
+			});
 		}
 
 		// Create the placeholders for the current and next image
@@ -354,7 +354,7 @@ window.flux = {
 			// Does this image have an associated link?
 			if($(img1).data('href'))
 			{
-				css1.cursor = 'pointer'
+				css1.cursor = 'pointer';
 				this.image1.addClass('hasLink');
 				this.image1.data('href', $(img1).data('href'));
 			}
@@ -435,7 +435,7 @@ window.flux = {
 			if(this.currentImageIndex > this.images.length-1)
 				this.currentImageIndex = 0;
 		}
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 /**
@@ -617,7 +617,7 @@ window.flux = {
 			this.options.execute = function() {
 				//console.error("Fallback execute()");
 				_this.fallbackExecute();
-			}
+			};
 		}
 	};
 
@@ -771,7 +771,7 @@ window.flux = {
 				
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -970,7 +970,7 @@ window.flux = {
 				}, 20);
 			}
 		}, opts));
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -1249,7 +1249,7 @@ window.flux = {
 				return (t[direction] && t[direction][elem]) ? t[direction][elem] : false;
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -1278,7 +1278,7 @@ window.flux = {
 				});
 
 				var tile2 = $(tile.get(0).cloneNode(false)).css({
-					'background-image': this.slider.image2.css('background-image'),
+					'background-image': this.slider.image2.css('background-image')
 					//'z-index': 190 // Removed to make compatible with FF10 (Chrome bug seems to have been fixed)
 				}).css3({
 					'transform': flux.browser.rotateY(180),
@@ -1491,7 +1491,7 @@ window.flux = {
 				}, 50);
 			}
 		}, opts));	
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -1533,7 +1533,7 @@ window.flux = {
 				return flux.browser.supportsCSSProperty('MaskImage');
 			}
 		}, opts));
-	}
+	};
 })(window.jQuery || window.Zepto);
 
 (function($) {
@@ -1568,6 +1568,6 @@ window.flux = {
 				}, 50);
 			}
 		}, opts));
-	}
+	};
 })(window.jQuery || window.Zepto);
 
