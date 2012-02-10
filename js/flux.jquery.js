@@ -21,7 +21,7 @@
 			this.slider.stop();
 		},
 		isPlaying: function() {
-			return this.slider.isPlayer();
+			return this.slider.isPlaying();
 		},
 		
 		next: function(t, o) {
@@ -36,6 +36,9 @@
 		
 		getImage: function(i) {
 			return this.slider.getImage(i);
+		},
+		getImages: function() {
+			return this.slider.images;
 		}
 	});
 }(jQuery));
