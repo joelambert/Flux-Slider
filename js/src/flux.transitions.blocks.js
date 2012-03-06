@@ -1,7 +1,6 @@
 (function($) {
 	flux.transitions.blocks = function(fluxslider, opts) {
 		return new flux.transition_grid(fluxslider, $.extend({
-			cols: 12,
 			forceSquare: true,
 			delayBetweenBars: 100,
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
