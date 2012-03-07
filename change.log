@@ -4,6 +4,8 @@ Added a new 3D transition called `explode`
 
 Updated `cols` param to `columns` in `blocks` transition
 
+Made `bars3d` work properly in Firefox
+
 
 1.4.3 (2012/01/10)
 ------------------

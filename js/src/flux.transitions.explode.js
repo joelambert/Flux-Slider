@@ -33,6 +33,10 @@
 				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
+				}).css({
+					'-moz-transform': 'perspective('+this.options.perspective+'px)',
+					'-moz-perspective': 'none',
+					'-moz-transform-style': 'preserve-3d'
 				});
 				
 				var _this = this;
@@ -41,6 +45,9 @@
 	
 				// Get notified when the last transition has completed
 				this.maxDelayTile.transitionEnd(function(){
+					_this.slider.image1.css3({
+						'transform-style': 'flat'
+					});
 					_this.finished();
 				});
 	
@@ -49,7 +56,7 @@
 						$(block).css({
 							'opacity': '0'
 						}).css3({
-							'transform': flux.browser.translate(0, 0, 700) + " rotate3d("+Math.round(Math.random())+", "+Math.round(Math.random())+", "+Math.round(Math.random())+", 90deg) "
+							'transform': flux.browser.translate(0, 0, 700) + " rotate3d("+(Math.round(Math.random()*2)-1)+", "+(Math.round(Math.random()*2)-1)+", "+(Math.round(Math.random()*2)-1)+", 90deg) "
 						});
 					});
 				}, 50);
