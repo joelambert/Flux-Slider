@@ -1,5 +1,5 @@
 /**
- * @preserve Flux Slider v1.4.3
+ * @preserve Flux Slider v1.4.4
  * http://www.joelambert.co.uk/flux
  *
  * Copyright 2011, Joe Lambert.
@@ -9,7 +9,7 @@
 
 // Flux namespace
 window.flux = {
-	version: '1.4.3'
+	version: '1.4.4'
 };
 
 (function($){
@@ -882,6 +882,10 @@ window.flux = {
 				this.slider.image1.css3({
 					'perspective': this.options.perspective,
 					'perspective-origin': '50% 50%'
+				}).css({
+					'-moz-transform': 'perspective('+this.options.perspective+'px)',
+					'-moz-perspective': 'none',
+					'-moz-transform-style': 'preserve-3d'
 				});
 				
 				var _this = this,
@@ -892,6 +896,10 @@ window.flux = {
 
 				// Get notified when the last transition has completed
 				bars.last().transitionEnd(function(event){
+					_this.slider.image1.css3({
+						'transform-style': 'flat'
+					});
+					
 					_this.slider.image2.show();
 
 					_this.finished();
@@ -976,7 +984,6 @@ window.flux = {
 (function($) {
 	flux.transitions.blocks = function(fluxslider, opts) {
 		return new flux.transition_grid(fluxslider, $.extend({
-			cols: 12,
 			forceSquare: true,
 			delayBetweenBars: 100,
 			renderTile: function(elem, colIndex, rowIndex, colWidth, rowHeight, leftOffset, topOffset) {
@@ -1272,7 +1279,8 @@ window.flux = {
 
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+leftOffset+'px -'+topOffset+'px',
-					'background-repeat': 'no-repeat'
+					'background-repeat': 'no-repeat',
+					'-moz-transform': 'translateZ(1px)'
 				}).css3({
 					'backface-visibility': 'hidden'
 				});
@@ -1353,7 +1361,8 @@ window.flux = {
 						height: '100%',
 						position: 'absolute',
 						top: '0',
-						left: '0'
+						left: '0',
+						'-moz-transform': 'translateZ(1px)'
 					}).css3({
 						'backface-visibility': 'hidden'
 					}),

@@ -18,7 +18,8 @@
 
 					'background-image': this.slider.image1.css('background-image'),
 					'background-position': '-'+leftOffset+'px -'+topOffset+'px',
-					'background-repeat': 'no-repeat'
+					'background-repeat': 'no-repeat',
+					'-moz-transform': 'translateZ(1px)'
 				}).css3({
 					'backface-visibility': 'hidden'
 				});
