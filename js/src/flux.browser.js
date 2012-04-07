@@ -48,8 +48,8 @@
 		},
 		supportsCSSProperty: function(prop) {
 			var div = document.createElement('div'),
-				prefixes = ['-webkit', '-moz', '-o', '-ms'],
-				domPrefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+				prefixes = ['', '-webkit', '-moz', '-o', '-ms'],
+				domPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
 				
 			var support = false;
 			for(var i=0; i<domPrefixes.length; i++)
