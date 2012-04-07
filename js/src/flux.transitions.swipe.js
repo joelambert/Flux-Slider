@@ -55,7 +55,8 @@
 				}, 50);
 			},
 			compatibilityCheck: function() {
-				return flux.browser.supportsCSSProperty('MaskImage');
+				return flux.browser.supportsCSSProperty('MaskImage') ||
+				       flux.browser.supportsCSSProperty('mask');
 			}
 		}, opts));
 	};
