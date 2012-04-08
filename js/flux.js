@@ -488,8 +488,8 @@ window.flux = {
 		},
 		supportsCSSProperty: function(prop) {
 			var div = document.createElement('div'),
-				prefixes = ['-webkit', '-moz', '-o', '-ms'],
-				domPrefixes = ['Webkit', 'Moz', 'O', 'Ms'];
+				prefixes = ['', '-webkit', '-moz', '-o', '-ms'],
+				domPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
 				
 			var support = false;
 			for(var i=0; i<domPrefixes.length; i++)
@@ -1554,13 +1554,14 @@ window.flux = {
 						});
 					} else if (flux.browser.supportsCSSProperty('mask')) {
 						$(img).css3({
-							'mask': 'url(#myMask)',
+							'mask': 'url(#myMask)'
 						});
 					}
 				}, 50);
 			},
 			compatibilityCheck: function() {
-				return flux.browser.supportsCSSProperty('MaskImage');
+				return flux.browser.supportsCSSProperty('MaskImage') ||
+				       flux.browser.supportsCSSProperty('mask');
 			}
 		}, opts));
 	};

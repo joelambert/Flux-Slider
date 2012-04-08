@@ -49,7 +49,7 @@
 						});
 					} else if (flux.browser.supportsCSSProperty('mask')) {
 						$(img).css3({
-							'mask': 'url(#myMask)',
+							'mask': 'url(#myMask)'
 						});
 					}
 				}, 50);
