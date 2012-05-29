@@ -1,5 +1,5 @@
 # Flux Slider
-Flux slider is a CSS3 animation based image transition framework, inspired in part by the fantastic [Nivo Slider](nivo.dev7studios.com) jQuery plugin.
+Flux slider is a CSS3 animation based image transition framework, inspired in part by the fantastic [Nivo Slider](http://nivo.dev7studios.com) jQuery plugin.
 
 Instead of the traditional Javascript timer based animations used by jQuery, Flux utilises the newer, more powerful CSS3 animation technology. Its in a fairly early/rough state at the moment but testing on the iPhone/iPad does appear to produce much smoother animations. Desktop performance (as with Nivo) is very smooth but the use of CSS3 enables us to produce some new effects that Nivo can’t, e.g. rotations.
 
@@ -14,10 +14,13 @@ The aim is to use hardware acceleration where possible to improve performance on
 - Opera 11
 
 ## May/should also work for
-- Android (Known to be jerky due to lack of hardware acceleration)
+- Android (Known to be jerky due to lack of hardware acceleration) 
+
+## Will fallback to plain image switching on
+- IE6 (2d only, 3D transitions will not switch)
 
 # Requirements
-Flux requires a browser which supports CSS3 transformations and has been built to use either jQuery or [Zepto.js](http://zepto.js) as they share the same API. For mobile deployment Zepto is recommended due to its <5k deployment footprint.
+Flux requires a browser which supports CSS3 transformations and has been built to use either [jQuery](http://jquery.com/) or [Zepto.js](http://zepto.js) as they share the same API. For mobile deployment Zepto is recommended due to its <5k deployment footprint.
 
 # Usage
 Create HTML markup with the images you wish to use. You can also wrap images in a link if you need them to be clickable. For example:
