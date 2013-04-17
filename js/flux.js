@@ -183,7 +183,6 @@ window.flux = {
 			var _this = this;
 			this.playing = true;
 			this.interval = setInterval(function() {
-				console.log('play');
 				_this.transition();
 			}, this.options.delay);
 		},
