@@ -1,7 +1,7 @@
 # Flux Slider
 Flux slider is a CSS3 animation based image transition framework, inspired in part by the fantastic [Nivo Slider](nivo.dev7studios.com) jQuery plugin.
 
-Instead of the traditional Javascript timer based animations used by jQuery, Flux utilises the newer, more powerful CSS3 animation technology. Its in a fairly early/rough state at the moment but testing on the iPhone/iPad does appear to produce much smoother animations. Desktop performance (as with Nivo) is very smooth but the use of CSS3 enables us to produce some new effects that Nivo can’t, e.g. rotations.
+Instead of the traditional JavaScript timer-based animations used by jQuery, Flux utilises the newer, more powerful CSS3 animation technology. Its in a early/rough state at the moment but testing on the iPhone/iPad does appear to produce much smoother animations. Desktop performance (as with Nivo) is very smooth but the use of CSS3 enables us to produce some new effects that Nivo can’t, e.g. rotations.
 
 The aim is to use hardware acceleration where possible to improve performance on less powerful devices, such as mobiles & tablets.
 
@@ -112,9 +112,9 @@ Or with the jQuery widget:
 
 ## flux.slider API
 
-The API functions work with both the native Javascript object and the jQuery widget. For example:
+The API functions work with both the native JavaScript object and the jQuery widget. For example:
 
-	// Show next image using the bars3d transition (native Javascript object)
+	// Show next image using the bars3d transition (native JavaScript object)
 	window.myFlux.next('bars3d');
 	
 or
@@ -165,7 +165,7 @@ There are occasions where you may wish to know when a transition has completed, 
 
 Flux provides a couple of mechanisms for this:
 
-#### `fluxTransitionEnd` Javascript Event
+#### `fluxTransitionEnd` JavaScript Event
 
 After each transition, Flux dispatches a `fluxTransitionEnd` event. To listen for these events you can do the following:
 
@@ -190,7 +190,7 @@ You can alternatively pass in a callback function as part of the configuration o
 # Writing custom transitions
 Writing your own custom transitions is easy, you just need to create an instance of a `flux.transition` object and pass in some callback functions to provide the custom behaviour you're looking for.
 
-Lets look at the built in **bars** transition as an example. The barebones definition of the transition looks like:
+Let's look at the built-in **bars** transition as an example. The barebones definition of the transition looks like:
 
 	flux.transitions.bars = function(fluxslider, opts) {
 		return new flux.transition(fluxslider, $.extend({
